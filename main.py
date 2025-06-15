@@ -9,14 +9,16 @@ from utils.config_loader import load_config
 from utils.logger import logger
 
 def main():
-    # 加载配置
     config = load_config()
-    # 初始化各核心模块
+    # 读取热词配置（如无则为空字符串）
+    hotwords = config["xunfei_asr"].get("hotwords", "")
+
     recorder = Recorder()
     asr = XunfeiASR(
         app_id=config["xunfei_asr"]["app_id"],
         api_key=config["xunfei_asr"]["api_key"],
-        api_secret=config["xunfei_asr"]["api_secret"]
+        api_secret=config["xunfei_asr"]["api_secret"],
+        hotwords=hotwords
     )
     deepseek = DeepseekAdapter(api_key=config["deepseek"]["api_key"])
     tts = XunfeiTTS(
@@ -49,7 +51,6 @@ def main():
         else:
             logger.error("TTS 生成语音失败。")
 
-    # 唤醒循环
     detector = WakewordDetector()
     detector.start(on_wake)
 
