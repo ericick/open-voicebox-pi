@@ -4,6 +4,7 @@ import time
 import json
 import requests
 from utils.logger import logger
+from utils.retry_utils import retry
 
 class XunfeiTTS:
     def __init__(self, app_id, api_key, api_secret):
@@ -11,7 +12,7 @@ class XunfeiTTS:
         self.api_key = api_key
         self.api_secret = api_secret
         self.url = "https://tts-api.xfyun.cn/v2/tts"
-        self.voice_name = "xiaoyan"  # 可在官网查可选发音人
+        self.voice_name = "xiaoyan"  # 可根据实际需求更换
 
     def get_auth_params(self, text):
         cur_time = str(int(time.time()))
@@ -29,12 +30,13 @@ class XunfeiTTS:
         }
         return headers
 
+    @retry(max_attempts=3, wait=2, exceptions=(requests.RequestException, ), msg="TTS网络请求异常，重试")
     def synthesize(self, text, out_file="response.mp3"):
         headers = self.get_auth_params(text)
         data = {"text": text}
         try:
             response = requests.post(self.url, headers=headers, data=data, timeout=10)
-            if response.headers['Content-Type'] == "audio/mpeg":
+            if response.headers.get('Content-Type') == "audio/mpeg":
                 with open(out_file, 'wb') as f:
                     f.write(response.content)
                 logger.info(f"讯飞TTS语音已保存: {out_file}")
