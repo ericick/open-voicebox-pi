@@ -8,13 +8,20 @@ import soundfile as sf
 from utils.logger import logger
 
 class XunfeiASR:
-    def __init__(self, app_id, api_key, api_secret):
+    def __init__(self, app_id, api_key, api_secret, hotwords=None):
+        """
+        :param app_id: 讯飞AppID
+        :param api_key: 讯飞APIKey
+        :param api_secret: 讯飞APISecret
+        :param hotwords: 热词字符串，逗号分隔（如“小猪小猪,芝麻开门”）
+        """
         self.app_id = app_id
         self.api_key = api_key
         self.api_secret = api_secret
         self.url = "https://iat-api.xfyun.cn/v2/iat"
-        self.engine_type = "sms16k"     # 普通话, 16k采样
-        self.aue = "raw"                # 原始音频pcm
+        self.engine_type = "sms16k"
+        self.aue = "raw"
+        self.hotwords = hotwords or ""
 
     def get_auth_params(self, audio_len):
         cur_time = str(int(time.time()))
@@ -23,6 +30,8 @@ class XunfeiASR:
             "aue": self.aue,
             "audio_len": audio_len
         }
+        if self.hotwords:
+            param["word"] = self.hotwords
         x_param = base64.b64encode(json.dumps(param).encode("utf-8")).decode("utf-8")
         m2 = hashlib.md5()
         m2.update((self.api_key + cur_time + x_param).encode('utf-8'))
@@ -37,11 +46,15 @@ class XunfeiASR:
         return headers
 
     def recognize(self, audio_data, samplerate=16000):
-        # 讯飞API需要原始PCM（16k/16bit/单声道），需处理成字节流
+        """
+        :param audio_data: numpy array 或 bytes
+        :param samplerate: 采样率，需为16kHz
+        :return: 识别文本字符串
+        """
+        # 处理为PCM16格式
         if isinstance(audio_data, bytes):
             audio_bytes = audio_data
         else:
-            # numpy array -> PCM
             with tempfile.NamedTemporaryFile(suffix=".pcm", delete=True) as tmpfile:
                 sf.write(tmpfile.name, audio_data, samplerate, subtype='PCM_16')
                 with open(tmpfile.name, 'rb') as f:
@@ -56,7 +69,7 @@ class XunfeiASR:
             if result.get("code") != 0:
                 logger.error(f"讯飞ASR出错：{result.get('desc')}")
                 return ""
-            # 拼接所有result的识别结果
+            # 拼接所有 ws/cw 结果
             text = ""
             for ws in result["data"]["result"]["ws"]:
                 for cw in ws["cw"]:
