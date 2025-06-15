@@ -1,0 +1,30 @@
+# 音频输入/输出
+sounddevice
+soundfile
+numpy
+playsound
+
+# 配置和日志
+PyYAML
+loguru
+
+# Porcupine 唤醒词检测（Picovoice 官方 Python 包）
+# 注意：porcupine-python 有时名称为 pvporcupine，具体根据官方文档
+pvporcupine
+
+# DeepSeek/OpenAI/通用API客户端（推荐 openai，便于后续拓展）
+openai
+requests
+
+# 讯飞 TTS 依赖
+requests
+
+# 结束词正则检测
+regex
+
+# （可选）Whisper ASR 本地测试用
+# 如仅用 whisper.cpp，可不装 openai-whisper/torch
+# pip install openai-whisper torch
+
+# 其他常用工具
+tqdm
