@@ -3,3 +3,10 @@ wakeword:
   access_key: "YOUR_PICOVOICE_ACCESS_KEY"
   keyword_paths:
     - "wakeword/xiaozhu_xiaozhu.ppn"  # 你的自定义唤醒词文件
+
+endwords:
+  - "再见"
+  - "拜拜"
+  - "下次再说"
+  - "回头聊"
+  - "关闭"
