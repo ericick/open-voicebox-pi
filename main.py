@@ -10,7 +10,6 @@ from utils.logger import logger
 
 def main():
     config = load_config()
-    # 读取热词配置（如无则为空字符串）
     hotwords = config["xunfei_asr"].get("hotwords", "")
 
     recorder = Recorder()
@@ -29,27 +28,37 @@ def main():
     endword_detector = EndwordDetector(keywords=config["endwords"])
 
     def on_wake():
-        logger.info("唤醒成功，准备录音。")
-        audio = recorder.record()
-        if audio is None or len(audio) == 0:
-            logger.warning("未录到有效语音。")
-            return
-        user_text = asr.recognize(audio)
-        logger.info(f"语音识别结果：{user_text}")
+        try:
+            logger.info("唤醒成功，准备录音。")
+            audio = recorder.record()
+            if audio is None or len(audio) == 0:
+                logger.warning("未录到有效语音。")
+                tts_file = tts.synthesize("未检测到有效语音，请再试一次。")
+                if tts_file:
+                    play_audio(tts_file)
+                return
 
-        if not user_text.strip():
-            reply_text = "我没有听清，你可以再说一遍吗？"
-        elif endword_detector.is_end(user_text):
-            reply_text = "好的，下次再见。"
-        else:
-            reply_text = deepseek.chat(user_text)
+            user_text = asr.recognize(audio)
+            logger.info(f"语音识别结果：{user_text}")
 
-        logger.info(f"AI回复文本：{reply_text}")
-        tts_file = tts.synthesize(reply_text)
-        if tts_file:
-            play_audio(tts_file)
-        else:
-            logger.error("TTS 生成语音失败。")
+            if not user_text.strip():
+                reply_text = "我没有听清，你可以再说一遍吗？"
+            elif endword_detector.is_end(user_text):
+                reply_text = "好的，下次再见。"
+            else:
+                reply_text = deepseek.chat(user_text)
+
+            logger.info(f"AI回复文本：{reply_text}")
+            tts_file = tts.synthesize(reply_text)
+            if tts_file:
+                play_audio(tts_file)
+            else:
+                logger.error("TTS 生成语音失败。")
+        except Exception as e:
+            logger.error(f"主流程异常：{e}")
+            tts_file = tts.synthesize("系统发生错误，请稍后重试。")
+            if tts_file:
+                play_audio(tts_file)
 
     detector = WakewordDetector()
     detector.start(on_wake)
