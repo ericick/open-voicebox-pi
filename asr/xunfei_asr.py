@@ -6,15 +6,10 @@ import requests
 import tempfile
 import soundfile as sf
 from utils.logger import logger
+from utils.retry_utils import retry
 
 class XunfeiASR:
     def __init__(self, app_id, api_key, api_secret, hotwords=None):
-        """
-        :param app_id: 讯飞AppID
-        :param api_key: 讯飞APIKey
-        :param api_secret: 讯飞APISecret
-        :param hotwords: 热词字符串，逗号分隔（如“小猪小猪,芝麻开门”）
-        """
         self.app_id = app_id
         self.api_key = api_key
         self.api_secret = api_secret
@@ -45,13 +40,8 @@ class XunfeiASR:
         }
         return headers
 
+    @retry(max_attempts=3, wait=2, exceptions=(requests.RequestException, ), msg="ASR网络请求异常，重试")
     def recognize(self, audio_data, samplerate=16000):
-        """
-        :param audio_data: numpy array 或 bytes
-        :param samplerate: 采样率，需为16kHz
-        :return: 识别文本字符串
-        """
-        # 处理为PCM16格式
         if isinstance(audio_data, bytes):
             audio_bytes = audio_data
         else:
@@ -69,7 +59,6 @@ class XunfeiASR:
             if result.get("code") != 0:
                 logger.error(f"讯飞ASR出错：{result.get('desc')}")
                 return ""
-            # 拼接所有 ws/cw 结果
             text = ""
             for ws in result["data"]["result"]["ws"]:
                 for cw in ws["cw"]:
