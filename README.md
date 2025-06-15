@@ -1,34 +1,36 @@
-
-
 # zh-ai-speaker
 
-A modular, open-source Chinese smart voice assistant for Raspberry Pi, supporting flexible AI model switching and high-quality speech interaction.
+A robust, modular, open-source Chinese smart voice assistant for Raspberry Pi, featuring enhanced exception handling and auto-retry for all network and I/O modules.
 
-一个模块化开源的中文智能语音助手，适用于树莓派，支持灵活的AI模型切换与高质量语音交互。
+一个健壮、模块化、开源的中文树莓派智能语音助手，所有网络与音频模块均强化异常捕获和自动重试机制。
 
 ---
 
 ## Features | 功能特性
 
-* **Local wake-word detection** (Porcupine, custom keywords like “小猪小猪”)
+* **Local wake-word detection** (Porcupine, custom keywords e.g. “小猪小猪”)
 
-* **Real-time ASR** (Whisper.cpp, fully offline speech-to-text)
+* **Cloud ASR** (iFlytek, supports hotwords, with auto-retry and error handling)
 
-* **Flexible AI model switching** (DeepSeek API, supports multi-LLM extension)
+* **Flexible AI model integration** (DeepSeek API with auto-retry)
 
-* **High-quality TTS** (iFlytek/讯飞 TTS API)
+* **Cloud TTS** (iFlytek, fast and natural, with error fallback and retry)
 
-* **Modular design** for easy extension, privacy-friendly, DIY-friendly
+* **Modular and extensible design**
 
-* **本地唤醒词检测**（Porcupine，可自定义如“小猪小猪”）
+* **全流程异常捕获与自动重试，故障自动降级**
 
-* **实时语音识别**（Whisper.cpp，全离线语音转文本）
+* **本地唤醒词检测**（Porcupine，可自定义，如“小猪小猪”）
 
-* **灵活AI模型切换**（DeepSeek API，支持多种大模型拓展）
+* **云端语音识别**（讯飞ASR，支持热词添加，带自动重试与错误处理）
 
-* **高质量语音合成**（讯飞TTS API，效果自然流畅）
+* **灵活对话模型集成**（DeepSeek API，自动重试与降级）
 
-* **模块化设计**，易于拓展，注重隐私，适合DIY开发
+* **云端语音合成**（讯飞TTS，流畅自然，异常自动兜底）
+
+* **模块化设计，便于扩展维护**
+
+* **全模块异常捕获、自动重试、故障降级机制**
 
 ---
 
@@ -46,10 +48,9 @@ A modular, open-source Chinese smart voice assistant for Raspberry Pi, supportin
 
 * Python 3.9+
 * Porcupine SDK (wake word)
-* Whisper.cpp (offline ASR)
-* DeepSeek/OpenAI/other LLM APIs
-* iFlytek TTS API (讯飞语音合成)
-* 依赖库详见 `requirements.txt`
+* iFlytek ASR & TTS API
+* DeepSeek API
+* requirements.txt 所有第三方依赖
 
 ---
 
@@ -70,29 +71,25 @@ pip install -r requirements.txt
 
 ### 3. Prepare third-party resources | 准备第三方资源
 
-* **Porcupine**: Register at [Picovoice Console](https://console.picovoice.ai/), generate your custom wake-word `.ppn` file, and get your Access Key.
+* **Porcupine**: Register at [Picovoice Console](https://console.picovoice.ai/), generate custom wake-word `.ppn` file, and get Access Key.
 
-* **Whisper.cpp**: [Download the desired model file (e.g., ggml-tiny.bin)](https://huggingface.co/ggerganov/whisper.cpp) and compile the whisper.cpp executable for Raspberry Pi.
+* **iFlytek ASR & TTS**: Register at [讯飞开放平台](https://www.xfyun.cn/), create apps, obtain AppID, APIKey, and APISecret for both ASR & TTS, and configure hotwords.
 
 * **DeepSeek API**: Register at [DeepSeek Platform](https://platform.deepseek.com/), create an API key.
 
-* **iFlytek TTS**: Register at [讯飞开放平台](https://www.xfyun.cn/), create an app and get your AppID, APIKey, and APISecret.
+* **Porcupine**：在[Picovoice 控制台](https://console.picovoice.ai/)注册账号，生成唤醒词 `.ppn` 文件并获取 Access Key。
 
-* **Porcupine**：在[Picovoice 控制台](https://console.picovoice.ai/)注册账号，生成你的唤醒词 `.ppn` 文件，并获取 Access Key。
+* **讯飞ASR/TTS**：在[讯飞开放平台](https://www.xfyun.cn/)注册账号，分别创建听写和合成应用，获取AppID、APIKey和APISecret，配置热词。
 
-* **Whisper.cpp**：从 [Hugging Face](https://huggingface.co/ggerganov/whisper.cpp) 下载所需模型文件（如 ggml-tiny.bin），在树莓派上编译主程序。
-
-* **DeepSeek API**：在 [DeepSeek 平台](https://platform.deepseek.com/) 注册开发者账号，创建 API Key。
-
-* **讯飞TTS**：在[讯飞开放平台](https://www.xfyun.cn/)注册账号，创建应用获取 AppID、APIKey 和 APISecret。
+* **DeepSeek API**：在 [DeepSeek 平台](https://platform.deepseek.com/) 注册开发者账号，创建API Key。
 
 ---
 
 ### 4. Configure the project | 配置项目
 
-Edit `config/config.yaml` and fill in your API keys, file paths, and custom wake-word information.
+Edit `config/config.yaml` and fill in your API keys, hotwords, file paths, and custom wake-word info.
 
-编辑 `config/config.yaml`，填写你的API密钥、文件路径和自定义唤醒词配置。
+编辑 `config/config.yaml`，填写你的API密钥、热词、文件路径和唤醒词配置。
 
 ---
 
@@ -114,11 +111,19 @@ zh-ai-speaker/
 ├── wakeword/
 ├── audio_in/
 ├── asr/
+│   └── xunfei_asr.py
 ├── dialogue/
+│   └── deepseek_adapter.py
 ├── tts/
+│   └── xunfei_adapter.py
 ├── audio_out/
+│   └── player.py
 ├── endword/
+│   └── endword_detector.py
 ├── utils/
+│   ├── logger.py
+│   ├── config_loader.py
+│   └── retry_utils.py
 ├── requirements.txt
 ├── README.md
 └── ...
@@ -126,11 +131,19 @@ zh-ai-speaker/
 
 ---
 
+## Exception Handling & Auto-Retry | 异常捕获与自动重试
+
+* All API calls (ASR, TTS, Dialogue) feature robust exception handling and auto-retry.
+* Main workflow gracefully degrades, always giving feedback to the user.
+* 所有API调用（ASR、TTS、对话）均内置健壮异常捕获与自动重试，主流程有故障自动降级和语音播报。
+
+---
+
 ## Customization & Extension | 个性化与拓展
 
-* Supports easy switching between different LLM and TTS modules.
-* Can add custom commands, multi-turn dialogue, smart home extensions, etc.
-* 欢迎自定义/添加新AI模型、TTS模块或语音指令，支持多轮对话与智能家居扩展。
+* Hotwords can be customized in config.yaml for better recognition accuracy.
+* Modular adapters make it easy to add/replace ASR, TTS, or LLM modules.
+* 热词可随时在config.yaml配置，模块化结构方便拓展其它ASR/TTS/大模型。
 
 ---
 
@@ -145,14 +158,13 @@ This project is open-sourced under the MIT License.
 ## Acknowledgements | 鸣谢
 
 * [Porcupine (Picovoice)](https://picovoice.ai/)
-* [Whisper.cpp](https://github.com/ggerganov/whisper.cpp)
+* [iFlytek 讯飞开放平台](https://www.xfyun.cn/)
 * [DeepSeek](https://platform.deepseek.com/)
-* [讯飞开放平台](https://www.xfyun.cn/)
 * And all open-source contributors
 
 ---
 
-如需详细二次开发、问题反馈或定制说明，欢迎在Issue区留言或联系作者。
+如需二次开发、问题反馈或定制说明，欢迎在Issue区留言或联系作者。
 
 If you have questions, feature requests, or want to contribute, feel free to submit an issue or pull request.
 
