@@ -14,3 +14,7 @@ endwords:
 deepseek:
   api_key: "YOUR_DEEPSEEK_API_KEY"
 
+xunfei:
+  app_id: "YOUR_XUNFEI_APP_ID"
+  api_key: "YOUR_XUNFEI_API_KEY"
+  api_secret: "YOUR_XUNFEI_API_SECRET"
