@@ -14,7 +14,9 @@ endwords:
 deepseek:
   api_key: "YOUR_DEEPSEEK_API_KEY"
 
-xunfei:
-  app_id: "YOUR_XUNFEI_APP_ID"
-  api_key: "YOUR_XUNFEI_API_KEY"
-  api_secret: "YOUR_XUNFEI_API_SECRET"
+xunfei_asr:
+  app_id: "你的APPID"
+  api_key: "你的APIKey"
+  api_secret: "你的APISecret"
+  hotwords: "小猪小猪,芝麻开门,嘟嘟,科大讯飞"
+
