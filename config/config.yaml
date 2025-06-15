@@ -10,3 +10,7 @@ endwords:
   - "下次再说"
   - "回头聊"
   - "关闭"
+
+deepseek:
+  api_key: "YOUR_DEEPSEEK_API_KEY"
+
