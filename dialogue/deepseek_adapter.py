@@ -1,15 +1,16 @@
 import requests
 from utils.logger import logger
+from utils.retry_utils import retry
 
 class DeepseekAdapter:
     def __init__(self, api_key, api_url="https://api.deepseek.com/v1/chat/completions"):
         self.api_key = api_key
         self.api_url = api_url
 
+    @retry(max_attempts=3, wait=2, exceptions=(requests.RequestException, ), msg="DeepSeek对话API请求异常，重试")
     def chat(self, user_text, context=None):
-        # context可选，便于实现多轮对话
         payload = {
-            "model": "deepseek-chat",  # 替换为实际模型名
+            "model": "deepseek-chat",
             "messages": [{"role": "user", "content": user_text}]
         }
         if context:
@@ -19,7 +20,7 @@ class DeepseekAdapter:
             "Content-Type": "application/json"
         }
         try:
-            resp = requests.post(self.api_url, json=payload, headers=headers, timeout=10)
+            resp = requests.post(self.api_url, json=payload, headers=headers, timeout=15)
             resp.raise_for_status()
             data = resp.json()
             reply = data["choices"][0]["message"]["content"]
