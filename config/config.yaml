@@ -1,0 +1,5 @@
+wakeword:
+  keywords: ["xiaozhu_xiaozhu"]
+  access_key: "YOUR_PICOVOICE_ACCESS_KEY"
+  keyword_paths:
+    - "wakeword/xiaozhu_xiaozhu.ppn"  # 你的自定义唤醒词文件
