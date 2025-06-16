@@ -1,22 +1,48 @@
-wakeword:
-  keywords: ["xiaozhu_xiaozhu"]
-  access_key: "YOUR_PICOVOICE_ACCESS_KEY"
-  keyword_paths:
-    - "wakeword/xiaozhu_xiaozhu.ppn"  # 你的自定义唤醒词文件
+xunfei_asr:
+  app_id: "你的ASR APPID"
+  api_key: "你的ASR APIKey"
+  api_secret: "你的ASR APISecret"
+  hotwords: "小猪小猪,芝麻开门"
+  engine_type: "sms16k"
+
+xunfei:
+  app_id: "你的TTS APPID"
+  api_key: "你的TTS APIKey"
+  api_secret: "你的TTS APISecret"
+  voice_name: "xiaoyan"
+  speed: 50
+  volume: 50
+  pitch: 50
+  engine_type: "intp65"
+
+deepseek:
+  api_key: "你的DeepSeek APIKey"
+  api_url: "https://api.deepseek.com/v1/chat/completions"
+  model: "deepseek-chat"
+  temperature: 0.7
+  max_tokens: 2048
 
 endwords:
   - "再见"
   - "拜拜"
   - "下次再说"
-  - "回头聊"
-  - "关闭"
 
-deepseek:
-  api_key: "YOUR_DEEPSEEK_API_KEY"
+welcome_audio_path: "audio_out/welcome.mp3"
+welcome_text: "你好。"
+audio_out_dir: "audio_out"
+tts_cache_dir: "audio_out/tts_cache"
 
-xunfei_asr:
-  app_id: "你的APPID"
-  api_key: "你的APIKey"
-  api_secret: "你的APISecret"
-  hotwords: "小猪小猪,芝麻开门,嘟嘟,科大讯飞"
+# 标准化异常播报文本
+error_prompts:
+  error_recording: "录音设备不可用，请检查麦克风。"
+  error_asr: "语音识别服务不可用，请检查网络或稍后重试。"
+  error_network: "网络连接异常，请检查网络。"
+  error_tts: "语音合成服务不可用。"
+  error_system: "系统发生未知错误，请稍后重试。"
+  error_no_input: "未检测到有效语音，请再试一次。"
 
+wakeword:
+  keyword_paths: ["wakeword/xiaozhu_xiaozhu.ppn"]
+  access_key: "你的picovoice_access_key"
+  sensitivities: [0.7]
+  audio_device_index: 0
