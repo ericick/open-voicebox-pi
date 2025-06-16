@@ -7,6 +7,8 @@ import tempfile
 import soundfile as sf
 from utils.logger import logger
 from utils.retry_utils import retry
+from utils.timing import timing
+
 
 class XunfeiASR:
     def __init__(self, app_id, api_key, api_secret, hotwords=None, engine_type="sms16k"):
