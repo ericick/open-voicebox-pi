@@ -1,6 +1,7 @@
 import requests
 from utils.logger import logger
 from utils.retry_utils import retry
+from utils.timing import timing
 
 class DeepseekAdapter:
     def __init__(self, api_key, api_url="https://api.deepseek.com/v1/chat/completions",
@@ -14,6 +15,7 @@ class DeepseekAdapter:
         self.max_tokens = max_tokens
 
     @retry(max_attempts=3, wait=2, exceptions=(requests.RequestException, ), msg="DeepSeek对话API请求异常，重试")
+    @timing("TTS")
     def chat(self, context):
         payload = {
             "model": self.model,
