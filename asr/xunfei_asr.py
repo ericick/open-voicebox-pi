@@ -9,12 +9,12 @@ from utils.logger import logger
 from utils.retry_utils import retry
 
 class XunfeiASR:
-    def __init__(self, app_id, api_key, api_secret, hotwords=None):
+    def __init__(self, app_id, api_key, api_secret, hotwords=None, engine_type="sms16k"):
         self.app_id = app_id
         self.api_key = api_key
         self.api_secret = api_secret
         self.url = "https://iat-api.xfyun.cn/v2/iat"
-        self.engine_type = "sms16k"
+        self.engine_type = engine_type
         self.aue = "raw"
         self.hotwords = hotwords or ""
 
@@ -42,20 +42,21 @@ class XunfeiASR:
 
     @retry(max_attempts=3, wait=2, exceptions=(requests.RequestException, ), msg="ASR网络请求异常，重试")
     def recognize(self, audio_data, samplerate=16000):
-        if isinstance(audio_data, bytes):
-            audio_bytes = audio_data
-        else:
-            with tempfile.NamedTemporaryFile(suffix=".pcm", delete=True) as tmpfile:
-                sf.write(tmpfile.name, audio_data, samplerate, subtype='PCM_16')
-                with open(tmpfile.name, 'rb') as f:
-                    audio_bytes = f.read()
-        audio_b64 = base64.b64encode(audio_bytes).decode('utf-8')
-        headers = self.get_auth_params(audio_len=len(audio_bytes))
-        data = {"audio": audio_b64}
         try:
+            logger.info("开始进行ASR语音识别。")
+            if isinstance(audio_data, bytes):
+                audio_bytes = audio_data
+            else:
+                with tempfile.NamedTemporaryFile(suffix=".pcm", delete=True) as tmpfile:
+                    sf.write(tmpfile.name, audio_data, samplerate, subtype='PCM_16')
+                    with open(tmpfile.name, 'rb') as f:
+                        audio_bytes = f.read()
+            audio_b64 = base64.b64encode(audio_bytes).decode('utf-8')
+            headers = self.get_auth_params(audio_len=len(audio_bytes))
+            data = {"audio": audio_b64}
             resp = requests.post(self.url, headers=headers, data=data, timeout=10)
             result = resp.json()
-            logger.info(f"讯飞ASR原始返回：{result}")
+            logger.debug(f"讯飞ASR原始返回: {result}")
             if result.get("code") != 0:
                 logger.error(f"讯飞ASR出错：{result.get('desc')}")
                 return ""
