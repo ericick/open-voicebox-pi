@@ -5,6 +5,8 @@ import json
 import requests
 from utils.logger import logger
 from utils.retry_utils import retry
+from utils.timing import timing
+
 
 class XunfeiTTS:
     def __init__(self, app_id, api_key, api_secret,
@@ -49,6 +51,7 @@ class XunfeiTTS:
         return headers
 
     @retry(max_attempts=3, wait=2, exceptions=(requests.RequestException, ), msg="TTS网络请求异常，重试")
+    @timing("TTS")
     def synthesize(self, text, out_file=None):
         headers = self.get_auth_params(text)
         data = {"text": text}
