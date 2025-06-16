@@ -1,10 +1,20 @@
 from loguru import logger
-import sys
+import os
 
-def setup_logger():
-    logger.remove()
-    logger.add(sys.stdout, level="INFO", format="<green>{time}</green> <level>{message}</level>")
-    logger.add("logs/voice_assistant.log", rotation="1 MB", retention="7 days")
-    return logger
+LOG_DIR = "logs"
+if not os.path.exists(LOG_DIR):
+    os.makedirs(LOG_DIR, exist_ok=True)
 
-logger = setup_logger()
+# 日志文件按天轮转，保留30天
+logger.remove()
+logger.add(lambda msg: print(msg, end=""), level="INFO", colorize=True)
+logger.add(
+    f"{LOG_DIR}/ai_speaker_{{time:YYYY-MM-DD}}.log",
+    rotation="00:00",
+    retention="30 days",
+    level="DEBUG",
+    encoding="utf-8",
+    enqueue=True,
+    backtrace=True,
+    diagnose=True
+)
