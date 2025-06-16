@@ -41,6 +41,7 @@ class XunfeiASR:
         return headers
 
     @retry(max_attempts=3, wait=2, exceptions=(requests.RequestException, ), msg="ASR网络请求异常，重试")
+    @timing("ASR")
     def recognize(self, audio_data, samplerate=16000):
         try:
             logger.info("开始进行ASR语音识别。")
