@@ -46,3 +46,7 @@ wakeword:
   access_key: "你的picovoice_access_key"
   sensitivities: [0.7]
   audio_device_index: 0
+
+tts_cache_policy:
+  max_files: 80        # 最大保留音频文件数
+  max_bytes: 150000000 # 最大总容量，单位为字节（如150MB）
