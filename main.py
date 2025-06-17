@@ -41,7 +41,13 @@ def main():
     )
     prepare_welcome_audio(tts, config["welcome_text"], config["welcome_audio_path"])
     tts_cache_manager.prepare_error_prompts()
-    tts_cache_manager.clean_cache(max_files=50, max_bytes=100*1024*1024)
+
+    # === 读取缓存策略配置，支持缺省 ===
+    cache_policy = config.get("tts_cache_policy", {})
+    max_files = cache_policy.get("max_files", 50)
+    max_bytes = cache_policy.get("max_bytes", 100*1024*1024)
+    tts_cache_manager.clean_cache(max_files=max_files, max_bytes=max_bytes)
+    # =================================
 
     recorder = Recorder()
     asr = XunfeiASR(
