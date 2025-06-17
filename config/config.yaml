@@ -48,5 +48,5 @@ wakeword:
   audio_device_index: 0
 
 tts_cache_policy:
-  max_files: 80        # 最大保留音频文件数
-  max_bytes: 150000000 # 最大总容量，单位为字节（如150MB）
+  max_files: 200        # 最大保留音频文件数
+  max_bytes: 15000000000 # 最大总容量，单位为字节（如15GB）
