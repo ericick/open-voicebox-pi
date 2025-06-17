@@ -1,28 +1,28 @@
-# 音频输入输出
-sounddevice
-soundfile
+# 基础
 numpy
-playsound
-
-# 配置和日志
 PyYAML
 loguru
-
-# 唤醒词检测（Picovoice 官方 Python 包，如需）
-pvporcupine
-
-# 讯飞ASR/TTS和DeepSeek对话API
 requests
 
-# DeepSeek/OpenAI通用API客户端（便于拓展）
-openai
+# 录音与音频处理
+sounddevice
+soundfile
+playsound
 
-# 结束词检测
-regex
+# 唤醒词检测
+pvporcupine
+pyaudio
 
-# 通用工具
-tqdm
+# 兼容TTS/ASR缓存管理
+# （如需加密存储或扩展功能可引入cryptography等）
 
-# （可选）Whisper本地ASR
-# openai-whisper
+# 如用Jupyter调试可选
+# jupyter
+
+# (可选) 若有深度学习本地模型推理需求
 # torch
+# transformers
+
+# 兼容树莓派5/Jetson Orin Nano，无需专门库
+
+# 适配Python 3.8及以上
