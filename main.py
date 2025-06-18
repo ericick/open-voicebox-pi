@@ -1,11 +1,10 @@
 import os
-from wakeword.porcupine_adapter import WakewordDetector
-from audio_in.recorder import Recorder
 from asr.xunfei_asr import XunfeiASR
 from dialogue.deepseek_adapter import DeepseekAdapter
 from tts.xunfei_adapter import XunfeiTTS
 from audio_out.player import play_audio
 from endword.endword_detector import EndwordDetector
+from audio_in.recorder import Recorder
 from utils.config_loader import load_config
 from utils.logger import logger
 from utils.tts_cache_manager import TTSCacheManager
@@ -18,7 +17,7 @@ def prepare_welcome_audio(tts, welcome_text, welcome_audio_path):
         logger.debug(f"本地欢迎语音已存在：{welcome_audio_path}")
 
 def main():
-    logger.info("==== 语音音箱主程序启动 ====")
+    logger.info("==== 智能语音音箱主流程启动 ====")
     config = load_config()
     logger.debug(f"完整配置参数: {config}")
 
@@ -42,14 +41,11 @@ def main():
     prepare_welcome_audio(tts, config["welcome_text"], config["welcome_audio_path"])
     tts_cache_manager.prepare_error_prompts()
 
-    # === 读取缓存策略配置，支持缺省 ===
     cache_policy = config.get("tts_cache_policy", {})
     max_files = cache_policy.get("max_files", 50)
     max_bytes = cache_policy.get("max_bytes", 100*1024*1024)
     tts_cache_manager.clean_cache(max_files=max_files, max_bytes=max_bytes)
-    # =================================
 
-    recorder = Recorder()
     asr = XunfeiASR(
         app_id=config["xunfei_asr"]["app_id"],
         api_key=config["xunfei_asr"]["api_key"],
@@ -65,12 +61,7 @@ def main():
         max_tokens=config["deepseek"].get("max_tokens", 2048)
     )
     endword_detector = EndwordDetector(keywords=config["endwords"])
-
-    wakeword_config = config.get("wakeword", {})
-    keyword_paths = wakeword_config.get("keyword_paths", ["wakeword/xiaozhu_xiaozhu.ppn"])
-    access_key = wakeword_config.get("access_key", "")
-    sensitivities = wakeword_config.get("sensitivities", [0.7]*len(keyword_paths))
-    audio_device_index = wakeword_config.get("audio_device_index", None)
+    recorder = Recorder()
 
     conversation_history = []
 
@@ -81,36 +72,32 @@ def main():
         else:
             play_audio(tts_cache_manager.get_error_audio("error_system"))
 
-    def on_wake():
-        nonlocal conversation_history
+    while True:
         try:
+            # 播放欢迎语
             play_audio(config["welcome_audio_path"])
-            logger.info("【主流程】唤醒成功，开始录音。")
-            audio = recorder.record()
-            if audio is None or len(audio) == 0:
-                logger.warning("未录到有效语音。")
-                play_standard_error("error_no_input")
-                return
+            logger.info("等待用户说话...（唤醒后进入录音）")
 
-            logger.info("【主流程】录音结束，开始语音识别。")
-            user_text = asr.recognize(audio)
-            logger.info(f"【主流程】语音识别结果: {user_text}")
+            # 支持边录音边识别的流式ASR
+            audio_blocks = recorder.record_stream(max_record_time=10)
+            user_text = asr.recognize_stream(audio_blocks)
+            logger.info(f"用户语音识别结果: {user_text}")
 
             if not user_text.strip():
-                logger.debug("【分支】识别结果为空，提示用户重说。")
+                logger.debug("识别结果为空，提示用户重说。")
                 play_standard_error("error_no_input")
-                return
+                continue
             elif endword_detector.is_end(user_text):
-                logger.info("【分支】检测到结束词，清空历史对话。")
+                logger.info("检测到结束词，清空历史对话。")
                 reply_text = "好的，下次再见。"
                 conversation_history.clear()
             else:
-                logger.debug("【分支】进入多轮对话处理。")
+                logger.debug("进入多轮对话处理。")
                 conversation_history.append({"role": "user", "content": user_text})
                 reply_text = deepseek.chat(context=conversation_history)
                 conversation_history.append({"role": "assistant", "content": reply_text})
 
-            logger.info(f"【主流程】AI回复文本: {reply_text}")
+            logger.info(f"AI回复文本: {reply_text}")
             tts_file = tts_cache_manager.cache_normal_tts(reply_text)
             if tts_file:
                 play_audio(tts_file)
@@ -122,22 +109,14 @@ def main():
             tb = traceback.format_exc()
             if "audio" in tb or "sounddevice" in tb:
                 play_standard_error("error_recording")
-            elif "requests" in tb and "ASR" in tb:
+            elif "websocket" in tb and "ASR" in tb:
                 play_standard_error("error_asr")
-            elif "ConnectionError" in tb or "network" in tb:
+            elif "requests" in tb or "ConnectionError" in tb or "network" in tb:
                 play_standard_error("error_network")
             elif "TTS" in tb:
                 play_standard_error("error_tts")
             else:
                 play_standard_error("error_system")
-
-    detector = WakewordDetector(
-        keyword_paths=keyword_paths,
-        access_key=access_key,
-        sensitivities=sensitivities,
-        audio_device_index=audio_device_index
-    )
-    detector.start(on_wake)
 
 if __name__ == "__main__":
     main()
