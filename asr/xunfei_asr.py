@@ -148,3 +148,72 @@ class XunfeiASR:
         )
         wst = threading.Thread(target=ws.run_forever, kwargs={"sslopt": {"cert_reqs": ssl.CERT_NONE}})
         wst.daemon = True
+        wst.start()
+        self.finished.wait(timeout=30)
+        return self.result.strip()
+
+    def recognize_stream(self, audio_generator):
+        """
+        边录音边识别（流式）：audio_generator为yield音频块(bytes)的生成器
+        """
+        self.result = ""
+        self.finished.clear()
+        url = self._assemble_url()
+
+        def send_audio(ws):
+            status = 0  # 0首帧 1中间帧 2尾帧
+            try:
+                for idx, audio_chunk in enumerate(audio_generator):
+                    if idx == 0:
+                        status = 0
+                    else:
+                        status = 1
+                    d = {
+                        "common": {
+                            "app_id": self.app_id
+                        },
+                        "business": {
+                            "language": "zh_cn",
+                            "domain": "iat",
+                            "accent": "mandarin",
+                            "vad_eos": 5000,
+                            "dwa": "wpgs"
+                        },
+                        "data": {
+                            "status": status,
+                            "format": "audio/L16;rate=16000",
+                            "encoding": "raw",
+                            "audio": base64.b64encode(audio_chunk).decode('utf-8')
+                        }
+                    }
+                    ws.send(json.dumps(d))
+                    time.sleep(0.04)
+                # 发送尾帧
+                d = {
+                    "data": {
+                        "status": 2,
+                        "format": "audio/L16;rate=16000",
+                        "encoding": "raw",
+                        "audio": ""
+                    }
+                }
+                ws.send(json.dumps(d))
+            except Exception as e:
+                logger.error(f"ASR流式音频发送异常: {e}")
+                self.finished.set()
+
+        def on_open(ws):
+            threading.Thread(target=send_audio, args=(ws,)).start()
+
+        ws = websocket.WebSocketApp(
+            url,
+            on_open=on_open,
+            on_message=self._on_message,
+            on_error=self._on_error,
+            on_close=self._on_close
+        )
+        wst = threading.Thread(target=ws.run_forever, kwargs={"sslopt": {"cert_reqs": ssl.CERT_NONE}})
+        wst.daemon = True
+        wst.start()
+        self.finished.wait(timeout=30)
+        return self.result.strip()
