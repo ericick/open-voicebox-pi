@@ -3,12 +3,14 @@ numpy
 PyYAML
 loguru
 requests
+openai
 
 # 录音与音频处理
 sounddevice
 soundfile
 playsound
 websocket-client
+pydub
 
 # 唤醒词检测
 pvporcupine
