@@ -8,6 +8,7 @@ requests
 sounddevice
 soundfile
 playsound
+websocket-client
 
 # 唤醒词检测
 pvporcupine
