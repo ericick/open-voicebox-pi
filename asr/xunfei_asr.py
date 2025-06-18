@@ -21,12 +21,11 @@ class XunfeiASR:
         self.finished = threading.Event()
 
     def _assemble_url(self):
-        # 按官方文档签名算法
+        # 参考官方文档，生成ws连接所需鉴权参数
         host = "iat-api.xfyun.cn"
         api = "/v2/iat"
         now = int(time.time())
         date = time.strftime('%a, %d %b %Y %H:%M:%S GMT', time.gmtime(now))
-        # 组装signature
         signature_origin = f"host: {host}\ndate: {date}\nGET {api} HTTP/1.1"
         signature_sha = base64.b64encode(
             hashlib.sha256(signature_origin.encode('utf-8')).digest()
@@ -34,13 +33,12 @@ class XunfeiASR:
         authorization_origin = (
             f'api_key="{self.api_key}",algorithm="hmac-sha256",headers="host date request-line",signature="{signature_sha}"'
         )
-        # 组装最终URL
         params = {
             "authorization": base64.b64encode(authorization_origin.encode('utf-8')).decode('utf-8'),
             "date": date,
             "host": host,
         }
-        url = self.ws_url + "?" + "&".join([f"{k}={requests.utils.quote(v)}" for k, v in params.items()])
+        url = self.ws_url + "?" + "&".join([f"{k}={json.dumps(v)[1:-1]}" for k, v in params.items()])
         return url
 
     def _on_message(self, ws, message):
@@ -58,7 +56,7 @@ class XunfeiASR:
                     text += w["w"]
             with self.result_lock:
                 self.result += text
-            # 若为最终结果（流结束）
+            # status=2 表示本轮识别完全结束
             if data["data"]["status"] == 2:
                 self.finished.set()
         except Exception as e:
@@ -74,15 +72,14 @@ class XunfeiASR:
         self.finished.set()
 
     def _on_open(self, ws):
-        # 本地直接录音保存为16k 16bit 单通道
+        # 本地录音结果已准备好，直接分帧发送
         def send_audio():
             try:
-                # 发首帧
                 frame_size = 1280    # 40ms一帧，16k采样，单通道，16bit=2字节
                 intervel = 0.04      # 发送间隔
                 audio = self.audio_data
                 idx = 0
-                status = 0  # 0首帧，1中间帧，2尾帧
+                status = 0
                 total_len = len(audio)
                 while idx < total_len:
                     chunk = audio[idx:idx+frame_size]
@@ -113,7 +110,6 @@ class XunfeiASR:
                     ws.send(json.dumps(d))
                     idx += frame_size
                     time.sleep(intervel)
-                # 最后一帧
                 if status != 2:
                     d = {
                         "data": {
@@ -131,11 +127,8 @@ class XunfeiASR:
 
     def recognize(self, audio, samplerate=16000):
         """
-        :param audio: numpy数组或bytes(单声道16k)
-        :param samplerate: 必须16k
-        :return: 识别文本
+        一次性音频识别：audio为完整录音（numpy数组或bytes），自动分帧发送
         """
-        # audio可为numpy或bytes
         if isinstance(audio, np.ndarray):
             audio = audio.astype(np.int16).tobytes()
         elif isinstance(audio, bytes):
@@ -146,7 +139,6 @@ class XunfeiASR:
         self.result = ""
         self.finished.clear()
         url = self._assemble_url()
-
         ws = websocket.WebSocketApp(
             url,
             on_open=self._on_open,
@@ -156,7 +148,3 @@ class XunfeiASR:
         )
         wst = threading.Thread(target=ws.run_forever, kwargs={"sslopt": {"cert_reqs": ssl.CERT_NONE}})
         wst.daemon = True
-        wst.start()
-        # 阻塞直到全部结果收齐/异常
-        self.finished.wait(timeout=30)
-        return self.result.strip()
