@@ -19,7 +19,7 @@ logger.setLevel(logging.INFO)
 class XunfeiTTS:
     def __init__(self, app_id, api_key, api_secret, vcn="x4_yezi",
                  aue="lame", auf="audio/L16;rate=16000", sfl=1, speed=50,
-                 volume=50, pitch=50, log_dir="tts_log"):
+                 volume=50, pitch=50, tts_out_dir="audio_out", log_dir="tts_log"):
         self.app_id = app_id
         self.api_key = api_key
         self.api_secret = api_secret
@@ -30,6 +30,8 @@ class XunfeiTTS:
         self.speed = speed
         self.volume = volume
         self.pitch = pitch
+        self.tts_out_dir = tts_out_dir
+        os.makedirs(self.tts_out_dir, exist_ok=True)
         self.log_dir = log_dir
         os.makedirs(self.log_dir, exist_ok=True)
 
@@ -53,7 +55,7 @@ class XunfeiTTS:
         url = url + '?' + urlencode(v)
         return url
 
-    def synthesize(self, text, out_file):
+    def synthesize(self, text, filename_prefix="tts"):
         self._result_audio = []
         self._error = None
 
@@ -95,14 +97,15 @@ class XunfeiTTS:
                         "vcn": self.vcn,
                         "tte": "utf8",
                         "sfl": self.sfl,
+                        "speed": self.speed,
+                        "volume": self.volume,
+                        "pitch": self.pitch
                     },
                     "data": {
                         "status": 2,
                         "text": str(base64.b64encode(text.encode('utf-8')), "UTF8")
                     }
                 }
-                if os.path.exists(out_file):
-                    os.remove(out_file)
                 ws.send(json.dumps(d))
                 logger.info(f"已发送TTS合成请求：{d}")
             thread.start_new_thread(run, ())
@@ -124,6 +127,9 @@ class XunfeiTTS:
             raise RuntimeError(self._error)
 
         if self._result_audio:
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+            prefix = "tts"
+            out_file = os.path.join(self.tts_out_dir, f"{prefix}_{timestamp}.mp3")
             with open(out_file, 'wb') as f:
                 for chunk in self._result_audio:
                     f.write(chunk)
