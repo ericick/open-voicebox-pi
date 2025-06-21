@@ -19,12 +19,12 @@ logger = logging.getLogger("XunfeiTTS")
 logger.setLevel(logging.INFO)
 
 class XunfeiTTS:
-    def __init__(self, app_id, api_key, api_secret, voice_name="xiaoyan",
+    def __init__(self, app_id, api_key, api_secret, vcn="x4_yezi",
                  aue="lame", auf="audio/L16;rate=16000", sfl=1, log_dir="tts_log"):
         self.app_id = app_id
         self.api_key = api_key
         self.api_secret = api_secret
-        self.voice_name = voice_name
+        self.vcn = vcn
         self.aue = aue
         self.auf = auf
         self.sfl = sfl
@@ -90,7 +90,7 @@ class XunfeiTTS:
                     "business": {
                         "aue": self.aue,
                         "auf": self.auf,
-                        "vcn": self.voice_name,
+                        "vcn": self.vcn,
                         "tte": "utf8",
                         "sfl": self.sfl,
                     },
