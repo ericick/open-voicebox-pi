@@ -58,6 +58,7 @@ class XunfeiTTS:
     def synthesize(self, text, filename_prefix="tts"):
         self._result_audio = []
         self._error = None
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
 
         def on_message(ws, message):
             try:
@@ -127,9 +128,7 @@ class XunfeiTTS:
             raise RuntimeError(self._error)
 
         if self._result_audio:
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
-            prefix = "tts"
-            out_file = os.path.join(self.tts_out_dir, f"{prefix}_{timestamp}.mp3")
+            out_file = os.path.join(self.tts_out_dir, f"{filename_prefix}_{timestamp}.mp3")
             with open(out_file, 'wb') as f:
                 for chunk in self._result_audio:
                     f.write(chunk)
