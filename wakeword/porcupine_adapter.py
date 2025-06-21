@@ -6,7 +6,7 @@ class WakewordDetector:
     def __init__(self, keyword_paths, access_key, sensitivities=None, audio_device_index=None):
         self.keyword_paths = keyword_paths
         self.access_key = access_key
-        self.sensitivities = sensitivities or [0.7] * len(keyword_paths)
+        self.sensitivities = sensitivities
         self.audio_device_index = audio_device_index
 
     def start(self, callback):
