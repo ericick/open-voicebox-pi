@@ -21,7 +21,10 @@ class TTSCacheManager:
             fpath = self.cache_filepath(tag)
             if not os.path.exists(fpath):
                 logger.info(f"生成TTS缓存：{tag} -> {text}")
-                self.tts.synthesize(text, out_file=fpath)
+                # 合成到tts_out_dir，生成临时文件
+                tmp_audio = self.tts.synthesize(text, filename_prefix=tag)
+                os.replace(tmp_audio, fpath)
+                logger.info(f"TTS缓存已生成并移动到：{fpath}")
             else:
                 logger.debug(f"TTS缓存已存在：{fpath}")
 
