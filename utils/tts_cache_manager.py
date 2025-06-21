@@ -40,7 +40,8 @@ class TTSCacheManager:
         h = hashlib.md5(text.encode("utf-8")).hexdigest()
         fpath = os.path.join(self.tts_cache_dir, f"normal_{h}.mp3")
         if not os.path.exists(fpath):
-            self.tts.synthesize(text, out_file=fpath)
+            tmp_path = self.tts.synthesize(text, filename_prefix=f"normal_{h}")
+            os.replace(tmp_path, fpath)
         return fpath
 
     def clean_cache(self, max_files=50, max_bytes=100*1024*1024):
