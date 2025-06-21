@@ -129,6 +129,7 @@ def main():
         keyword_paths=keyword_paths,
         access_key=access_key,
         sensitivities=sensitivities,
+        model_path=model_path,
         audio_device_index=audio_device_index
     )
 
