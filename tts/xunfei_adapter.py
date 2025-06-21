@@ -1,5 +1,3 @@
-# tts/xunfei_adapter.py
-
 import websocket
 import hashlib
 import base64
@@ -28,6 +26,9 @@ class XunfeiTTS:
         self.aue = aue
         self.auf = auf
         self.sfl = sfl
+        self.speed = speed
+        self.volume = volume
+        self.pitch = pitch
         self.log_dir = log_dir
         os.makedirs(self.log_dir, exist_ok=True)
 
