@@ -8,6 +8,7 @@ import websocket
 import ssl
 import numpy as np
 from utils.logger import logger
+from urllib.parse import quote_plus
 
 class XunfeiASR:
     def __init__(self, app_id, api_key, api_secret, hotwords="", engine_type="sms16k"):
@@ -22,41 +23,45 @@ class XunfeiASR:
         self.finished = threading.Event()
 
     def _assemble_url(self):
-        # 按TTS标准流程严格生成ws鉴权参数
-        host = "iat-api.xfyun.cn"
-        api = "/v2/iat"
-        url = self.ws_url
+    host = "iat-api.xfyun.cn"
+    api = "/v2/iat"
+    url = self.ws_url
 
-        # 1. 生成RFC1123格式时间戳
-        now = time.time()
-        date = time.strftime('%a, %d %b %Y %H:%M:%S GMT', time.gmtime(now))
+    # 1. 生成RFC1123格式时间戳
+    now = time.time()
+    date = time.strftime('%a, %d %b %Y %H:%M:%S GMT', time.gmtime(now))
 
-        # 2. 组装签名原始字符串
-        signature_origin = f"host: {host}\n"
-        signature_origin += f"date: {date}\n"
-        signature_origin += f"GET {api} HTTP/1.1"
+    # 2. 组装签名原始字符串 (注意\n与空格，最后一行为"GET /v2/iat HTTP/1.1")
+    signature_origin = f"host: {host}\n"
+    signature_origin += f"date: {date}\n"
+    signature_origin += f"GET {api} HTTP/1.1"
 
-        # 3. HMAC-SHA256签名
-        signature_sha = hmac.new(self.api_secret.encode('utf-8'),
-                                 signature_origin.encode('utf-8'),
-                                 digestmod=hashlib.sha256).digest()
-        signature_sha = base64.b64encode(signature_sha).decode('utf-8')
+    # 3. HMAC-SHA256签名
+    signature_sha = hmac.new(
+        self.api_secret.encode('utf-8'),
+        signature_origin.encode('utf-8'),
+        digestmod=hashlib.sha256
+    ).digest()
+    signature = base64.b64encode(signature_sha).decode('utf-8')
 
-        # 4. 拼接authorization原始字符串
-        authorization_origin = (
-            f'api_key="{self.api_key}", algorithm="hmac-sha256", '
-            f'headers="host date request-line", signature="{signature_sha}"'
-        )
+    # 4. 组装authorization_origin字符串
+    authorization_origin = (
+        f'api_key="{self.api_key}", '
+        f'algorithm="hmac-sha256", '
+        f'headers="host date request-line", '
+        f'signature="{signature}"'
+    )
+    # 5. base64编码
+    authorization = base64.b64encode(authorization_origin.encode('utf-8')).decode('utf-8')
 
-        authorization = base64.b64encode(authorization_origin.encode('utf-8')).decode('utf-8')
-        params = {
-            "authorization": authorization,
-            "date": date,
-            "host": host,
-        }
-
-        url = url + '?' + '&'.join([f"{k}={base64.urlsafe_b64encode(v.encode()).decode() if k=='authorization' else v}" for k, v in params.items()])
-        return url
+    # 6. 拼接url参数
+    params = {
+        "authorization": authorization,
+        "date": date,
+        "host": host,
+    }
+    url = url + '?' + '&'.join([f"{k}={quote_plus(v)}" for k, v in params.items()])
+    return url
 
     # 其余部分不用动...
     def _on_message(self, ws, message):
