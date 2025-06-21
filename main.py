@@ -50,11 +50,10 @@ def main():
         api_key=config["xunfei_asr"]["api_key"],
         api_secret=config["xunfei_asr"]["api_secret"],
         hotwords=config["xunfei_asr"].get("hotwords", ""),
-        engine_type=config["xunfei_asr"].get("engine_type", "sms16k"),
     )
     deepseek = DeepseekAdapter(
         api_key=config["deepseek"]["api_key"],
-        api_url=config["deepseek"].get("api_url", "https://api.deepseek.com/v1/chat/completions"),
+        base_url=config["deepseek"].get("api_url", "https://api.deepseek.com"),
         model=config["deepseek"].get("model", "deepseek-chat"),
         temperature=config["deepseek"].get("temperature", 0.7),
         max_tokens=config["deepseek"].get("max_tokens", 2048)
