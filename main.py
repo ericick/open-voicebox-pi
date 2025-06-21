@@ -25,11 +25,10 @@ def main():
         app_id=config["xunfei"]["app_id"],
         api_key=config["xunfei"]["api_key"],
         api_secret=config["xunfei"]["api_secret"],
-        voice_name=config["xunfei"].get("voice_name", "xiaoyan"),
+        vcn=config["xunfei"].get("vcn", "x4_yezi"),
         speed=config["xunfei"].get("speed", 50),
         volume=config["xunfei"].get("volume", 50),
         pitch=config["xunfei"].get("pitch", 50),
-        engine_type=config["xunfei"].get("engine_type", "intp65"),
         tts_out_dir=config.get("audio_out_dir", "audio_out")
     )
 
