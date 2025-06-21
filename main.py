@@ -12,7 +12,11 @@ from utils.tts_cache_manager import TTSCacheManager
 def prepare_welcome_audio(tts, welcome_text, welcome_audio_path):
     if not os.path.exists(welcome_audio_path):
         logger.info("未发现本地欢迎语音，将使用TTS生成。")
-        tts.synthesize(welcome_text, tts_out_dir=welcome_audio_path)
+        # 合成welcome音频，存到tts_out_dir下
+        generated_audio_path = tts.synthesize(welcome_text, filename_prefix="welcome")
+        # 用os.replace移动到你指定的位置
+        os.replace(generated_audio_path, welcome_audio_path)
+        logger.info(f"欢迎语音生成并保存到：{welcome_audio_path}")
     else:
         logger.debug(f"本地欢迎语音已存在：{welcome_audio_path}")
 
