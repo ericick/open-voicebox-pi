@@ -8,6 +8,7 @@ from audio_in.recorder import Recorder
 from utils.config_loader import load_config
 from utils.logger import logger
 from utils.tts_cache_manager import TTSCacheManager
+from wakeword.porcupine_adapter import WakewordDetector
 
 def prepare_welcome_audio(tts, welcome_text, welcome_audio_path):
     if not os.path.exists(welcome_audio_path):
@@ -74,13 +75,11 @@ def main():
         else:
             play_audio(tts_cache_manager.get_error_audio("error_system"))
 
-    while True:
+    def on_wakeword_detected():
         try:
-            # 播放欢迎语
             play_audio(config["welcome_audio_path"])
-            logger.info("等待用户说话...（唤醒后进入录音）")
+            logger.info("已唤醒，等待用户说话...")
 
-            # 支持边录音边识别的流式ASR
             audio_blocks = recorder.record_stream(max_record_time=10)
             user_text = asr.recognize_stream(audio_blocks)
             logger.info(f"用户语音识别结果: {user_text}")
@@ -88,7 +87,7 @@ def main():
             if not user_text.strip():
                 logger.debug("识别结果为空，提示用户重说。")
                 play_standard_error("error_no_input")
-                continue
+                return
             elif endword_detector.is_end(user_text):
                 logger.info("检测到结束词，清空历史对话。")
                 reply_text = "好的，下次再见。"
@@ -119,6 +118,21 @@ def main():
                 play_standard_error("error_tts")
             else:
                 play_standard_error("error_system")
+
+    # ==== 配置并启动唤醒词检测 ====
+    keyword_paths = config["wakeword"]["keyword_paths"]     # 列表
+    access_key = config["wakeword"]["access_key"]
+    sensitivities = config["wakeword"].get("sensitivities", [0.7] * len(keyword_paths))
+    audio_device_index = config["wakeword"].get("audio_device_index", None)
+    wakeword_detector = WakewordDetector(
+        keyword_paths=keyword_paths,
+        access_key=access_key,
+        sensitivities=sensitivities,
+        audio_device_index=audio_device_index
+    )
+
+    # 启动唤醒词监听，检测到后进入对话主流程
+    wakeword_detector.start(on_wakeword_detected)
 
 if __name__ == "__main__":
     main()
