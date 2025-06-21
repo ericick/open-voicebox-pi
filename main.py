@@ -124,6 +124,7 @@ def main():
     access_key = config["wakeword"]["access_key"]
     sensitivities = config["wakeword"]["sensitivities"]
     audio_device_index = config["wakeword"].get("audio_device_index", None)
+    model_path = config["wakeword"].get("model_path", None)
     wakeword_detector = WakewordDetector(
         keyword_paths=keyword_paths,
         access_key=access_key,
