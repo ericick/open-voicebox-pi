@@ -2,6 +2,7 @@ import time
 import json
 import base64
 import hashlib
+import hmac
 import threading
 import websocket
 import ssl
@@ -21,26 +22,43 @@ class XunfeiASR:
         self.finished = threading.Event()
 
     def _assemble_url(self):
-        # 参考官方文档，生成ws连接所需鉴权参数
+        # 按TTS标准流程严格生成ws鉴权参数
         host = "iat-api.xfyun.cn"
         api = "/v2/iat"
-        now = int(time.time())
+        url = self.ws_url
+
+        # 1. 生成RFC1123格式时间戳
+        now = time.time()
         date = time.strftime('%a, %d %b %Y %H:%M:%S GMT', time.gmtime(now))
-        signature_origin = f"host: {host}\ndate: {date}\nGET {api} HTTP/1.1"
-        signature_sha = base64.b64encode(
-            hashlib.sha256(signature_origin.encode('utf-8')).digest()
-        ).decode('utf-8')
+
+        # 2. 组装签名原始字符串
+        signature_origin = f"host: {host}\n"
+        signature_origin += f"date: {date}\n"
+        signature_origin += f"GET {api} HTTP/1.1"
+
+        # 3. HMAC-SHA256签名
+        signature_sha = hmac.new(self.api_secret.encode('utf-8'),
+                                 signature_origin.encode('utf-8'),
+                                 digestmod=hashlib.sha256).digest()
+        signature_sha = base64.b64encode(signature_sha).decode('utf-8')
+
+        # 4. 拼接authorization原始字符串
         authorization_origin = (
-            f'api_key="{self.api_key}",algorithm="hmac-sha256",headers="host date request-line",signature="{signature_sha}"'
+            f'api_key="{self.api_key}", algorithm="hmac-sha256", '
+            f'headers="host date request-line", signature="{signature_sha}"'
         )
+
+        authorization = base64.b64encode(authorization_origin.encode('utf-8')).decode('utf-8')
         params = {
-            "authorization": base64.b64encode(authorization_origin.encode('utf-8')).decode('utf-8'),
+            "authorization": authorization,
             "date": date,
             "host": host,
         }
-        url = self.ws_url + "?" + "&".join([f"{k}={json.dumps(v)[1:-1]}" for k, v in params.items()])
+
+        url = url + '?' + '&'.join([f"{k}={base64.urlsafe_b64encode(v.encode()).decode() if k=='authorization' else v}" for k, v in params.items()])
         return url
 
+    # 其余部分不用动...
     def _on_message(self, ws, message):
         try:
             data = json.loads(message)
