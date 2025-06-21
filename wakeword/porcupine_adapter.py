@@ -3,7 +3,7 @@ import pyaudio
 from utils.logger import logger
 
 class WakewordDetector:
-    def __init__(self, keyword_paths, access_key, sensitivities=None, audio_device_index=None):
+    def __init__(self, keyword_paths, access_key, sensitivities=None, model_path, audio_device_index=None):
         self.keyword_paths = keyword_paths
         self.access_key = access_key
         self.sensitivities = sensitivities
