@@ -20,7 +20,7 @@ class WakewordDetector:
         pa = pyaudio.PyAudio()
         stream = pa.open(
             rate=porcupine.sample_rate,
-            channels=1,
+            channels=2,
             format=pyaudio.paInt16,
             input=True,
             frames_per_buffer=porcupine.frame_length,
