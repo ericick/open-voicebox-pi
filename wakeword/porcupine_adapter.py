@@ -14,7 +14,7 @@ class WakewordDetector:
         porcupine = pvporcupine.create(
             access_key=self.access_key,
             keyword_paths=self.keyword_paths,
-            sensitivities=self.sensitivities
+            sensitivities=self.sensitivities,
             model_path=self.model_path
         )
         pa = pyaudio.PyAudio()
