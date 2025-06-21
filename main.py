@@ -122,7 +122,7 @@ def main():
     # ==== 配置并启动唤醒词检测 ====
     keyword_paths = config["wakeword"]["keyword_paths"]     # 列表
     access_key = config["wakeword"]["access_key"]
-    sensitivities = config["wakeword"].get("sensitivities", [0.7] * len(keyword_paths))
+    sensitivities = config["wakeword"]["sensitivities"]
     audio_device_index = config["wakeword"].get("audio_device_index", None)
     wakeword_detector = WakewordDetector(
         keyword_paths=keyword_paths,
