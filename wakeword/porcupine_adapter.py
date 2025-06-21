@@ -30,7 +30,7 @@ class WakewordDetector:
         try:
             while True:
                 pcm = stream.read(porcupine.frame_length, exception_on_overflow=False)
-                pcm = memoryview(pcm).cast('h')
+                pcm = memoryview(pcm).cast('h')[::2]
                 result = porcupine.process(pcm)
                 if result >= 0:
                     logger.debug("唤醒词已检测到，触发回调。")
