@@ -7,6 +7,7 @@ class WakewordDetector:
         self.keyword_paths = keyword_paths
         self.access_key = access_key
         self.sensitivities = sensitivities
+        self.model_path = model_path
         self.audio_device_index = audio_device_index
 
     def start(self, callback):
@@ -14,6 +15,7 @@ class WakewordDetector:
             access_key=self.access_key,
             keyword_paths=self.keyword_paths,
             sensitivities=self.sensitivities
+            model_path=self.model_path
         )
         pa = pyaudio.PyAudio()
         stream = pa.open(
