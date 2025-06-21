@@ -90,25 +90,30 @@ class XunfeiTTS:
 
         def on_open(ws):
             def run(*args):
-                d = {
-                    "common": {"app_id": self.app_id},
-                    "business": {
-                        "aue": self.aue,
-                        "auf": self.auf,
-                        "vcn": self.vcn,
-                        "tte": "utf8",
-                        "sfl": self.sfl,
-                        "speed": self.speed,
-                        "volume": self.volume,
-                        "pitch": self.pitch
-                    },
-                    "data": {
-                        "status": 2,
-                        "text": str(base64.b64encode(text.encode('utf-8')), "UTF8")
+                try:
+                    d = {
+                        "common": {"app_id": self.app_id},
+                        "business": {
+                            "aue": self.aue,
+                            "auf": self.auf,
+                            "vcn": self.vcn,
+                            "tte": "utf8",
+                            "sfl": self.sfl,
+                            "speed": self.speed,
+                            "volume": self.volume,
+                            "pitch": self.pitch
+                        },
+                        "data": {
+                            "status": 2,
+                            "text": str(base64.b64encode(text.encode('utf-8')), "UTF8")
+                        }
                     }
-                }
-                ws.send(json.dumps(d))
-                logger.info(f"已发送TTS合成请求：{d}")
+                    ws.send(json.dumps(d))
+                    logger.info(f"已发送TTS合成请求：{d}")
+                except Exception as e:
+                    logger.error(f"TTS ws.send异常: {e}")
+                    self._error = f"TTS ws.send异常: {e}"
+                    ws.close()
             thread.start_new_thread(run, ())
 
         ws_url = self._create_url()
