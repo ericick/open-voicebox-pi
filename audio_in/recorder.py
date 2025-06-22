@@ -16,6 +16,8 @@ class Recorder:
         with stream:
             for _ in range(total_samples // self.block_size):
                 block, _ = stream.read(self.block_size)
+                with open("debug_audio.pcm", "ab") as f:
+                    f.write(block.tobytes())
                 yield block.tobytes()
 
     def record(self, max_record_time=15, silence_threshold=500, silence_duration=1.0):
