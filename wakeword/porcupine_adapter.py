@@ -20,7 +20,7 @@ class WakewordDetector:
         pa = pyaudio.PyAudio()
         stream = pa.open(
             rate=porcupine.sample_rate,
-            channels=1,
+            channels=6,
             format=pyaudio.paInt16,
             input=True,
             frames_per_buffer=porcupine.frame_length,
@@ -30,7 +30,7 @@ class WakewordDetector:
         try:
             while True:
                 pcm = stream.read(porcupine.frame_length, exception_on_overflow=False)
-                pcm = memoryview(pcm).cast('h')
+                pcm = memoryview(pcm).cast('h')[::6]
                 result = porcupine.process(pcm)
                 if result >= 0:
                     logger.debug("唤醒词已检测到，触发回调。")
