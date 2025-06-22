@@ -46,10 +46,7 @@ class XunfeiASR:
     
         # 4. 组装authorization_origin字符串
         authorization_origin = (
-            f'api_key="{self.api_key}", '
-            f'algorithm="hmac-sha256", '
-            f'headers="host date request-line", '
-            f'signature="{signature}"'
+            f'api_key="{self.api_key}",algorithm="hmac-sha256",headers="host date request-line",signature="{signature}"'
         )
         # 5. base64编码
         authorization = base64.b64encode(authorization_origin.encode('utf-8')).decode('utf-8')
