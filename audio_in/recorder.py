@@ -1,12 +1,22 @@
 import sounddevice as sd
 import numpy as np
 
+
 class Recorder:
-    def __init__(self, samplerate=16000, channels=1, dtype='int16', block_size=6400):
+    def __init__(self, samplerate=16000, channels=1, dtype='int16', block_size=1280):
         self.samplerate = samplerate
         self.channels = channels
         self.dtype = dtype
-        self.block_size = block_size  # 0.4s = 6400 samples @16kHz
+        self.block_size = block_size  # 1280 samples @16kHz = 40ms
+
+    def record_stream(self, max_record_time=15):
+        total_samples = int(self.samplerate * max_record_time)
+        stream = sd.InputStream(samplerate=self.samplerate, channels=self.channels, dtype=self.dtype, blocksize=self.block_size)
+        print("开始流式录音，请说话...")
+        with stream:
+            for _ in range(total_samples // self.block_size):
+                block, _ = stream.read(self.block_size)
+                yield block.tobytes()
 
     def record(self, max_record_time=15, silence_threshold=500, silence_duration=1.0):
         """
@@ -35,15 +45,3 @@ class Recorder:
                     silence_count = 0
         audio = np.concatenate(buffer)
         return audio
-
-    def record_stream(self, max_record_time=15):
-        """
-        流式录音，边录音边yield音频数据块（bytes），适合流式ASR。
-        """
-        total_samples = int(self.samplerate * max_record_time)
-        stream = sd.InputStream(samplerate=self.samplerate, channels=self.channels, dtype=self.dtype, blocksize=self.block_size)
-        print("开始流式录音，请说话...")
-        with stream:
-            for _ in range(total_samples // self.block_size):
-                block, _ = stream.read(self.block_size)
-                yield block.tobytes()
