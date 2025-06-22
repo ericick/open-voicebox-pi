@@ -6,11 +6,14 @@ from datetime import datetime
 
 
 class Recorder:
-    def __init__(self, samplerate=16000, channels=6, dtype='int16', block_size=1280, max_record_time=15, save_pcm=True, pcm_save_dir="audio_out"):
+    def __init__(self, samplerate=16000, channels=6, dtype='int16', block_size=1280, max_record_time=15, save_pcm=True, pcm_save_dir="audio_out", device=1):
         self.samplerate = samplerate
         self.channels = channels
         self.dtype = dtype
         self.block_size = block_size  # 1280 samples @16kHz = 40ms
+        self.max_record_time =  max_record_time
+        self.save_pcm =  save_pcm
+        self.pcm_save_dir =  pcm_save_dir
 
     def record_stream(self, max_record_time=15):
         total_samples = int(self.samplerate * max_record_time)
@@ -27,7 +30,7 @@ class Recorder:
             os.makedirs(pcm_save_dir, exist_ok=True)
             ts = datetime.now().strftime("%Y%m%d_%H%M%S")
             pcm_path = os.path.join(pcm_save_dir, f"stream_record_{ts}.pcm")
-            with open(pcm_path, "wb") as f:
+            with open(pcm_save_dir, "wb") as f:
                 f.write(all_bytes)
             logger.info(f"流式录音PCM已保存: {pcm_path}，总长度: {len(all_bytes)} 字节")
         else:
