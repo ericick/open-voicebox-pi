@@ -20,6 +20,7 @@ class Recorder:
         with stream:
             for _ in range(total_samples // self.block_size):
                 block, _ = stream.read(self.block_size)
+                logger.debug(f"第{i}帧录音, block形状: {block.shape})
                 all_bytes += block.tobytes()
                 yield block.tobytes()
         if save_pcm:
