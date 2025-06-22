@@ -11,12 +11,11 @@ from utils.logger import logger
 from urllib.parse import quote_plus
 
 class XunfeiASR:
-    def __init__(self, app_id, api_key, api_secret, hotwords="", engine_type="sms16k"):
+    def __init__(self, app_id, api_key, api_secret, hotwords=""):
         self.app_id = app_id
         self.api_key = api_key
         self.api_secret = api_secret
         self.hotwords = hotwords
-        self.engine_type = engine_type
         self.ws_url = "wss://iat-api.xfyun.cn/v2/iat"
         self.result = ""
         self.result_lock = threading.Lock()
