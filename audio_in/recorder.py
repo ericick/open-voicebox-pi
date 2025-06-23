@@ -14,10 +14,11 @@ class Recorder:
         self.max_record_time =  max_record_time
         self.save_pcm =  save_pcm
         self.pcm_save_dir =  pcm_save_dir
+        self.device = device
 
     def record_stream(self, max_record_time=15):
         total_samples = int(self.samplerate * max_record_time)
-        stream = sd.InputStream(samplerate=self.samplerate, channels=self.channels, dtype=self.dtype, blocksize=self.block_size)
+        stream = sd.InputStream(samplerate=self.samplerate, channels=self.channels, dtype=self.dtype, blocksize=self.block_size, device=self.device)
         print("开始流式录音，请说话...")
         all_bytes = b""
         with stream:
