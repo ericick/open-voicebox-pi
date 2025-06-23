@@ -1,7 +1,7 @@
 import subprocess
 from utils.logger import logger
 
-def play_audio(file_path, volume=None, device=None):
+def play_audio(file_path, volume=None, device=plughw:3,0):
     try:
         logger.debug(f"准备播放音频: {file_path}")
         cmd = ['mpg123', '-q', '-a', device, file_path]
