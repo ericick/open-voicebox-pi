@@ -80,7 +80,7 @@ def main():
             play_audio(config["welcome_audio_path"])
             logger.info("已唤醒，等待用户说话...")
 
-            audio_blocks = recorder.record_stream(max_record_time=10, device = config["wakeword"]["audio_device_index])
+            audio_blocks = recorder.record_stream(max_record_time=10, device = config["wakeword"]["audio_device_index"])
             user_text = asr.recognize_stream(audio_blocks)
             logger.info(f"用户语音识别结果: {user_text}")
 
