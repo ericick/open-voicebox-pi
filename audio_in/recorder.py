@@ -1,12 +1,10 @@
 import sounddevice as sd
 import numpy as np
-import os
 from utils.logger import logger
-from datetime import datetime
 
 
 class Recorder:
-    def __init__(self, samplerate=16000, channels=6, dtype='int16', block_size=1280, max_record_time=15, save_pcm=True, pcm_save_dir="audio_out", device=0):
+    def __init__(self, samplerate=16000, channels=6, dtype='int16', block_size=1280, max_record_time=15, device=1):
         self.samplerate = samplerate
         self.channels = channels
         self.dtype = dtype
