@@ -19,7 +19,7 @@ class Recorder:
     def record_stream(self, max_record_time=15):
         total_samples = int(self.samplerate * max_record_time)
         stream = sd.InputStream(samplerate=self.samplerate, channels=self.channels, dtype=self.dtype, blocksize=self.block_size, device=self.device)
-        print("开始流式录音，请说话...")
+        logger.info("开始流式录音，请说话...")
         all_bytes = b""
         with stream:
             for _ in range(total_samples // self.block_size):
