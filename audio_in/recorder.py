@@ -18,24 +18,21 @@ class Recorder:
 
     def record_stream(self, max_record_time=15):
         total_samples = int(self.samplerate * max_record_time)
-        stream = sd.InputStream(samplerate=self.samplerate, channels=self.channels, dtype=self.dtype, blocksize=self.block_size, device=self.device)
+        stream = sd.InputStream(
+            samplerate=self.samplerate,
+            channels=self.channels,
+            dtype=self.dtype,
+            blocksize=self.block_size,
+            device=self.device
+        )
         logger.info("开始流式录音，请说话...")
-        all_bytes = b""
         with stream:
-            for _ in range(total_samples // self.block_size):
+            for i in range(total_samples // self.block_size):
                 block, _ = stream.read(self.block_size)
                 logger.debug(f"第{i}帧录音, block形状: {block.shape}")
-                all_bytes += block[:, 0].tobytes()
-                yield block.tobytes()
-        if save_pcm:
-            os.makedirs(pcm_save_dir, exist_ok=True)
-            ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-            pcm_path = os.path.join(pcm_save_dir, f"stream_record_{ts}.pcm")
-            with open(pcm_save_dir, "wb") as f:
-                f.write(all_bytes)
-            logger.info(f"流式录音PCM已保存: {pcm_path}，总长度: {len(all_bytes)} 字节")
-        else:
-            logger.debug("未保存流式录音到本地PCM文件。")
+                # 只取第一个通道（保证ASR兼容）
+                mono_block = block[:, 0] if self.channels > 1 else block
+                yield mono_block.tobytes()
         
 
     def record(self, max_record_time=15, silence_threshold=500, silence_duration=1.0):
