@@ -10,8 +10,6 @@ class Recorder:
         self.dtype = dtype
         self.block_size = block_size  # 1280 samples @16kHz = 40ms
         self.max_record_time =  max_record_time
-        self.save_pcm =  save_pcm
-        self.pcm_save_dir =  pcm_save_dir
         self.device = device
 
     def record_stream(self, max_record_time=15):
