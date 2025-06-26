@@ -6,7 +6,7 @@ from datetime import datetime
 
 
 class Recorder:
-    def __init__(self, samplerate=16000, channels=1, dtype='int16', block_size=1280, max_record_time=15, save_pcm=True, pcm_save_dir="audio_out", device=0):
+    def __init__(self, samplerate=16000, channels=2, dtype='int16', block_size=1280, max_record_time=15, save_pcm=True, pcm_save_dir="audio_out", device=0):
         self.samplerate = samplerate
         self.channels = channels
         self.dtype = dtype
