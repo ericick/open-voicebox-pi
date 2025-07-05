@@ -34,11 +34,13 @@ class WakewordDetector:
                 result = porcupine.process(pcm)
                 if result >= 0:
                     logger.debug("唤醒词已检测到，触发回调。")
-                    break  # 关键！检测到后直接break，防止一直占用设备
-            callback()  # 检测到一次就回调，之后关闭设备
+                    break  # 跳出循环
         except KeyboardInterrupt:
             logger.info("唤醒词检测终止。")
         finally:
             stream.close()
             pa.terminate()
             porcupine.delete()
+        # 注意，**一定要在资源释放后再回调**
+        callback()
+
