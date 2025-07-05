@@ -68,7 +68,7 @@ class XunfeiASR:
         return url
 
     def _on_message(self, ws, message):
-        logger.debug(f"ASR收到消息: {message[:500]}")  # 截断避免日志爆炸
+        logger.debug(f"ASR收到消息: {message[:500]}")
         try:
             data = json.loads(message)
             code = data.get("code", -1)
@@ -76,17 +76,18 @@ class XunfeiASR:
                 logger.error(f"ASR识别返回错误: code={code}, msg={data.get('message')}")
                 self.finished.set()
                 return
-            result = data["data"]["result"]["ws"]
-            text = ""
-            for r in result:
-                for w in r["cw"]:
-                    text += w["w"]
-            with self.result_lock:
-                self.result += text
-            logger.info(f"ASR中间结果: {text}")
+            # 只处理最后一帧
             if data["data"]["status"] == 2:
+                result = data["data"]["result"]["ws"]
+                text = ""
+                for r in result:
+                    for w in r["cw"]:
+                        text += w["w"]
+                with self.result_lock:
+                    self.result = text
                 logger.info(f"ASR识别完成，最终结果: {self.result.strip()}")
                 self.finished.set()
+            # 否则，直接忽略所有中间结果
         except Exception as e:
             logger.error(f"ASR返回解析异常: {e}")
             self.finished.set()
