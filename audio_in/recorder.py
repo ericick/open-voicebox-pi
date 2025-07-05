@@ -4,7 +4,7 @@ from utils.logger import logger
 
 
 class Recorder:
-    def __init__(self, samplerate=16000, channels=6, dtype='int16', block_size=1280, max_record_time=15, device="hw:2,0"):
+    def __init__(self, samplerate=16000, channels=6, dtype='int16', block_size=1280, max_record_time=15, device="ReSpeaker 4 Mic Array (UAC1.0): USB Audio (hw:2,0)"):
         self.samplerate = samplerate
         self.channels = channels
         self.dtype = dtype
