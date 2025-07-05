@@ -68,7 +68,7 @@ class XunfeiASR:
         return url
 
     def _on_message(self, ws, message):
-        logger.debug(f"ASR收到消息: {message[:500]}")
+        logger.debug(f"ASR收到消息: {message[:500]}")  # 截断避免日志爆炸
         try:
             data = json.loads(message)
             code = data.get("code", -1)
@@ -76,34 +76,20 @@ class XunfeiASR:
                 logger.error(f"ASR识别返回错误: code={code}, msg={data.get('message')}")
                 self.finished.set()
                 return
-            result_obj = data["data"]["result"]
-            ws_data = result_obj["ws"]
-            # 1. 当前片段文本
-            new_text = ""
-            for r in ws_data:
+            result = data["data"]["result"]["ws"]
+            text = ""
+            for r in result:
                 for w in r["cw"]:
-                    new_text += w["w"]
-    
-            # 2. 处理讯飞wpgs动态修正
-            if "pgs" in result_obj:
-                if result_obj["pgs"] == "apd":
-                    self.asr_sentence_list.append(new_text)
-                elif result_obj["pgs"] == "rpl":
-                    s, e = result_obj["rg"]
-                    self.asr_sentence_list[s-1:e] = [new_text]
-                text = ''.join(self.asr_sentence_list)
-            else:
-                self.asr_sentence_list.append(new_text)
-                text = ''.join(self.asr_sentence_list)
+                    text += w["w"]
+            with self.result_lock:
+                self.result += text
             logger.info(f"ASR中间结果: {text}")
             if data["data"]["status"] == 2:
-                logger.info(f"ASR识别完成，最终结果: {text.strip()}")
-                self.result = text.strip()
+                logger.info(f"ASR识别完成，最终结果: {self.result.strip()}")
                 self.finished.set()
         except Exception as e:
             logger.error(f"ASR返回解析异常: {e}")
             self.finished.set()
-
 
     def _on_error(self, ws, error):
         logger.error(f"ASR websocket异常: {error}")
