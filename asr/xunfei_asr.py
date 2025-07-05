@@ -20,6 +20,7 @@ class XunfeiASR:
         self.result = ""
         self.result_lock = threading.Lock()
         self.finished = threading.Event()
+        self.asr_sentence_list = []
 
     def _assemble_url(self):
         host = "iat-api.xfyun.cn"
@@ -68,7 +69,7 @@ class XunfeiASR:
         return url
 
     def _on_message(self, ws, message):
-        logger.debug(f"ASR收到消息: {message[:500]}")  # 截断避免日志爆炸
+        logger.debug(f"ASR收到消息: {message[:500]}")
         try:
             data = json.loads(message)
             code = data.get("code", -1)
@@ -76,20 +77,34 @@ class XunfeiASR:
                 logger.error(f"ASR识别返回错误: code={code}, msg={data.get('message')}")
                 self.finished.set()
                 return
-            result = data["data"]["result"]["ws"]
-            text = ""
-            for r in result:
+            result_obj = data["data"]["result"]
+            ws_data = result_obj["ws"]
+            # 1. 当前片段文本
+            new_text = ""
+            for r in ws_data:
                 for w in r["cw"]:
-                    text += w["w"]
-            with self.result_lock:
-                self.result += text
+                    new_text += w["w"]
+    
+            # 2. 处理讯飞wpgs动态修正
+            if "pgs" in result_obj:
+                if result_obj["pgs"] == "apd":
+                    self.asr_sentence_list.append(new_text)
+                elif result_obj["pgs"] == "rpl":
+                    s, e = result_obj["rg"]
+                    self.asr_sentence_list[s-1:e] = [new_text]
+                text = ''.join(self.asr_sentence_list)
+            else:
+                self.asr_sentence_list.append(new_text)
+                text = ''.join(self.asr_sentence_list)
             logger.info(f"ASR中间结果: {text}")
             if data["data"]["status"] == 2:
-                logger.info(f"ASR识别完成，最终结果: {self.result.strip()}")
+                logger.info(f"ASR识别完成，最终结果: {text.strip()}")
+                self.result = text.strip()
                 self.finished.set()
         except Exception as e:
             logger.error(f"ASR返回解析异常: {e}")
             self.finished.set()
+
 
     def _on_error(self, ws, error):
         logger.error(f"ASR websocket异常: {error}")
@@ -160,6 +175,7 @@ class XunfeiASR:
         """
         一次性音频识别：audio为完整录音（numpy数组或bytes），自动分帧发送
         """
+        self.asr_sentence_list = []
         logger.info(f"调用ASR一次性识别，audio类型:{type(audio)}, 长度:{len(audio) if isinstance(audio, bytes) else audio.size}")
         if isinstance(audio, np.ndarray):
             audio = audio.astype(np.int16).tobytes()
@@ -193,6 +209,7 @@ class XunfeiASR:
         """
         边录音边识别（流式）：audio_generator为yield音频块(bytes)的生成器
         """
+        self.asr_sentence_list = []
         self.result = ""
         self.finished.clear()
         url = self._assemble_url()
