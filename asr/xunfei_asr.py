@@ -87,15 +87,15 @@ class XunfeiASR:
     
             # 处理增量或替换逻辑
             if pgs == "apd":  # 追加
-                logger.info(f"apd")
+                #logger.info(f"apd")
                 self.words_list.extend(ws_list)
             elif pgs == "rpl" and rg is not None:  # 替换
-                logger.info(f"rpl")
+                #logger.info(f"rpl")
                 start, end = rg
                 self.words_list = self.words_list[:start] + ws_list + self.words_list[end+1:]
             else:
                 # 兼容无pgs（极少见），直接累积
-                logger.info(f"none")
+                #logger.info(f"none")
                 self.words_list.extend(ws_list)
     
             # status==2 表示识别结束，组装最终结果
