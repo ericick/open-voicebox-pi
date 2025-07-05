@@ -76,20 +76,45 @@ class XunfeiASR:
                 logger.error(f"ASR识别返回错误: code={code}, msg={data.get('message')}")
                 self.finished.set()
                 return
-            result = data["data"]["result"]["ws"]
-            text = ""
-            for r in result:
-                for w in r["cw"]:
-                    text += w["w"]
-            with self.result_lock:
-                self.result += text
-            logger.info(f"ASR中间结果: {text}")
+    
+            result = data["data"]["result"]
+            ws_list = result["ws"]
+            pgs = result.get("pgs")
+            rg = result.get("rg")
+            if not hasattr(self, "words_list"):
+                self.words_list = []
+    
+            if pgs == "apd":  # 追加
+                self.words_list.extend(ws_list)
+            elif pgs == "rpl" and rg is not None:  # 替换
+                start, end = rg
+                self.words_list = self.words_list[:start] + ws_list + self.words_list[end+1:]
+            else:
+                # 兼容无pgs（极少见），直接累积
+                self.words_list.extend(ws_list)
+    
+            # status==2 表示识别结束，组装最终结果
             if data["data"]["status"] == 2:
+                # 拼接所有分词
+                final_result = ""
+                for ws_block in self.words_list:
+                    for w in ws_block["cw"]:
+                        final_result += w["w"]
+                with self.result_lock:
+                    self.result = final_result
                 logger.info(f"ASR识别完成，最终结果: {self.result.strip()}")
                 self.finished.set()
+            else:
+                # 可选：也可以打印当前中间累计文本
+                middle = ""
+                for ws_block in self.words_list:
+                    for w in ws_block["cw"]:
+                        middle += w["w"]
+                logger.info(f"ASR中间累计: {middle}")
         except Exception as e:
             logger.error(f"ASR返回解析异常: {e}")
             self.finished.set()
+
 
     def _on_error(self, ws, error):
         logger.error(f"ASR websocket异常: {error}")
