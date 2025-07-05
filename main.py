@@ -118,9 +118,6 @@ def main():
                 play_standard_error("error_tts")
             else:
                 play_standard_error("error_system")
-        finally:
-        # 不管成功失败都重新监听唤醒
-            wakeword_detector.start(on_wakeword_detected)
 
     # ==== 配置并启动唤醒词检测 ====
     keyword_paths = config["wakeword"]["keyword_paths"]     # 列表
