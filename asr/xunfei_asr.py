@@ -82,7 +82,7 @@ class XunfeiASR:
                 for w in r["cw"]:
                     text += w["w"]
             with self.result_lock:
-                self.result = text
+                self.result += text
             logger.info(f"ASR中间结果: {text}")
             if data["data"]["status"] == 2:
                 logger.info(f"ASR识别完成，最终结果: {self.result.strip()}")
