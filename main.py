@@ -78,32 +78,40 @@ def main():
     def on_wakeword_detected():
         try:
             play_audio(config["welcome_audio_path"])
-            logger.info("已唤醒，等待用户说话...")
-
-            audio_blocks = recorder.record_stream(max_record_time=10)
-            user_text = asr.recognize_stream(audio_blocks)
-            logger.info(f"用户语音识别结果: {user_text}")
-
-            if not user_text.strip():
-                logger.debug("识别结果为空，提示用户重说。")
-                play_standard_error("error_no_input")
-                return
-            elif endword_detector.is_end(user_text):
-                logger.info("检测到结束词，清空历史对话。")
-                reply_text = "好的，下次再见。"
-                conversation_history.clear()
-            else:
-                logger.debug("进入多轮对话处理。")
-                conversation_history.append({"role": "user", "content": user_text})
-                reply_text = deepseek.chat(context=conversation_history)
-                conversation_history.append({"role": "assistant", "content": reply_text})
-
-            logger.info(f"AI回复文本: {reply_text}")
-            tts_file = tts_cache_manager.cache_normal_tts(reply_text)
-            if tts_file:
-                play_audio(tts_file)
-            else:
-                play_standard_error("error_tts")
+            logger.info("已唤醒，进入多轮对话...")
+    
+            while True:   # 增加循环
+                audio_blocks = recorder.record_stream(max_record_time=10)
+                user_text = asr.recognize_stream(audio_blocks)
+                logger.info(f"用户语音识别结果: {user_text}")
+    
+                if not user_text.strip():
+                    logger.debug("识别结果为空，提示用户重说。")
+                    play_standard_error("error_no_input")
+                    continue    # 让用户重说
+    
+                elif endword_detector.is_end(user_text):
+                    logger.info("检测到结束词，清空历史对话。")
+                    reply_text = "好的，下次再见。"
+                    conversation_history.clear()
+                    tts_file = tts_cache_manager.cache_normal_tts(reply_text)
+                    if tts_file:
+                        play_audio(tts_file)
+                    else:
+                        play_standard_error("error_tts")
+                    break       # 跳出多轮对话，回到唤醒监听
+    
+                else:
+                    logger.debug("进入多轮对话处理。")
+                    conversation_history.append({"role": "user", "content": user_text})
+                    reply_text = deepseek.chat(context=conversation_history)
+                    conversation_history.append({"role": "assistant", "content": reply_text})
+                    logger.info(f"AI回复文本: {reply_text}")
+                    tts_file = tts_cache_manager.cache_normal_tts(reply_text)
+                    if tts_file:
+                        play_audio(tts_file)
+                    else:
+                        play_standard_error("error_tts")
         except Exception as e:
             logger.error(f"主流程异常：{e}")
             import traceback
@@ -118,6 +126,7 @@ def main():
                 play_standard_error("error_tts")
             else:
                 play_standard_error("error_system")
+
 
     # ==== 配置并启动唤醒词检测 ====
     keyword_paths = config["wakeword"]["keyword_paths"]     # 列表
