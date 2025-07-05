@@ -64,7 +64,7 @@ def main():
         max_tokens=config["deepseek"].get("max_tokens", 2048)
     )
     endword_detector = EndwordDetector(keywords=config["endwords"])
-    recorder = Recorder()
+    recorder = Recorder(device=1, channels=6)
 
     conversation_history = []
 
