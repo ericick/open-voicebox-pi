@@ -78,16 +78,16 @@ class XunfeiASR:
                 return
             # 只处理最后一帧
             if data["data"]["status"] == 2:
-                result = data["data"]["result"]["ws"]
+                ws_list = data["data"]["result"]["ws"]
                 text = ""
-                for r in result:
+                for r in ws_list:
                     for w in r["cw"]:
                         text += w["w"]
                 with self.result_lock:
-                    self.result = text
+                    self.result = text  # 覆盖，保证是最后完整的一句
                 logger.info(f"ASR识别完成，最终结果: {self.result.strip()}")
                 self.finished.set()
-            # 否则，直接忽略所有中间结果
+            # 其他帧不处理
         except Exception as e:
             logger.error(f"ASR返回解析异常: {e}")
             self.finished.set()
