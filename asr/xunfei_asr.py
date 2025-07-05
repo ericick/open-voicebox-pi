@@ -81,9 +81,11 @@ class XunfeiASR:
             ws_list = result["ws"]
             pgs = result.get("pgs")
             rg = result.get("rg")
-            if not hasattr(self, "words_list"):
+            # 初始化words_list，保证每次新的识别流程都是干净的
+            if not hasattr(self, "words_list") or data["data"]["status"] == 0:
                 self.words_list = []
     
+            # 处理增量或替换逻辑
             if pgs == "apd":  # 追加
                 self.words_list.extend(ws_list)
             elif pgs == "rpl" and rg is not None:  # 替换
@@ -105,7 +107,7 @@ class XunfeiASR:
                 logger.info(f"ASR识别完成，最终结果: {self.result.strip()}")
                 self.finished.set()
             else:
-                # 可选：也可以打印当前中间累计文本
+                # 打印累计中间文本（可选）
                 middle = ""
                 for ws_block in self.words_list:
                     for w in ws_block["cw"]:
@@ -114,6 +116,7 @@ class XunfeiASR:
         except Exception as e:
             logger.error(f"ASR返回解析异常: {e}")
             self.finished.set()
+
 
 
     def _on_error(self, ws, error):
