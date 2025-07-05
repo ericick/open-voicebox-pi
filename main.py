@@ -137,7 +137,9 @@ def main():
     )
 
     # 启动唤醒词监听，检测到后进入对话主流程
-    wakeword_detector.start(on_wakeword_detected)
+    while True:
+        wakeword_detector.start(on_wakeword_detected)
+
 
 if __name__ == "__main__":
     main()
