@@ -67,8 +67,8 @@ class XunfeiASR:
         logger.info(f"ASR WS 连接URL: {url}")
         return url
 
-    def _on_message(self, ws, message):
-        logger.debug(f"ASR收到消息: {message[:500]}")  # 截断避免日志爆炸
+    def _on_message(ws, message):
+        logger.debug(f"ASR收到消息: {message[:500]}")
         try:
             data = json.loads(message)
             code = data.get("code", -1)
@@ -76,28 +76,22 @@ class XunfeiASR:
                 logger.error(f"ASR识别返回错误: code={code}, msg={data.get('message')}")
                 self.finished.set()
                 return
-    
+
             result = data["data"]["result"]
             ws_list = result["ws"]
             pgs = result.get("pgs")
             rg = result.get("rg")
-            # 初始化words_list，保证每次新的识别流程都是干净的
-            if not hasattr(self, "words_list") or data["data"]["status"] == 0:
-                self.words_list = []
-    
-            # 处理增量或替换逻辑
-            if pgs == "apd":  # 追加
+            # 核心逻辑
+            if pgs == "apd":
                 self.words_list.extend(ws_list)
-            elif pgs == "rpl" and rg is not None:  # 替换
+            elif pgs == "rpl" and rg is not None:
                 start, end = rg
-                self.words_list = self.words_list[:start] + ws_list + self.words_list[end+1:]
+                self.words_list = self.words_list[:start] + ws_list + self.words_list[end + 1:]
             else:
-                # 兼容无pgs（极少见），直接累积
                 self.words_list.extend(ws_list)
-    
-            # status==2 表示识别结束，组装最终结果
+
             if data["data"]["status"] == 2:
-                # 拼接所有分词
+                # 组装最终结果
                 final_result = ""
                 for ws_block in self.words_list:
                     for w in ws_block["cw"]:
@@ -106,13 +100,6 @@ class XunfeiASR:
                     self.result = final_result
                 logger.info(f"ASR识别完成，最终结果: {self.result.strip()}")
                 self.finished.set()
-            else:
-                # 打印累计中间文本（可选）
-                middle = ""
-                for ws_block in self.words_list:
-                    for w in ws_block["cw"]:
-                        middle += w["w"]
-                logger.info(f"ASR中间累计: {middle}")
         except Exception as e:
             logger.error(f"ASR返回解析异常: {e}")
             self.finished.set()
@@ -221,6 +208,7 @@ class XunfeiASR:
         """
         边录音边识别（流式）：audio_generator为yield音频块(bytes)的生成器
         """
+        self.words_list = []
         self.result = ""
         self.finished.clear()
         url = self._assemble_url()
