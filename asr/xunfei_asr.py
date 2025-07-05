@@ -20,7 +20,6 @@ class XunfeiASR:
         self.result = ""
         self.result_lock = threading.Lock()
         self.finished = threading.Event()
-        self.asr_sentence_list = []
 
     def _assemble_url(self):
         host = "iat-api.xfyun.cn"
@@ -175,7 +174,6 @@ class XunfeiASR:
         """
         一次性音频识别：audio为完整录音（numpy数组或bytes），自动分帧发送
         """
-        self.asr_sentence_list = []
         logger.info(f"调用ASR一次性识别，audio类型:{type(audio)}, 长度:{len(audio) if isinstance(audio, bytes) else audio.size}")
         if isinstance(audio, np.ndarray):
             audio = audio.astype(np.int16).tobytes()
@@ -209,7 +207,6 @@ class XunfeiASR:
         """
         边录音边识别（流式）：audio_generator为yield音频块(bytes)的生成器
         """
-        self.asr_sentence_list = []
         self.result = ""
         self.finished.clear()
         url = self._assemble_url()
