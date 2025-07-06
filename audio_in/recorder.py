@@ -12,8 +12,11 @@ class Recorder:
         self.max_record_time =  max_record_time
         self.device = device
 
-    def record_stream(self, max_record_time=15):
+    def record_stream(self, max_record_time=15, silence_threshold=500, silence_duration=2.0):
         total_samples = int(self.samplerate * max_record_time)
+        silence_chunk = int(self.samplerate * silence_duration)
+        silence_count = 0
+    
         stream = sd.InputStream(
             samplerate=self.samplerate,
             channels=self.channels,
@@ -26,10 +29,16 @@ class Recorder:
             for i in range(total_samples // self.block_size):
                 block, _ = stream.read(self.block_size)
                 logger.debug(f"第{i}帧录音, block形状: {block.shape}")
-                # 只取第一个通道（保证ASR兼容）
                 mono_block = block[:, 0] if self.channels > 1 else block
                 yield mono_block.tobytes()
-        
+                # === 新增静音检测 ===
+                if np.abs(mono_block).mean() < silence_threshold:
+                    silence_count += len(mono_block)
+                    if silence_count >= silence_chunk:
+                        logger.info("检测到静音，自动停止流式录音。")
+                        break
+                else:
+                    silence_count = 0
 
     def record(self, max_record_time=15, silence_threshold=500, silence_duration=1.0):
         """
