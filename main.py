@@ -130,18 +130,15 @@ def main():
 
 
     # ==== 配置并启动唤醒词检测 ====
-    keyword_paths = config["wakeword"]["keyword_paths"]     # 列表
-    access_key = config["wakeword"]["access_key"]
-    sensitivities = config["wakeword"]["sensitivities"]
-    audio_device_index = config["wakeword"].get("audio_device_index", None)
-    model_path = config["wakeword"].get("model_path", None)
-    wakeword_detector = WakewordDetector(
-        keyword_paths=keyword_paths,
-        access_key=access_key,
-        sensitivities=sensitivities,
-        model_path=model_path,
-        audio_device_index=audio_device_index
-    )
+    wake_cfg = config["wakeword"]
+    args = {
+        "keyword_paths": wake_cfg["keyword_paths"],
+        "access_key": wake_cfg["access_key"],
+        "sensitivities": wake_cfg.get("sensitivities"),
+        "model_path": wake_cfg.get("model_path"),
+        "audio_device_index": wake_cfg.get("audio_device_index")
+    }
+    wakeword_detector = WakewordDetector(**args)
 
     # 启动唤醒词监听，检测到后进入对话主流程
     while True:
