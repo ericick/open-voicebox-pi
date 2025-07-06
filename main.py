@@ -61,7 +61,8 @@ def main():
         base_url=config["deepseek"].get("api_url", "https://api.deepseek.com"),
         model=config["deepseek"].get("model", "deepseek-chat"),
         temperature=config["deepseek"].get("temperature", 0.7),
-        max_tokens=config["deepseek"].get("max_tokens", 2048)
+        max_tokens=config["deepseek"].get("max_tokens", 2048),
+        system_prompt=config["deepseek"].get("system_prompt", "")
     )
     endword_detector = EndwordDetector(keywords=config["endwords"])
     recorder = Recorder(device=1, channels=6)
