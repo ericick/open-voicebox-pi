@@ -3,17 +3,15 @@ xunfei_asr:
   api_key: "你的ASR APIKey"
   api_secret: "你的ASR APISecret"
   hotwords: "小猪小猪,芝麻开门"
-  engine_type: "sms16k"
 
 xunfei:
   app_id: "你的TTS APPID"
   api_key: "你的TTS APIKey"
   api_secret: "你的TTS APISecret"
-  voice_name: "xiaoyan"
+  vcn:"x4_yezi"
   speed: 50
   volume: 50
   pitch: 50
-  engine_type: "intp65"
 
 deepseek:
   api_key: "你的DeepSeek APIKey"
@@ -21,6 +19,7 @@ deepseek:
   model: "deepseek-chat"
   temperature: 0.7
   max_tokens: 2048
+  system_prompt: "这是背景设定，你不需要在后面的对话中提及，但是要一直记住：你是我给我女儿设计的智能语音音箱，她叫嘟嘟，你是一个知性、温柔的大姐姐，她会亲密地叫你小猪猪，由于语音音箱的识别问题，发送给你的文字会有倒序或者重复的问题，请你自动理解，并且当作正常的语言来处理。"
 
 endwords:
   - "再见"
@@ -45,7 +44,8 @@ wakeword:
   keyword_paths: ["wakeword/xiaozhu_xiaozhu.ppn"]
   access_key: "你的picovoice_access_key"
   sensitivities: [0.7]
-  audio_device_index: 0
+  model_path: "wakeword/porcupine_params_zh.pv"
+  audio_device_index: 1
 
 tts_cache_policy:
   max_files: 200        # 最大保留音频文件数
