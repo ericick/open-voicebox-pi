@@ -1,0 +1,604 @@
+2025-06-22 00:08:22.552 | INFO     | __main__:main:24 - ==== 智能语音音箱主流程启动 ====
+2025-06-22 00:08:22.558 | DEBUG    | __main__:main:26 - 完整配置参数: {'xunfei_asr': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'hotwords': '小猪猪,芝麻开门', 'engine_type': 'sms16k'}, 'xunfei': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'vcn': 'x4_yezi', 'speed': 50, 'volume': 50, 'pitch': 50}, 'deepseek': {'api_key': 'sk-f2d5403d07e1499a8e344a09588f4eb7', 'base_url': 'https://api.deepseek.com', 'model': 'deepseek-chat', 'temperature': 0.7, 'max_tokens': 2048}, 'endwords': ['再见', '拜拜', '下次再说'], 'welcome_audio_path': 'audio_out/welcome.mp3', 'welcome_text': '你好。', 'audio_out_dir': 'audio_out', 'tts_cache_dir': 'audio_out/tts_cache', 'error_prompts': {'error_recording': '录音设备不可用，请检查麦克风。', 'error_asr': '语音识别服务不可用，请检查网络或稍后重试。', 'error_network': '网络连接异常，请检查网络。', 'error_tts': '语音合成服务不可用。', 'error_system': '系统发生未知错误，请稍后重试。', 'error_no_input': '未检测到有效语音，请再试一次。'}, 'wakeword': {'keyword_paths': 'wakeword/xiaozhu.ppn', 'access_key': 'TTnalPNKGniQ17wPRKfQR7u29VGYKVHk2NheRgMh7K7b5JIVnJE3UQ==', 'sensitivities': [0.7], 'audio_device_index': 0}, 'tts_cache_policy': {'max_files': 200, 'max_bytes': 15000000000}}
+2025-06-22 00:08:22.558 | DEBUG    | __main__:prepare_welcome_audio:21 - 本地欢迎语音已存在：audio_out/welcome.mp3
+2025-06-22 00:08:22.559 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_recording.mp3
+2025-06-22 00:08:22.559 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_asr.mp3
+2025-06-22 00:08:22.559 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_network.mp3
+2025-06-22 00:08:22.559 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_tts.mp3
+2025-06-22 00:08:22.560 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_system.mp3
+2025-06-22 00:08:22.560 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_no_input.mp3
+2025-06-22 00:08:22.634 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/welcome.mp3
+2025-06-22 00:08:24.062 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/welcome.mp3
+2025-06-22 00:08:24.063 | INFO     | __main__:main:81 - 等待用户说话...（唤醒后进入录音）
+2025-06-22 00:08:36.000 | INFO     | __main__:main:86 - 用户语音识别结果: 小猪小猪猪，嗯。
+2025-06-22 00:08:36.000 | DEBUG    | __main__:main:97 - 进入多轮对话处理。
+2025-06-22 00:08:44.914 | INFO     | dialogue.deepseek_adapter:chat:20 - DeepSeek回复: 🐷：哼哼～（拱拱鼻子）听到召唤立刻滚圆登场！有什么需要本小猪效劳的嘛？是想要冷笑话攻击💥、今日幸运数字✨，还是想听我用小猪语翻译这段"嗯嗯"——"检测到两脚兽快乐能量不足，启动紧急卖萌协议！"(◕ᴗ◕✿)  
+
+（突然正经）不过如果此刻你需要的只是有人听你说说话，小猪耳朵也会竖得高高的哦～ 🌸
+2025-06-22 00:08:44.914 | INFO     | __main__:main:102 - AI回复文本: 🐷：哼哼～（拱拱鼻子）听到召唤立刻滚圆登场！有什么需要本小猪效劳的嘛？是想要冷笑话攻击💥、今日幸运数字✨，还是想听我用小猪语翻译这段"嗯嗯"——"检测到两脚兽快乐能量不足，启动紧急卖萌协议！"(◕ᴗ◕✿)  
+
+（突然正经）不过如果此刻你需要的只是有人听你说说话，小猪耳朵也会竖得高高的哦～ 🌸
+2025-06-22 00:08:44.915 | ERROR    | __main__:main:109 - 主流程异常：XunfeiTTS.synthesize() got an unexpected keyword argument 'out_file'
+2025-06-22 00:08:44.916 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/tts_cache/error_tts.mp3
+2025-06-22 00:08:47.442 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/tts_cache/error_tts.mp3
+2025-06-22 00:08:47.442 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/welcome.mp3
+2025-06-22 00:08:48.897 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/welcome.mp3
+2025-06-22 00:08:48.897 | INFO     | __main__:main:81 - 等待用户说话...（唤醒后进入录音）
+2025-06-22 00:17:56.930 | INFO     | __main__:main:24 - ==== 智能语音音箱主流程启动 ====
+2025-06-22 00:17:56.935 | DEBUG    | __main__:main:26 - 完整配置参数: {'xunfei_asr': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'hotwords': '小猪猪,芝麻开门', 'engine_type': 'sms16k'}, 'xunfei': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'vcn': 'x4_yezi', 'speed': 50, 'volume': 50, 'pitch': 50}, 'deepseek': {'api_key': 'sk-f2d5403d07e1499a8e344a09588f4eb7', 'base_url': 'https://api.deepseek.com', 'model': 'deepseek-chat', 'temperature': 0.7, 'max_tokens': 2048}, 'endwords': ['再见', '拜拜', '下次再说'], 'welcome_audio_path': 'audio_out/welcome.mp3', 'welcome_text': '你好。', 'audio_out_dir': 'audio_out', 'tts_cache_dir': 'audio_out/tts_cache', 'error_prompts': {'error_recording': '录音设备不可用，请检查麦克风。', 'error_asr': '语音识别服务不可用，请检查网络或稍后重试。', 'error_network': '网络连接异常，请检查网络。', 'error_tts': '语音合成服务不可用。', 'error_system': '系统发生未知错误，请稍后重试。', 'error_no_input': '未检测到有效语音，请再试一次。'}, 'wakeword': {'keyword_paths': 'wakeword/xiaozhu.ppn', 'access_key': 'TTnalPNKGniQ17wPRKfQR7u29VGYKVHk2NheRgMh7K7b5JIVnJE3UQ==', 'sensitivities': [0.7], 'audio_device_index': 0}, 'tts_cache_policy': {'max_files': 200, 'max_bytes': 15000000000}}
+2025-06-22 00:17:56.936 | DEBUG    | __main__:prepare_welcome_audio:21 - 本地欢迎语音已存在：audio_out/welcome.mp3
+2025-06-22 00:17:56.936 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_recording.mp3
+2025-06-22 00:17:56.936 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_asr.mp3
+2025-06-22 00:17:56.936 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_network.mp3
+2025-06-22 00:17:56.937 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_tts.mp3
+2025-06-22 00:17:56.937 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_system.mp3
+2025-06-22 00:17:56.937 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_no_input.mp3
+2025-06-22 00:17:57.011 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/welcome.mp3
+2025-06-22 00:17:58.429 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/welcome.mp3
+2025-06-22 00:17:58.429 | INFO     | __main__:main:81 - 等待用户说话...（唤醒后进入录音）
+2025-06-22 00:18:10.738 | INFO     | __main__:main:86 - 用户语音识别结果: 小猪小猪猪小小舟舟，小猪猪小小舟，小猪猪。
+2025-06-22 00:18:10.739 | DEBUG    | __main__:main:97 - 进入多轮对话处理。
+2025-06-22 00:18:21.336 | INFO     | dialogue.deepseek_adapter:chat:20 - DeepSeek回复: 这句重复又带点童趣的句子像是一首可爱的儿歌或顺口溜～可能是想表达“小猪”和“小舟”的某种互动？试着解读一下：
+
+1. **文字游戏**：可能是利用“猪”和“舟”的押韵（zh-u/zh-ou）玩谐音，比如“小猪坐小舟”“小猪划舟舟”之类的场景。  
+2. **童谣节奏**：重复的句式适合儿童语言学习，比如：  
+   *“小猪猪，小小舟，  
+   小猪划船水里游～”*  
+3. **隐藏含义**：如果是网络梗或特定圈子的暗号，可能需要更多线索哦！  
+
+需要帮忙编成完整儿歌或解密吗？ 😄
+2025-06-22 00:18:21.336 | INFO     | __main__:main:102 - AI回复文本: 这句重复又带点童趣的句子像是一首可爱的儿歌或顺口溜～可能是想表达“小猪”和“小舟”的某种互动？试着解读一下：
+
+1. **文字游戏**：可能是利用“猪”和“舟”的押韵（zh-u/zh-ou）玩谐音，比如“小猪坐小舟”“小猪划舟舟”之类的场景。  
+2. **童谣节奏**：重复的句式适合儿童语言学习，比如：  
+   *“小猪猪，小小舟，  
+   小猪划船水里游～”*  
+3. **隐藏含义**：如果是网络梗或特定圈子的暗号，可能需要更多线索哦！  
+
+需要帮忙编成完整儿歌或解密吗？ 😄
+2025-06-22 00:18:26.244 | INFO     | asr.xunfei_asr:_on_close:94 - ASR websocket连接关闭
+2025-06-22 00:18:28.525 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/tts_cache/normal_6ba66b096120fea5c1f338bd99d652fa.mp3
+2025-06-22 00:19:06.602 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/tts_cache/normal_6ba66b096120fea5c1f338bd99d652fa.mp3
+2025-06-22 00:19:06.603 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/welcome.mp3
+2025-06-22 00:19:08.059 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/welcome.mp3
+2025-06-22 00:19:08.060 | INFO     | __main__:main:81 - 等待用户说话...（唤醒后进入录音）
+2025-06-22 00:19:20.008 | INFO     | __main__:main:86 - 用户语音识别结果: 你你好你好。
+2025-06-22 00:19:20.008 | DEBUG    | __main__:main:97 - 进入多轮对话处理。
+2025-06-22 00:19:29.223 | INFO     | dialogue.deepseek_adapter:chat:20 - DeepSeek回复: 哈哈，你这是在测试我的复读机功能吗？😄  
+
+**“你你好你好”** 可以理解为：  
+1. **热情打招呼**：像小朋友兴奋地连说好几次“你好”！  
+   → 回应版：*“你好呀呀呀～（疯狂挥手）”*  
+2. **网络梗语气**：比如模仿卡顿的电子音，或者AI觉醒时的自我重复（？）  
+   → 机械音：*“检—检测到友—友好信号…你好！你好！”*  
+
+需要我继续接龙，还是开发新功能？✨
+2025-06-22 00:19:29.224 | INFO     | __main__:main:102 - AI回复文本: 哈哈，你这是在测试我的复读机功能吗？😄  
+
+**“你你好你好”** 可以理解为：  
+1. **热情打招呼**：像小朋友兴奋地连说好几次“你好”！  
+   → 回应版：*“你好呀呀呀～（疯狂挥手）”*  
+2. **网络梗语气**：比如模仿卡顿的电子音，或者AI觉醒时的自我重复（？）  
+   → 机械音：*“检—检测到友—友好信号…你好！你好！”*  
+
+需要我继续接龙，还是开发新功能？✨
+2025-06-22 00:19:35.015 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/tts_cache/normal_0ffabfb7d58bca608c620e86dcaeab51.mp3
+2025-06-22 00:19:35.525 | INFO     | asr.xunfei_asr:_on_close:94 - ASR websocket连接关闭
+2025-06-22 00:35:02.352 | INFO     | __main__:main:25 - ==== 智能语音音箱主流程启动 ====
+2025-06-22 00:35:02.357 | DEBUG    | __main__:main:27 - 完整配置参数: {'xunfei_asr': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'hotwords': '小猪猪,芝麻开门', 'engine_type': 'sms16k'}, 'xunfei': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'vcn': 'x4_yezi', 'speed': 50, 'volume': 50, 'pitch': 50}, 'deepseek': {'api_key': 'sk-f2d5403d07e1499a8e344a09588f4eb7', 'base_url': 'https://api.deepseek.com', 'model': 'deepseek-chat', 'temperature': 0.7, 'max_tokens': 2048}, 'endwords': ['再见', '拜拜', '下次再说'], 'welcome_audio_path': 'audio_out/welcome.mp3', 'welcome_text': '你好。', 'audio_out_dir': 'audio_out', 'tts_cache_dir': 'audio_out/tts_cache', 'error_prompts': {'error_recording': '录音设备不可用，请检查麦克风。', 'error_asr': '语音识别服务不可用，请检查网络或稍后重试。', 'error_network': '网络连接异常，请检查网络。', 'error_tts': '语音合成服务不可用。', 'error_system': '系统发生未知错误，请稍后重试。', 'error_no_input': '未检测到有效语音，请再试一次。'}, 'wakeword': {'keyword_paths': 'wakeword/xiaozhu.ppn', 'access_key': 'TTnalPNKGniQ17wPRKfQR7u29VGYKVHk2NheRgMh7K7b5JIVnJE3UQ==', 'sensitivities': [0.7], 'audio_device_index': 0}, 'tts_cache_policy': {'max_files': 200, 'max_bytes': 15000000000}}
+2025-06-22 00:35:02.358 | DEBUG    | __main__:prepare_welcome_audio:22 - 本地欢迎语音已存在：audio_out/welcome.mp3
+2025-06-22 00:35:02.358 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_recording.mp3
+2025-06-22 00:35:02.358 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_asr.mp3
+2025-06-22 00:35:02.359 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_network.mp3
+2025-06-22 00:35:02.359 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_tts.mp3
+2025-06-22 00:35:02.359 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_system.mp3
+2025-06-22 00:35:02.359 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_no_input.mp3
+2025-06-22 00:35:44.602 | INFO     | __main__:main:25 - ==== 智能语音音箱主流程启动 ====
+2025-06-22 00:35:44.608 | DEBUG    | __main__:main:27 - 完整配置参数: {'xunfei_asr': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'hotwords': '小猪猪,芝麻开门', 'engine_type': 'sms16k'}, 'xunfei': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'vcn': 'x4_yezi', 'speed': 50, 'volume': 50, 'pitch': 50}, 'deepseek': {'api_key': 'sk-f2d5403d07e1499a8e344a09588f4eb7', 'base_url': 'https://api.deepseek.com', 'model': 'deepseek-chat', 'temperature': 0.7, 'max_tokens': 2048}, 'endwords': ['再见', '拜拜', '下次再说'], 'welcome_audio_path': 'audio_out/welcome.mp3', 'welcome_text': '你好。', 'audio_out_dir': 'audio_out', 'tts_cache_dir': 'audio_out/tts_cache', 'error_prompts': {'error_recording': '录音设备不可用，请检查麦克风。', 'error_asr': '语音识别服务不可用，请检查网络或稍后重试。', 'error_network': '网络连接异常，请检查网络。', 'error_tts': '语音合成服务不可用。', 'error_system': '系统发生未知错误，请稍后重试。', 'error_no_input': '未检测到有效语音，请再试一次。'}, 'wakeword': {'keyword_paths': 'wakeword/xiaozhu.ppn', 'access_key': 'TTnalPNKGniQ17wPRKfQR7u29VGYKVHk2NheRgMh7K7b5JIVnJE3UQ==', 'sensitivities': [0.7], 'audio_device_index': 0}, 'tts_cache_policy': {'max_files': 200, 'max_bytes': 15000000000}}
+2025-06-22 00:35:44.608 | DEBUG    | __main__:prepare_welcome_audio:22 - 本地欢迎语音已存在：audio_out/welcome.mp3
+2025-06-22 00:35:44.609 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_recording.mp3
+2025-06-22 00:35:44.609 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_asr.mp3
+2025-06-22 00:35:44.609 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_network.mp3
+2025-06-22 00:35:44.609 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_tts.mp3
+2025-06-22 00:35:44.609 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_system.mp3
+2025-06-22 00:35:44.610 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_no_input.mp3
+2025-06-22 00:40:47.440 | INFO     | __main__:main:25 - ==== 智能语音音箱主流程启动 ====
+2025-06-22 00:40:47.446 | DEBUG    | __main__:main:27 - 完整配置参数: {'xunfei_asr': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'hotwords': '小猪猪,芝麻开门', 'engine_type': 'sms16k'}, 'xunfei': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'vcn': 'x4_yezi', 'speed': 50, 'volume': 50, 'pitch': 50}, 'deepseek': {'api_key': 'sk-f2d5403d07e1499a8e344a09588f4eb7', 'base_url': 'https://api.deepseek.com', 'model': 'deepseek-chat', 'temperature': 0.7, 'max_tokens': 2048}, 'endwords': ['再见', '拜拜', '下次再说'], 'welcome_audio_path': 'audio_out/welcome.mp3', 'welcome_text': '你好。', 'audio_out_dir': 'audio_out', 'tts_cache_dir': 'audio_out/tts_cache', 'error_prompts': {'error_recording': '录音设备不可用，请检查麦克风。', 'error_asr': '语音识别服务不可用，请检查网络或稍后重试。', 'error_network': '网络连接异常，请检查网络。', 'error_tts': '语音合成服务不可用。', 'error_system': '系统发生未知错误，请稍后重试。', 'error_no_input': '未检测到有效语音，请再试一次。'}, 'wakeword': {'keyword_paths': 'wakeword/xiaozhu.ppn', 'access_key': 'TTnalPNKGniQ17wPRKfQR7u29VGYKVHk2NheRgMh7K7b5JIVnJE3UQ==', 'sensitivities': [0.7], 'audio_device_index': 0}, 'tts_cache_policy': {'max_files': 200, 'max_bytes': 15000000000}}
+2025-06-22 00:40:47.447 | DEBUG    | __main__:prepare_welcome_audio:22 - 本地欢迎语音已存在：audio_out/welcome.mp3
+2025-06-22 00:40:47.447 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_recording.mp3
+2025-06-22 00:40:47.448 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_asr.mp3
+2025-06-22 00:40:47.448 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_network.mp3
+2025-06-22 00:40:47.448 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_tts.mp3
+2025-06-22 00:40:47.448 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_system.mp3
+2025-06-22 00:40:47.449 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_no_input.mp3
+2025-06-22 00:41:57.014 | INFO     | __main__:main:25 - ==== 智能语音音箱主流程启动 ====
+2025-06-22 00:41:57.019 | DEBUG    | __main__:main:27 - 完整配置参数: {'xunfei_asr': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'hotwords': '小猪猪,芝麻开门', 'engine_type': 'sms16k'}, 'xunfei': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'vcn': 'x4_yezi', 'speed': 50, 'volume': 50, 'pitch': 50}, 'deepseek': {'api_key': 'sk-f2d5403d07e1499a8e344a09588f4eb7', 'base_url': 'https://api.deepseek.com', 'model': 'deepseek-chat', 'temperature': 0.7, 'max_tokens': 2048}, 'endwords': ['再见', '拜拜', '下次再说'], 'welcome_audio_path': 'audio_out/welcome.mp3', 'welcome_text': '你好。', 'audio_out_dir': 'audio_out', 'tts_cache_dir': 'audio_out/tts_cache', 'error_prompts': {'error_recording': '录音设备不可用，请检查麦克风。', 'error_asr': '语音识别服务不可用，请检查网络或稍后重试。', 'error_network': '网络连接异常，请检查网络。', 'error_tts': '语音合成服务不可用。', 'error_system': '系统发生未知错误，请稍后重试。', 'error_no_input': '未检测到有效语音，请再试一次。'}, 'wakeword': {'keyword_paths': 'wakeword/xiaozhu.ppn', 'access_key': 'TTnalPNKGniQ17wPRKfQR7u29VGYKVHk2NheRgMh7K7b5JIVnJE3UQ==', 'sensitivities': 0.7, 'audio_device_index': 0}, 'tts_cache_policy': {'max_files': 200, 'max_bytes': 15000000000}}
+2025-06-22 00:41:57.019 | DEBUG    | __main__:prepare_welcome_audio:22 - 本地欢迎语音已存在：audio_out/welcome.mp3
+2025-06-22 00:41:57.020 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_recording.mp3
+2025-06-22 00:41:57.020 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_asr.mp3
+2025-06-22 00:41:57.020 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_network.mp3
+2025-06-22 00:41:57.020 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_tts.mp3
+2025-06-22 00:41:57.020 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_system.mp3
+2025-06-22 00:41:57.021 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_no_input.mp3
+2025-06-22 00:43:04.397 | INFO     | __main__:main:25 - ==== 智能语音音箱主流程启动 ====
+2025-06-22 00:43:04.401 | DEBUG    | __main__:main:27 - 完整配置参数: {'xunfei_asr': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'hotwords': '小猪猪,芝麻开门', 'engine_type': 'sms16k'}, 'xunfei': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'vcn': 'x4_yezi', 'speed': 50, 'volume': 50, 'pitch': 50}, 'deepseek': {'api_key': 'sk-f2d5403d07e1499a8e344a09588f4eb7', 'base_url': 'https://api.deepseek.com', 'model': 'deepseek-chat', 'temperature': 0.7, 'max_tokens': 2048}, 'endwords': ['再见', '拜拜', '下次再说'], 'welcome_audio_path': 'audio_out/welcome.mp3', 'welcome_text': '你好。', 'audio_out_dir': 'audio_out', 'tts_cache_dir': 'audio_out/tts_cache', 'error_prompts': {'error_recording': '录音设备不可用，请检查麦克风。', 'error_asr': '语音识别服务不可用，请检查网络或稍后重试。', 'error_network': '网络连接异常，请检查网络。', 'error_tts': '语音合成服务不可用。', 'error_system': '系统发生未知错误，请稍后重试。', 'error_no_input': '未检测到有效语音，请再试一次。'}, 'wakeword': {'keyword_paths': ['wakeword/xiaozhu.ppn'], 'access_key': 'TTnalPNKGniQ17wPRKfQR7u29VGYKVHk2NheRgMh7K7b5JIVnJE3UQ==', 'sensitivities': [0.7], 'audio_device_index': 0}, 'tts_cache_policy': {'max_files': 200, 'max_bytes': 15000000000}}
+2025-06-22 00:43:04.408 | DEBUG    | __main__:prepare_welcome_audio:22 - 本地欢迎语音已存在：audio_out/welcome.mp3
+2025-06-22 00:43:04.408 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_recording.mp3
+2025-06-22 00:43:04.408 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_asr.mp3
+2025-06-22 00:43:04.408 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_network.mp3
+2025-06-22 00:43:04.409 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_tts.mp3
+2025-06-22 00:43:04.409 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_system.mp3
+2025-06-22 00:43:04.409 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_no_input.mp3
+2025-06-22 00:55:06.908 | INFO     | __main__:main:25 - ==== 智能语音音箱主流程启动 ====
+2025-06-22 00:55:06.914 | DEBUG    | __main__:main:27 - 完整配置参数: {'xunfei_asr': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'hotwords': '小猪猪,芝麻开门', 'engine_type': 'sms16k'}, 'xunfei': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'vcn': 'x4_yezi', 'speed': 50, 'volume': 50, 'pitch': 50}, 'deepseek': {'api_key': 'sk-f2d5403d07e1499a8e344a09588f4eb7', 'base_url': 'https://api.deepseek.com', 'model': 'deepseek-chat', 'temperature': 0.7, 'max_tokens': 2048}, 'endwords': ['再见', '拜拜', '下次再说'], 'welcome_audio_path': 'audio_out/welcome.mp3', 'welcome_text': '你好。', 'audio_out_dir': 'audio_out', 'tts_cache_dir': 'audio_out/tts_cache', 'error_prompts': {'error_recording': '录音设备不可用，请检查麦克风。', 'error_asr': '语音识别服务不可用，请检查网络或稍后重试。', 'error_network': '网络连接异常，请检查网络。', 'error_tts': '语音合成服务不可用。', 'error_system': '系统发生未知错误，请稍后重试。', 'error_no_input': '未检测到有效语音，请再试一次。'}, 'wakeword': {'keyword_paths': ['wakeword/xiaozhu.ppn'], 'access_key': 'TTnalPNKGniQ17wPRKfQR7u29VGYKVHk2NheRgMh7K7b5JIVnJE3UQ==', 'sensitivities': [0.7], 'model_path': 'wakeword/porcuine_params_zh.pv', 'audio_device_index': 0}, 'tts_cache_policy': {'max_files': 200, 'max_bytes': 15000000000}}
+2025-06-22 00:55:06.914 | DEBUG    | __main__:prepare_welcome_audio:22 - 本地欢迎语音已存在：audio_out/welcome.mp3
+2025-06-22 00:55:06.915 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_recording.mp3
+2025-06-22 00:55:06.915 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_asr.mp3
+2025-06-22 00:55:06.916 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_network.mp3
+2025-06-22 00:55:06.916 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_tts.mp3
+2025-06-22 00:55:06.916 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_system.mp3
+2025-06-22 00:55:06.916 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_no_input.mp3
+2025-06-22 00:56:29.596 | INFO     | __main__:main:25 - ==== 智能语音音箱主流程启动 ====
+2025-06-22 00:56:29.600 | DEBUG    | __main__:main:27 - 完整配置参数: {'xunfei_asr': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'hotwords': '小猪猪,芝麻开门', 'engine_type': 'sms16k'}, 'xunfei': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'vcn': 'x4_yezi', 'speed': 50, 'volume': 50, 'pitch': 50}, 'deepseek': {'api_key': 'sk-f2d5403d07e1499a8e344a09588f4eb7', 'base_url': 'https://api.deepseek.com', 'model': 'deepseek-chat', 'temperature': 0.7, 'max_tokens': 2048}, 'endwords': ['再见', '拜拜', '下次再说'], 'welcome_audio_path': 'audio_out/welcome.mp3', 'welcome_text': '你好。', 'audio_out_dir': 'audio_out', 'tts_cache_dir': 'audio_out/tts_cache', 'error_prompts': {'error_recording': '录音设备不可用，请检查麦克风。', 'error_asr': '语音识别服务不可用，请检查网络或稍后重试。', 'error_network': '网络连接异常，请检查网络。', 'error_tts': '语音合成服务不可用。', 'error_system': '系统发生未知错误，请稍后重试。', 'error_no_input': '未检测到有效语音，请再试一次。'}, 'wakeword': {'keyword_paths': ['wakeword/xiaozhu.ppn'], 'access_key': 'TTnalPNKGniQ17wPRKfQR7u29VGYKVHk2NheRgMh7K7b5JIVnJE3UQ==', 'sensitivities': [0.7], 'model_path': 'wakeword/porcuine_params_zh.pv', 'audio_device_index': 0}, 'tts_cache_policy': {'max_files': 200, 'max_bytes': 15000000000}}
+2025-06-22 00:56:29.601 | DEBUG    | __main__:prepare_welcome_audio:22 - 本地欢迎语音已存在：audio_out/welcome.mp3
+2025-06-22 00:56:29.601 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_recording.mp3
+2025-06-22 00:56:29.601 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_asr.mp3
+2025-06-22 00:56:29.601 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_network.mp3
+2025-06-22 00:56:29.602 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_tts.mp3
+2025-06-22 00:56:29.602 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_system.mp3
+2025-06-22 00:56:29.602 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_no_input.mp3
+2025-06-22 00:58:02.906 | INFO     | __main__:main:25 - ==== 智能语音音箱主流程启动 ====
+2025-06-22 00:58:02.912 | DEBUG    | __main__:main:27 - 完整配置参数: {'xunfei_asr': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'hotwords': '小猪猪,芝麻开门', 'engine_type': 'sms16k'}, 'xunfei': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'vcn': 'x4_yezi', 'speed': 50, 'volume': 50, 'pitch': 50}, 'deepseek': {'api_key': 'sk-f2d5403d07e1499a8e344a09588f4eb7', 'base_url': 'https://api.deepseek.com', 'model': 'deepseek-chat', 'temperature': 0.7, 'max_tokens': 2048}, 'endwords': ['再见', '拜拜', '下次再说'], 'welcome_audio_path': 'audio_out/welcome.mp3', 'welcome_text': '你好。', 'audio_out_dir': 'audio_out', 'tts_cache_dir': 'audio_out/tts_cache', 'error_prompts': {'error_recording': '录音设备不可用，请检查麦克风。', 'error_asr': '语音识别服务不可用，请检查网络或稍后重试。', 'error_network': '网络连接异常，请检查网络。', 'error_tts': '语音合成服务不可用。', 'error_system': '系统发生未知错误，请稍后重试。', 'error_no_input': '未检测到有效语音，请再试一次。'}, 'wakeword': {'keyword_paths': ['wakeword/xiaozhu.ppn'], 'access_key': 'TTnalPNKGniQ17wPRKfQR7u29VGYKVHk2NheRgMh7K7b5JIVnJE3UQ==', 'sensitivities': [0.7], 'model_path': 'wakeword/porcuine_params_zh.pv', 'audio_device_index': 0}, 'tts_cache_policy': {'max_files': 200, 'max_bytes': 15000000000}}
+2025-06-22 00:58:02.912 | DEBUG    | __main__:prepare_welcome_audio:22 - 本地欢迎语音已存在：audio_out/welcome.mp3
+2025-06-22 00:58:02.913 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_recording.mp3
+2025-06-22 00:58:02.913 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_asr.mp3
+2025-06-22 00:58:02.913 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_network.mp3
+2025-06-22 00:58:02.913 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_tts.mp3
+2025-06-22 00:58:02.913 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_system.mp3
+2025-06-22 00:58:02.913 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_no_input.mp3
+2025-06-22 00:58:32.524 | INFO     | __main__:main:25 - ==== 智能语音音箱主流程启动 ====
+2025-06-22 00:58:32.529 | DEBUG    | __main__:main:27 - 完整配置参数: {'xunfei_asr': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'hotwords': '小猪猪,芝麻开门', 'engine_type': 'sms16k'}, 'xunfei': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'vcn': 'x4_yezi', 'speed': 50, 'volume': 50, 'pitch': 50}, 'deepseek': {'api_key': 'sk-f2d5403d07e1499a8e344a09588f4eb7', 'base_url': 'https://api.deepseek.com', 'model': 'deepseek-chat', 'temperature': 0.7, 'max_tokens': 2048}, 'endwords': ['再见', '拜拜', '下次再说'], 'welcome_audio_path': 'audio_out/welcome.mp3', 'welcome_text': '你好。', 'audio_out_dir': 'audio_out', 'tts_cache_dir': 'audio_out/tts_cache', 'error_prompts': {'error_recording': '录音设备不可用，请检查麦克风。', 'error_asr': '语音识别服务不可用，请检查网络或稍后重试。', 'error_network': '网络连接异常，请检查网络。', 'error_tts': '语音合成服务不可用。', 'error_system': '系统发生未知错误，请稍后重试。', 'error_no_input': '未检测到有效语音，请再试一次。'}, 'wakeword': {'keyword_paths': ['wakeword/xiaozhu.ppn'], 'access_key': 'TTnalPNKGniQ17wPRKfQR7u29VGYKVHk2NheRgMh7K7b5JIVnJE3UQ==', 'sensitivities': [0.7], 'model_path': 'wakeword/', 'audio_device_index': 0}, 'tts_cache_policy': {'max_files': 200, 'max_bytes': 15000000000}}
+2025-06-22 00:58:32.529 | DEBUG    | __main__:prepare_welcome_audio:22 - 本地欢迎语音已存在：audio_out/welcome.mp3
+2025-06-22 00:58:32.530 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_recording.mp3
+2025-06-22 00:58:32.530 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_asr.mp3
+2025-06-22 00:58:32.530 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_network.mp3
+2025-06-22 00:58:32.530 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_tts.mp3
+2025-06-22 00:58:32.531 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_system.mp3
+2025-06-22 00:58:32.531 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_no_input.mp3
+2025-06-22 01:02:11.217 | INFO     | __main__:main:25 - ==== 智能语音音箱主流程启动 ====
+2025-06-22 01:02:11.222 | DEBUG    | __main__:main:27 - 完整配置参数: {'xunfei_asr': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'hotwords': '小猪猪,芝麻开门', 'engine_type': 'sms16k'}, 'xunfei': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'vcn': 'x4_yezi', 'speed': 50, 'volume': 50, 'pitch': 50}, 'deepseek': {'api_key': 'sk-f2d5403d07e1499a8e344a09588f4eb7', 'base_url': 'https://api.deepseek.com', 'model': 'deepseek-chat', 'temperature': 0.7, 'max_tokens': 2048}, 'endwords': ['再见', '拜拜', '下次再说'], 'welcome_audio_path': 'audio_out/welcome.mp3', 'welcome_text': '你好。', 'audio_out_dir': 'audio_out', 'tts_cache_dir': 'audio_out/tts_cache', 'error_prompts': {'error_recording': '录音设备不可用，请检查麦克风。', 'error_asr': '语音识别服务不可用，请检查网络或稍后重试。', 'error_network': '网络连接异常，请检查网络。', 'error_tts': '语音合成服务不可用。', 'error_system': '系统发生未知错误，请稍后重试。', 'error_no_input': '未检测到有效语音，请再试一次。'}, 'wakeword': {'keyword_paths': ['wakeword/xiaozhu.ppn'], 'access_key': 'TTnalPNKGniQ17wPRKfQR7u29VGYKVHk2NheRgMh7K7b5JIVnJE3UQ==', 'sensitivities': [0.7], 'model_path': 'wakeword/porcupine_params_zh.pv', 'audio_device_index': 0}, 'tts_cache_policy': {'max_files': 200, 'max_bytes': 15000000000}}
+2025-06-22 01:02:11.223 | DEBUG    | __main__:prepare_welcome_audio:22 - 本地欢迎语音已存在：audio_out/welcome.mp3
+2025-06-22 01:02:11.223 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_recording.mp3
+2025-06-22 01:02:11.223 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_asr.mp3
+2025-06-22 01:02:11.224 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_network.mp3
+2025-06-22 01:02:11.224 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_tts.mp3
+2025-06-22 01:02:11.224 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_system.mp3
+2025-06-22 01:02:11.224 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_no_input.mp3
+2025-06-22 01:05:44.131 | INFO     | __main__:main:25 - ==== 智能语音音箱主流程启动 ====
+2025-06-22 01:05:44.136 | DEBUG    | __main__:main:27 - 完整配置参数: {'xunfei_asr': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'hotwords': '小猪猪,芝麻开门', 'engine_type': 'sms16k'}, 'xunfei': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'vcn': 'x4_yezi', 'speed': 50, 'volume': 50, 'pitch': 50}, 'deepseek': {'api_key': 'sk-f2d5403d07e1499a8e344a09588f4eb7', 'base_url': 'https://api.deepseek.com', 'model': 'deepseek-chat', 'temperature': 0.7, 'max_tokens': 2048}, 'endwords': ['再见', '拜拜', '下次再说'], 'welcome_audio_path': 'audio_out/welcome.mp3', 'welcome_text': '你好。', 'audio_out_dir': 'audio_out', 'tts_cache_dir': 'audio_out/tts_cache', 'error_prompts': {'error_recording': '录音设备不可用，请检查麦克风。', 'error_asr': '语音识别服务不可用，请检查网络或稍后重试。', 'error_network': '网络连接异常，请检查网络。', 'error_tts': '语音合成服务不可用。', 'error_system': '系统发生未知错误，请稍后重试。', 'error_no_input': '未检测到有效语音，请再试一次。'}, 'wakeword': {'keyword_paths': ['wakeword/xiaozhu.ppn'], 'access_key': 'TTnalPNKGniQ17wPRKfQR7u29VGYKVHk2NheRgMh7K7b5JIVnJE3UQ==', 'sensitivities': [0.7], 'model_path': 'wakeword/porcupine_params_zh.pv', 'audio_device_index': 0}, 'tts_cache_policy': {'max_files': 200, 'max_bytes': 15000000000}}
+2025-06-22 01:05:44.136 | DEBUG    | __main__:prepare_welcome_audio:22 - 本地欢迎语音已存在：audio_out/welcome.mp3
+2025-06-22 01:05:44.137 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_recording.mp3
+2025-06-22 01:05:44.137 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_asr.mp3
+2025-06-22 01:05:44.137 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_network.mp3
+2025-06-22 01:05:44.137 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_tts.mp3
+2025-06-22 01:05:44.137 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_system.mp3
+2025-06-22 01:05:44.138 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_no_input.mp3
+2025-06-22 01:07:09.215 | INFO     | __main__:main:25 - ==== 智能语音音箱主流程启动 ====
+2025-06-22 01:07:09.221 | DEBUG    | __main__:main:27 - 完整配置参数: {'xunfei_asr': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'hotwords': '小猪猪,芝麻开门', 'engine_type': 'sms16k'}, 'xunfei': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'vcn': 'x4_yezi', 'speed': 50, 'volume': 50, 'pitch': 50}, 'deepseek': {'api_key': 'sk-f2d5403d07e1499a8e344a09588f4eb7', 'base_url': 'https://api.deepseek.com', 'model': 'deepseek-chat', 'temperature': 0.7, 'max_tokens': 2048}, 'endwords': ['再见', '拜拜', '下次再说'], 'welcome_audio_path': 'audio_out/welcome.mp3', 'welcome_text': '你好。', 'audio_out_dir': 'audio_out', 'tts_cache_dir': 'audio_out/tts_cache', 'error_prompts': {'error_recording': '录音设备不可用，请检查麦克风。', 'error_asr': '语音识别服务不可用，请检查网络或稍后重试。', 'error_network': '网络连接异常，请检查网络。', 'error_tts': '语音合成服务不可用。', 'error_system': '系统发生未知错误，请稍后重试。', 'error_no_input': '未检测到有效语音，请再试一次。'}, 'wakeword': {'keyword_paths': ['wakeword/xiaozhu.ppn'], 'access_key': 'TTnalPNKGniQ17wPRKfQR7u29VGYKVHk2NheRgMh7K7b5JIVnJE3UQ==', 'sensitivities': [0.7], 'model_path': 'wakeword/porcupine_params_zh.pv', 'audio_device_index': 0}, 'tts_cache_policy': {'max_files': 200, 'max_bytes': 15000000000}}
+2025-06-22 01:07:09.222 | DEBUG    | __main__:prepare_welcome_audio:22 - 本地欢迎语音已存在：audio_out/welcome.mp3
+2025-06-22 01:07:09.222 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_recording.mp3
+2025-06-22 01:07:09.222 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_asr.mp3
+2025-06-22 01:07:09.222 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_network.mp3
+2025-06-22 01:07:09.222 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_tts.mp3
+2025-06-22 01:07:09.222 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_system.mp3
+2025-06-22 01:07:09.222 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_no_input.mp3
+2025-06-22 13:17:58.426 | INFO     | __main__:main:25 - ==== 智能语音音箱主流程启动 ====
+2025-06-22 13:17:58.431 | DEBUG    | __main__:main:27 - 完整配置参数: {'xunfei_asr': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'hotwords': '小猪猪,芝麻开门', 'engine_type': 'sms16k'}, 'xunfei': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'vcn': 'x4_yezi', 'speed': 50, 'volume': 50, 'pitch': 50}, 'deepseek': {'api_key': 'sk-f2d5403d07e1499a8e344a09588f4eb7', 'base_url': 'https://api.deepseek.com', 'model': 'deepseek-chat', 'temperature': 0.7, 'max_tokens': 2048}, 'endwords': ['再见', '拜拜', '下次再说'], 'welcome_audio_path': 'audio_out/welcome.mp3', 'welcome_text': '你好。', 'audio_out_dir': 'audio_out', 'tts_cache_dir': 'audio_out/tts_cache', 'error_prompts': {'error_recording': '录音设备不可用，请检查麦克风。', 'error_asr': '语音识别服务不可用，请检查网络或稍后重试。', 'error_network': '网络连接异常，请检查网络。', 'error_tts': '语音合成服务不可用。', 'error_system': '系统发生未知错误，请稍后重试。', 'error_no_input': '未检测到有效语音，请再试一次。'}, 'wakeword': {'keyword_paths': ['wakeword/xiaozhu.ppn'], 'access_key': 'TTnalPNKGniQ17wPRKfQR7u29VGYKVHk2NheRgMh7K7b5JIVnJE3UQ==', 'sensitivities': [0.7], 'model_path': 'wakeword/porcupine_params_zh.pv', 'audio_device_index': 1}, 'tts_cache_policy': {'max_files': 200, 'max_bytes': 15000000000}}
+2025-06-22 13:17:58.432 | DEBUG    | __main__:prepare_welcome_audio:22 - 本地欢迎语音已存在：audio_out/welcome.mp3
+2025-06-22 13:17:58.432 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_recording.mp3
+2025-06-22 13:17:58.432 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_asr.mp3
+2025-06-22 13:17:58.432 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_network.mp3
+2025-06-22 13:17:58.432 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_tts.mp3
+2025-06-22 13:17:58.432 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_system.mp3
+2025-06-22 13:17:58.433 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_no_input.mp3
+2025-06-22 13:17:58.511 | INFO     | wakeword.porcupine_adapter:start:29 - 唤醒词检测已启动，等待唤醒...
+2025-06-22 13:18:03.504 | DEBUG    | wakeword.porcupine_adapter:start:36 - 唤醒词已检测到，触发回调。
+2025-06-22 13:18:03.505 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/welcome.mp3
+2025-06-22 13:18:04.925 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/welcome.mp3
+2025-06-22 13:18:04.926 | INFO     | __main__:on_wakeword_detected:81 - 已唤醒，等待用户说话...
+2025-06-22 13:18:21.279 | INFO     | asr.xunfei_asr:_on_close:94 - ASR websocket连接关闭
+2025-06-22 13:18:21.279 | INFO     | __main__:on_wakeword_detected:85 - 用户语音识别结果: 
+2025-06-22 13:18:21.280 | DEBUG    | __main__:on_wakeword_detected:88 - 识别结果为空，提示用户重说。
+2025-06-22 13:18:21.280 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 13:18:24.848 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 13:18:36.328 | ERROR    | asr.xunfei_asr:send_audio:225 - ASR流式音频发送异常: Error starting stream: Unanticipated host error [PaErrorCode -9999]: '' [<host API not found> error 0]
+2025-06-22 13:28:13.492 | DEBUG    | wakeword.porcupine_adapter:start:36 - 唤醒词已检测到，触发回调。
+2025-06-22 13:28:13.493 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/welcome.mp3
+2025-06-22 13:28:15.032 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/welcome.mp3
+2025-06-22 13:28:15.033 | INFO     | __main__:on_wakeword_detected:81 - 已唤醒，等待用户说话...
+2025-06-22 13:28:31.914 | INFO     | asr.xunfei_asr:_on_close:94 - ASR websocket连接关闭
+2025-06-22 13:28:31.915 | INFO     | __main__:on_wakeword_detected:85 - 用户语音识别结果: 
+2025-06-22 13:28:31.920 | DEBUG    | __main__:on_wakeword_detected:88 - 识别结果为空，提示用户重说。
+2025-06-22 13:28:31.920 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 13:28:35.529 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 13:28:46.976 | ERROR    | asr.xunfei_asr:send_audio:225 - ASR流式音频发送异常: Error starting stream: Unanticipated host error [PaErrorCode -9999]: '' [<host API not found> error 0]
+2025-06-22 13:34:31.015 | INFO     | __main__:main:25 - ==== 智能语音音箱主流程启动 ====
+2025-06-22 13:34:31.021 | DEBUG    | __main__:main:27 - 完整配置参数: {'xunfei_asr': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'hotwords': '小猪猪,芝麻开门', 'engine_type': 'sms16k'}, 'xunfei': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'vcn': 'x4_yezi', 'speed': 50, 'volume': 50, 'pitch': 50}, 'deepseek': {'api_key': 'sk-f2d5403d07e1499a8e344a09588f4eb7', 'base_url': 'https://api.deepseek.com', 'model': 'deepseek-chat', 'temperature': 0.7, 'max_tokens': 2048}, 'endwords': ['再见', '拜拜', '下次再说'], 'welcome_audio_path': 'audio_out/welcome.mp3', 'welcome_text': '你好。', 'audio_out_dir': 'audio_out', 'tts_cache_dir': 'audio_out/tts_cache', 'error_prompts': {'error_recording': '录音设备不可用，请检查麦克风。', 'error_asr': '语音识别服务不可用，请检查网络或稍后重试。', 'error_network': '网络连接异常，请检查网络。', 'error_tts': '语音合成服务不可用。', 'error_system': '系统发生未知错误，请稍后重试。', 'error_no_input': '未检测到有效语音，请再试一次。'}, 'wakeword': {'keyword_paths': ['wakeword/xiaozhu.ppn'], 'access_key': 'TTnalPNKGniQ17wPRKfQR7u29VGYKVHk2NheRgMh7K7b5JIVnJE3UQ==', 'sensitivities': [0.7], 'model_path': 'wakeword/porcupine_params_zh.pv', 'audio_device_index': 1}, 'tts_cache_policy': {'max_files': 200, 'max_bytes': 15000000000}}
+2025-06-22 13:34:31.022 | DEBUG    | __main__:prepare_welcome_audio:22 - 本地欢迎语音已存在：audio_out/welcome.mp3
+2025-06-22 13:34:31.022 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_recording.mp3
+2025-06-22 13:34:31.023 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_asr.mp3
+2025-06-22 13:34:31.023 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_network.mp3
+2025-06-22 13:34:31.023 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_tts.mp3
+2025-06-22 13:34:31.023 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_system.mp3
+2025-06-22 13:34:31.024 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_no_input.mp3
+2025-06-22 13:34:31.113 | INFO     | wakeword.porcupine_adapter:start:29 - 唤醒词检测已启动，等待唤醒...
+2025-06-22 13:34:38.315 | DEBUG    | wakeword.porcupine_adapter:start:36 - 唤醒词已检测到，触发回调。
+2025-06-22 13:34:38.315 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/welcome.mp3
+2025-06-22 13:34:39.771 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/welcome.mp3
+2025-06-22 13:34:39.772 | INFO     | __main__:on_wakeword_detected:81 - 已唤醒，等待用户说话...
+2025-06-22 13:34:56.199 | INFO     | asr.xunfei_asr:_on_close:94 - ASR websocket连接关闭
+2025-06-22 13:34:56.200 | INFO     | __main__:on_wakeword_detected:85 - 用户语音识别结果: 
+2025-06-22 13:34:56.201 | DEBUG    | __main__:on_wakeword_detected:88 - 识别结果为空，提示用户重说。
+2025-06-22 13:34:56.202 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 13:34:59.701 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 13:35:11.218 | ERROR    | asr.xunfei_asr:send_audio:225 - ASR流式音频发送异常: Error starting stream: Unanticipated host error [PaErrorCode -9999]: '' [<host API not found> error 0]
+2025-06-22 13:37:37.086 | INFO     | __main__:main:25 - ==== 智能语音音箱主流程启动 ====
+2025-06-22 13:37:37.090 | DEBUG    | __main__:main:27 - 完整配置参数: {'xunfei_asr': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'hotwords': '小猪猪,芝麻开门', 'engine_type': 'sms16k'}, 'xunfei': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'vcn': 'x4_yezi', 'speed': 50, 'volume': 50, 'pitch': 50}, 'deepseek': {'api_key': 'sk-f2d5403d07e1499a8e344a09588f4eb7', 'base_url': 'https://api.deepseek.com', 'model': 'deepseek-chat', 'temperature': 0.7, 'max_tokens': 2048}, 'endwords': ['再见', '拜拜', '下次再说'], 'welcome_audio_path': 'audio_out/welcome.mp3', 'welcome_text': '你好。', 'audio_out_dir': 'audio_out', 'tts_cache_dir': 'audio_out/tts_cache', 'error_prompts': {'error_recording': '录音设备不可用，请检查麦克风。', 'error_asr': '语音识别服务不可用，请检查网络或稍后重试。', 'error_network': '网络连接异常，请检查网络。', 'error_tts': '语音合成服务不可用。', 'error_system': '系统发生未知错误，请稍后重试。', 'error_no_input': '未检测到有效语音，请再试一次。'}, 'wakeword': {'keyword_paths': ['wakeword/xiaozhu.ppn'], 'access_key': 'TTnalPNKGniQ17wPRKfQR7u29VGYKVHk2NheRgMh7K7b5JIVnJE3UQ==', 'sensitivities': [0.7], 'model_path': 'wakeword/porcupine_params_zh.pv', 'audio_device_index': 1}, 'tts_cache_policy': {'max_files': 200, 'max_bytes': 15000000000}}
+2025-06-22 13:37:37.091 | DEBUG    | __main__:prepare_welcome_audio:22 - 本地欢迎语音已存在：audio_out/welcome.mp3
+2025-06-22 13:37:37.091 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_recording.mp3
+2025-06-22 13:37:37.092 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_asr.mp3
+2025-06-22 13:37:37.092 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_network.mp3
+2025-06-22 13:37:37.092 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_tts.mp3
+2025-06-22 13:37:37.092 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_system.mp3
+2025-06-22 13:37:37.093 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_no_input.mp3
+2025-06-22 13:37:37.182 | INFO     | wakeword.porcupine_adapter:start:29 - 唤醒词检测已启动，等待唤醒...
+2025-06-22 13:37:40.223 | DEBUG    | wakeword.porcupine_adapter:start:36 - 唤醒词已检测到，触发回调。
+2025-06-22 13:37:40.223 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/welcome.mp3
+2025-06-22 13:37:41.627 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/welcome.mp3
+2025-06-22 13:37:41.627 | INFO     | __main__:on_wakeword_detected:81 - 已唤醒，等待用户说话...
+2025-06-22 16:53:48.862 | INFO     | __main__:main:25 - ==== 智能语音音箱主流程启动 ====
+2025-06-22 16:53:48.866 | DEBUG    | __main__:main:27 - 完整配置参数: {'xunfei_asr': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'hotwords': '小猪猪,芝麻开门', 'engine_type': 'sms16k'}, 'xunfei': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'vcn': 'x4_yezi', 'speed': 50, 'volume': 50, 'pitch': 50}, 'deepseek': {'api_key': 'sk-f2d5403d07e1499a8e344a09588f4eb7', 'base_url': 'https://api.deepseek.com', 'model': 'deepseek-chat', 'temperature': 0.7, 'max_tokens': 2048}, 'endwords': ['再见', '拜拜', '下次再说'], 'welcome_audio_path': 'audio_out/welcome.mp3', 'welcome_text': '你好。', 'audio_out_dir': 'audio_out', 'tts_cache_dir': 'audio_out/tts_cache', 'error_prompts': {'error_recording': '录音设备不可用，请检查麦克风。', 'error_asr': '语音识别服务不可用，请检查网络或稍后重试。', 'error_network': '网络连接异常，请检查网络。', 'error_tts': '语音合成服务不可用。', 'error_system': '系统发生未知错误，请稍后重试。', 'error_no_input': '未检测到有效语音，请再试一次。'}, 'wakeword': {'keyword_paths': ['wakeword/xiaozhu.ppn'], 'access_key': 'TTnalPNKGniQ17wPRKfQR7u29VGYKVHk2NheRgMh7K7b5JIVnJE3UQ==', 'sensitivities': [0.7], 'model_path': 'wakeword/porcupine_params_zh.pv', 'audio_device_index': 1}, 'tts_cache_policy': {'max_files': 200, 'max_bytes': 15000000000}}
+2025-06-22 16:53:48.867 | INFO     | __main__:prepare_welcome_audio:15 - 未发现本地欢迎语音，将使用TTS生成。
+2025-06-22 16:53:51.010 | INFO     | __main__:prepare_welcome_audio:20 - 欢迎语音生成并保存到：audio_out/welcome.mp3
+2025-06-22 16:53:51.011 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_recording.mp3
+2025-06-22 16:53:51.011 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_asr.mp3
+2025-06-22 16:53:51.011 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_network.mp3
+2025-06-22 16:53:51.011 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_tts.mp3
+2025-06-22 16:53:51.011 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_system.mp3
+2025-06-22 16:53:51.011 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_no_input.mp3
+2025-06-22 16:53:51.079 | INFO     | wakeword.porcupine_adapter:start:29 - 唤醒词检测已启动，等待唤醒...
+2025-06-22 17:15:47.862 | INFO     | __main__:main:25 - ==== 智能语音音箱主流程启动 ====
+2025-06-22 17:15:47.867 | DEBUG    | __main__:main:27 - 完整配置参数: {'xunfei_asr': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'hotwords': '小猪猪,芝麻开门', 'engine_type': 'sms16k'}, 'xunfei': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'vcn': 'x4_yezi', 'speed': 50, 'volume': 50, 'pitch': 50}, 'deepseek': {'api_key': 'sk-f2d5403d07e1499a8e344a09588f4eb7', 'base_url': 'https://api.deepseek.com', 'model': 'deepseek-chat', 'temperature': 0.7, 'max_tokens': 2048}, 'endwords': ['再见', '拜拜', '下次再说'], 'welcome_audio_path': 'audio_out/welcome.mp3', 'welcome_text': '你好。', 'audio_out_dir': 'audio_out', 'tts_cache_dir': 'audio_out/tts_cache', 'error_prompts': {'error_recording': '录音设备不可用，请检查麦克风。', 'error_asr': '语音识别服务不可用，请检查网络或稍后重试。', 'error_network': '网络连接异常，请检查网络。', 'error_tts': '语音合成服务不可用。', 'error_system': '系统发生未知错误，请稍后重试。', 'error_no_input': '未检测到有效语音，请再试一次。'}, 'wakeword': {'keyword_paths': ['wakeword/xiaozhu.ppn'], 'access_key': 'TTnalPNKGniQ17wPRKfQR7u29VGYKVHk2NheRgMh7K7b5JIVnJE3UQ==', 'sensitivities': [0.7], 'model_path': 'wakeword/porcupine_params_zh.pv', 'audio_device_index': 1}, 'tts_cache_policy': {'max_files': 200, 'max_bytes': 15000000000}}
+2025-06-22 17:15:47.868 | DEBUG    | __main__:prepare_welcome_audio:22 - 本地欢迎语音已存在：audio_out/welcome.mp3
+2025-06-22 17:15:47.868 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_recording.mp3
+2025-06-22 17:15:47.868 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_asr.mp3
+2025-06-22 17:15:47.868 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_network.mp3
+2025-06-22 17:15:47.869 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_tts.mp3
+2025-06-22 17:15:47.869 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_system.mp3
+2025-06-22 17:15:47.869 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_no_input.mp3
+2025-06-22 17:15:47.951 | INFO     | wakeword.porcupine_adapter:start:29 - 唤醒词检测已启动，等待唤醒...
+2025-06-22 17:18:24.144 | DEBUG    | wakeword.porcupine_adapter:start:36 - 唤醒词已检测到，触发回调。
+2025-06-22 17:18:24.144 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/welcome.mp3
+2025-06-22 17:18:25.598 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/welcome.mp3
+2025-06-22 17:18:25.598 | INFO     | __main__:on_wakeword_detected:81 - 已唤醒，等待用户说话...
+2025-06-22 17:18:42.115 | INFO     | asr.xunfei_asr:_on_close:94 - ASR websocket连接关闭
+2025-06-22 17:18:42.115 | INFO     | __main__:on_wakeword_detected:85 - 用户语音识别结果: 
+2025-06-22 17:18:42.116 | DEBUG    | __main__:on_wakeword_detected:88 - 识别结果为空，提示用户重说。
+2025-06-22 17:18:42.116 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 17:18:45.632 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 17:18:57.148 | ERROR    | asr.xunfei_asr:send_audio:225 - ASR流式音频发送异常: Error starting stream: Unanticipated host error [PaErrorCode -9999]: '' [<host API not found> error 0]
+2025-06-22 17:26:57.348 | DEBUG    | wakeword.porcupine_adapter:start:36 - 唤醒词已检测到，触发回调。
+2025-06-22 17:26:57.348 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/welcome.mp3
+2025-06-22 17:26:58.786 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/welcome.mp3
+2025-06-22 17:26:58.787 | INFO     | __main__:on_wakeword_detected:81 - 已唤醒，等待用户说话...
+2025-06-22 17:27:15.367 | INFO     | asr.xunfei_asr:_on_close:94 - ASR websocket连接关闭
+2025-06-22 17:27:15.367 | INFO     | __main__:on_wakeword_detected:85 - 用户语音识别结果: 
+2025-06-22 17:27:15.368 | DEBUG    | __main__:on_wakeword_detected:88 - 识别结果为空，提示用户重说。
+2025-06-22 17:27:15.368 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 17:27:18.913 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 17:27:30.404 | ERROR    | asr.xunfei_asr:send_audio:225 - ASR流式音频发送异常: Error starting stream: Unanticipated host error [PaErrorCode -9999]: '' [<host API not found> error 0]
+2025-06-22 19:50:34.415 | INFO     | __main__:main:25 - ==== 智能语音音箱主流程启动 ====
+2025-06-22 19:50:34.420 | DEBUG    | __main__:main:27 - 完整配置参数: {'xunfei_asr': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'hotwords': '小猪猪,芝麻开门', 'engine_type': 'sms16k'}, 'xunfei': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'vcn': 'x4_yezi', 'speed': 50, 'volume': 50, 'pitch': 50}, 'deepseek': {'api_key': 'sk-f2d5403d07e1499a8e344a09588f4eb7', 'base_url': 'https://api.deepseek.com', 'model': 'deepseek-chat', 'temperature': 0.7, 'max_tokens': 2048}, 'endwords': ['再见', '拜拜', '下次再说'], 'welcome_audio_path': 'audio_out/welcome.mp3', 'welcome_text': '你好。', 'audio_out_dir': 'audio_out', 'tts_cache_dir': 'audio_out/tts_cache', 'error_prompts': {'error_recording': '录音设备不可用，请检查麦克风。', 'error_asr': '语音识别服务不可用，请检查网络或稍后重试。', 'error_network': '网络连接异常，请检查网络。', 'error_tts': '语音合成服务不可用。', 'error_system': '系统发生未知错误，请稍后重试。', 'error_no_input': '未检测到有效语音，请再试一次。'}, 'wakeword': {'keyword_paths': ['wakeword/xiaozhu.ppn'], 'access_key': 'TTnalPNKGniQ17wPRKfQR7u29VGYKVHk2NheRgMh7K7b5JIVnJE3UQ==', 'sensitivities': [0.7], 'model_path': 'wakeword/porcupine_params_zh.pv', 'audio_device_index': 1}, 'tts_cache_policy': {'max_files': 200, 'max_bytes': 15000000000}}
+2025-06-22 19:50:34.421 | DEBUG    | __main__:prepare_welcome_audio:22 - 本地欢迎语音已存在：audio_out/welcome.mp3
+2025-06-22 19:50:34.421 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_recording.mp3
+2025-06-22 19:50:34.421 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_asr.mp3
+2025-06-22 19:50:34.422 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_network.mp3
+2025-06-22 19:50:34.422 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_tts.mp3
+2025-06-22 19:50:34.422 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_system.mp3
+2025-06-22 19:50:34.422 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_no_input.mp3
+2025-06-22 19:50:34.513 | INFO     | wakeword.porcupine_adapter:start:29 - 唤醒词检测已启动，等待唤醒...
+2025-06-22 19:50:37.491 | DEBUG    | wakeword.porcupine_adapter:start:36 - 唤醒词已检测到，触发回调。
+2025-06-22 19:50:37.491 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/welcome.mp3
+2025-06-22 19:50:38.945 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/welcome.mp3
+2025-06-22 19:50:38.945 | INFO     | __main__:on_wakeword_detected:81 - 已唤醒，等待用户说话...
+2025-06-22 19:50:55.367 | INFO     | asr.xunfei_asr:_on_close:94 - ASR websocket连接关闭
+2025-06-22 19:50:55.368 | INFO     | __main__:on_wakeword_detected:85 - 用户语音识别结果: 
+2025-06-22 19:50:55.368 | DEBUG    | __main__:on_wakeword_detected:88 - 识别结果为空，提示用户重说。
+2025-06-22 19:50:55.369 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 19:50:58.914 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 19:51:10.388 | ERROR    | asr.xunfei_asr:send_audio:225 - ASR流式音频发送异常: Error starting stream: Unanticipated host error [PaErrorCode -9999]: '' [<host API not found> error 0]
+2025-06-22 20:12:29.063 | INFO     | __main__:main:25 - ==== 智能语音音箱主流程启动 ====
+2025-06-22 20:12:29.068 | DEBUG    | __main__:main:27 - 完整配置参数: {'xunfei_asr': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'hotwords': '小猪猪,芝麻开门', 'engine_type': 'sms16k'}, 'xunfei': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'vcn': 'x4_yezi', 'speed': 50, 'volume': 50, 'pitch': 50}, 'deepseek': {'api_key': 'sk-f2d5403d07e1499a8e344a09588f4eb7', 'base_url': 'https://api.deepseek.com', 'model': 'deepseek-chat', 'temperature': 0.7, 'max_tokens': 2048}, 'endwords': ['再见', '拜拜', '下次再说'], 'welcome_audio_path': 'audio_out/welcome.mp3', 'welcome_text': '你好。', 'audio_out_dir': 'audio_out', 'tts_cache_dir': 'audio_out/tts_cache', 'error_prompts': {'error_recording': '录音设备不可用，请检查麦克风。', 'error_asr': '语音识别服务不可用，请检查网络或稍后重试。', 'error_network': '网络连接异常，请检查网络。', 'error_tts': '语音合成服务不可用。', 'error_system': '系统发生未知错误，请稍后重试。', 'error_no_input': '未检测到有效语音，请再试一次。'}, 'wakeword': {'keyword_paths': ['wakeword/xiaozhu.ppn'], 'access_key': 'TTnalPNKGniQ17wPRKfQR7u29VGYKVHk2NheRgMh7K7b5JIVnJE3UQ==', 'sensitivities': [0.7], 'model_path': 'wakeword/porcupine_params_zh.pv', 'audio_device_index': 1}, 'tts_cache_policy': {'max_files': 200, 'max_bytes': 15000000000}}
+2025-06-22 20:12:29.069 | DEBUG    | __main__:prepare_welcome_audio:22 - 本地欢迎语音已存在：audio_out/welcome.mp3
+2025-06-22 20:12:29.069 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_recording.mp3
+2025-06-22 20:12:29.069 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_asr.mp3
+2025-06-22 20:12:29.069 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_network.mp3
+2025-06-22 20:12:29.070 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_tts.mp3
+2025-06-22 20:12:29.070 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_system.mp3
+2025-06-22 20:12:29.070 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_no_input.mp3
+2025-06-22 20:12:29.169 | INFO     | wakeword.porcupine_adapter:start:29 - 唤醒词检测已启动，等待唤醒...
+2025-06-22 20:12:38.226 | DEBUG    | wakeword.porcupine_adapter:start:36 - 唤醒词已检测到，触发回调。
+2025-06-22 20:12:38.227 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/welcome.mp3
+2025-06-22 20:12:39.678 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/welcome.mp3
+2025-06-22 20:12:39.678 | INFO     | __main__:on_wakeword_detected:81 - 已唤醒，等待用户说话...
+2025-06-22 21:04:04.019 | INFO     | __main__:main:25 - ==== 智能语音音箱主流程启动 ====
+2025-06-22 21:04:04.024 | DEBUG    | __main__:main:27 - 完整配置参数: {'xunfei_asr': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'hotwords': '小猪猪,芝麻开门', 'engine_type': 'sms16k'}, 'xunfei': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'vcn': 'x4_yezi', 'speed': 50, 'volume': 50, 'pitch': 50}, 'deepseek': {'api_key': 'sk-f2d5403d07e1499a8e344a09588f4eb7', 'base_url': 'https://api.deepseek.com', 'model': 'deepseek-chat', 'temperature': 0.7, 'max_tokens': 2048}, 'endwords': ['再见', '拜拜', '下次再说'], 'welcome_audio_path': 'audio_out/welcome.mp3', 'welcome_text': '你好。', 'audio_out_dir': 'audio_out', 'tts_cache_dir': 'audio_out/tts_cache', 'error_prompts': {'error_recording': '录音设备不可用，请检查麦克风。', 'error_asr': '语音识别服务不可用，请检查网络或稍后重试。', 'error_network': '网络连接异常，请检查网络。', 'error_tts': '语音合成服务不可用。', 'error_system': '系统发生未知错误，请稍后重试。', 'error_no_input': '未检测到有效语音，请再试一次。'}, 'wakeword': {'keyword_paths': ['wakeword/xiaozhu.ppn'], 'access_key': 'TTnalPNKGniQ17wPRKfQR7u29VGYKVHk2NheRgMh7K7b5JIVnJE3UQ==', 'sensitivities': [0.7], 'model_path': 'wakeword/porcupine_params_zh.pv', 'audio_device_index': 1}, 'tts_cache_policy': {'max_files': 200, 'max_bytes': 15000000000}}
+2025-06-22 21:04:04.025 | DEBUG    | __main__:prepare_welcome_audio:22 - 本地欢迎语音已存在：audio_out/welcome.mp3
+2025-06-22 21:04:04.025 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_recording.mp3
+2025-06-22 21:04:04.025 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_asr.mp3
+2025-06-22 21:04:04.025 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_network.mp3
+2025-06-22 21:04:04.025 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_tts.mp3
+2025-06-22 21:04:04.025 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_system.mp3
+2025-06-22 21:04:04.026 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_no_input.mp3
+2025-06-22 21:04:04.118 | INFO     | wakeword.porcupine_adapter:start:29 - 唤醒词检测已启动，等待唤醒...
+2025-06-22 21:04:07.831 | DEBUG    | wakeword.porcupine_adapter:start:36 - 唤醒词已检测到，触发回调。
+2025-06-22 21:04:07.832 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/welcome.mp3
+2025-06-22 21:04:09.331 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/welcome.mp3
+2025-06-22 21:04:09.331 | INFO     | __main__:on_wakeword_detected:81 - 已唤醒，等待用户说话...
+2025-06-22 21:04:25.663 | INFO     | asr.xunfei_asr:_on_close:94 - ASR websocket连接关闭
+2025-06-22 21:04:25.664 | INFO     | __main__:on_wakeword_detected:85 - 用户语音识别结果: 
+2025-06-22 21:04:25.664 | DEBUG    | __main__:on_wakeword_detected:88 - 识别结果为空，提示用户重说。
+2025-06-22 21:04:25.664 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 21:04:29.196 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 21:04:40.700 | ERROR    | asr.xunfei_asr:send_audio:225 - ASR流式音频发送异常: Error starting stream: Unanticipated host error [PaErrorCode -9999]: '' [<host API not found> error 0]
+2025-06-22 21:21:12.204 | INFO     | __main__:main:25 - ==== 智能语音音箱主流程启动 ====
+2025-06-22 21:21:12.209 | DEBUG    | __main__:main:27 - 完整配置参数: {'xunfei_asr': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'hotwords': '小猪猪,芝麻开门', 'engine_type': 'sms16k'}, 'xunfei': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'vcn': 'x4_yezi', 'speed': 50, 'volume': 50, 'pitch': 50}, 'deepseek': {'api_key': 'sk-f2d5403d07e1499a8e344a09588f4eb7', 'base_url': 'https://api.deepseek.com', 'model': 'deepseek-chat', 'temperature': 0.7, 'max_tokens': 2048}, 'endwords': ['再见', '拜拜', '下次再说'], 'welcome_audio_path': 'audio_out/welcome.mp3', 'welcome_text': '你好。', 'audio_out_dir': 'audio_out', 'tts_cache_dir': 'audio_out/tts_cache', 'error_prompts': {'error_recording': '录音设备不可用，请检查麦克风。', 'error_asr': '语音识别服务不可用，请检查网络或稍后重试。', 'error_network': '网络连接异常，请检查网络。', 'error_tts': '语音合成服务不可用。', 'error_system': '系统发生未知错误，请稍后重试。', 'error_no_input': '未检测到有效语音，请再试一次。'}, 'wakeword': {'keyword_paths': ['wakeword/xiaozhu.ppn'], 'access_key': 'TTnalPNKGniQ17wPRKfQR7u29VGYKVHk2NheRgMh7K7b5JIVnJE3UQ==', 'sensitivities': [0.7], 'model_path': 'wakeword/porcupine_params_zh.pv', 'audio_device_index': 1}, 'tts_cache_policy': {'max_files': 200, 'max_bytes': 15000000000}}
+2025-06-22 21:21:12.210 | DEBUG    | __main__:prepare_welcome_audio:22 - 本地欢迎语音已存在：audio_out/welcome.mp3
+2025-06-22 21:21:12.210 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_recording.mp3
+2025-06-22 21:21:12.210 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_asr.mp3
+2025-06-22 21:21:12.210 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_network.mp3
+2025-06-22 21:21:12.211 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_tts.mp3
+2025-06-22 21:21:12.211 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_system.mp3
+2025-06-22 21:21:12.211 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_no_input.mp3
+2025-06-22 21:21:12.296 | INFO     | wakeword.porcupine_adapter:start:29 - 唤醒词检测已启动，等待唤醒...
+2025-06-22 21:21:45.258 | DEBUG    | wakeword.porcupine_adapter:start:36 - 唤醒词已检测到，触发回调。
+2025-06-22 21:21:45.259 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/welcome.mp3
+2025-06-22 21:21:46.710 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/welcome.mp3
+2025-06-22 21:21:46.711 | INFO     | __main__:on_wakeword_detected:81 - 已唤醒，等待用户说话...
+2025-06-22 21:22:03.108 | INFO     | asr.xunfei_asr:_on_close:85 - ASR websocket连接关闭
+2025-06-22 21:22:03.108 | INFO     | __main__:on_wakeword_detected:85 - 用户语音识别结果: 
+2025-06-22 21:22:03.108 | DEBUG    | __main__:on_wakeword_detected:88 - 识别结果为空，提示用户重说。
+2025-06-22 21:22:03.109 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 21:22:06.643 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 21:22:18.120 | ERROR    | asr.xunfei_asr:send_audio:230 - ASR流式音频发送异常: Error starting stream: Unanticipated host error [PaErrorCode -9999]: '' [<host API not found> error 0]
+2025-06-22 21:28:10.617 | DEBUG    | wakeword.porcupine_adapter:start:36 - 唤醒词已检测到，触发回调。
+2025-06-22 21:28:10.617 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/welcome.mp3
+2025-06-22 21:28:12.069 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/welcome.mp3
+2025-06-22 21:28:12.069 | INFO     | __main__:on_wakeword_detected:81 - 已唤醒，等待用户说话...
+2025-06-22 21:28:28.460 | INFO     | asr.xunfei_asr:_on_close:85 - ASR websocket连接关闭
+2025-06-22 21:28:28.460 | INFO     | __main__:on_wakeword_detected:85 - 用户语音识别结果: 
+2025-06-22 21:28:28.461 | DEBUG    | __main__:on_wakeword_detected:88 - 识别结果为空，提示用户重说。
+2025-06-22 21:28:28.461 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 21:28:32.049 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 21:28:43.498 | ERROR    | asr.xunfei_asr:send_audio:230 - ASR流式音频发送异常: Error starting stream: Unanticipated host error [PaErrorCode -9999]: '' [<host API not found> error 0]
+2025-06-22 21:40:03.992 | DEBUG    | wakeword.porcupine_adapter:start:36 - 唤醒词已检测到，触发回调。
+2025-06-22 21:40:03.993 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/welcome.mp3
+2025-06-22 21:40:05.496 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/welcome.mp3
+2025-06-22 21:40:05.497 | INFO     | __main__:on_wakeword_detected:81 - 已唤醒，等待用户说话...
+2025-06-22 21:40:21.923 | INFO     | asr.xunfei_asr:_on_close:85 - ASR websocket连接关闭
+2025-06-22 21:40:21.923 | INFO     | __main__:on_wakeword_detected:85 - 用户语音识别结果: 
+2025-06-22 21:40:21.924 | DEBUG    | __main__:on_wakeword_detected:88 - 识别结果为空，提示用户重说。
+2025-06-22 21:40:21.924 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 21:40:25.516 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 21:40:36.974 | ERROR    | asr.xunfei_asr:send_audio:230 - ASR流式音频发送异常: Error starting stream: Unanticipated host error [PaErrorCode -9999]: '' [<host API not found> error 0]
+2025-06-22 21:40:52.113 | DEBUG    | wakeword.porcupine_adapter:start:36 - 唤醒词已检测到，触发回调。
+2025-06-22 21:40:52.113 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/welcome.mp3
+2025-06-22 21:40:53.611 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/welcome.mp3
+2025-06-22 21:40:53.611 | INFO     | __main__:on_wakeword_detected:81 - 已唤醒，等待用户说话...
+2025-06-22 21:41:10.020 | INFO     | asr.xunfei_asr:_on_close:85 - ASR websocket连接关闭
+2025-06-22 21:41:10.021 | INFO     | __main__:on_wakeword_detected:85 - 用户语音识别结果: 
+2025-06-22 21:41:10.021 | DEBUG    | __main__:on_wakeword_detected:88 - 识别结果为空，提示用户重说。
+2025-06-22 21:41:10.022 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 21:41:13.635 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 21:41:25.020 | ERROR    | asr.xunfei_asr:send_audio:230 - ASR流式音频发送异常: Error starting stream: Unanticipated host error [PaErrorCode -9999]: '' [<host API not found> error 0]
+2025-06-22 21:41:34.407 | DEBUG    | wakeword.porcupine_adapter:start:36 - 唤醒词已检测到，触发回调。
+2025-06-22 21:41:34.407 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/welcome.mp3
+2025-06-22 21:41:35.910 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/welcome.mp3
+2025-06-22 21:41:35.910 | INFO     | __main__:on_wakeword_detected:81 - 已唤醒，等待用户说话...
+2025-06-22 21:41:52.323 | INFO     | asr.xunfei_asr:_on_close:85 - ASR websocket连接关闭
+2025-06-22 21:41:52.323 | INFO     | __main__:on_wakeword_detected:85 - 用户语音识别结果: 
+2025-06-22 21:41:52.324 | DEBUG    | __main__:on_wakeword_detected:88 - 识别结果为空，提示用户重说。
+2025-06-22 21:41:52.324 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 21:41:55.919 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 21:42:07.356 | ERROR    | asr.xunfei_asr:send_audio:230 - ASR流式音频发送异常: Error starting stream: Unanticipated host error [PaErrorCode -9999]: '' [<host API not found> error 0]
+2025-06-22 22:02:57.150 | INFO     | __main__:main:25 - ==== 智能语音音箱主流程启动 ====
+2025-06-22 22:02:57.155 | DEBUG    | __main__:main:27 - 完整配置参数: {'xunfei_asr': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'hotwords': '小猪猪,芝麻开门', 'engine_type': 'sms16k'}, 'xunfei': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'vcn': 'x4_yezi', 'speed': 50, 'volume': 50, 'pitch': 50}, 'deepseek': {'api_key': 'sk-f2d5403d07e1499a8e344a09588f4eb7', 'base_url': 'https://api.deepseek.com', 'model': 'deepseek-chat', 'temperature': 0.7, 'max_tokens': 2048}, 'endwords': ['再见', '拜拜', '下次再说'], 'welcome_audio_path': 'audio_out/welcome.mp3', 'welcome_text': '你好。', 'audio_out_dir': 'audio_out', 'tts_cache_dir': 'audio_out/tts_cache', 'error_prompts': {'error_recording': '录音设备不可用，请检查麦克风。', 'error_asr': '语音识别服务不可用，请检查网络或稍后重试。', 'error_network': '网络连接异常，请检查网络。', 'error_tts': '语音合成服务不可用。', 'error_system': '系统发生未知错误，请稍后重试。', 'error_no_input': '未检测到有效语音，请再试一次。'}, 'wakeword': {'keyword_paths': ['wakeword/xiaozhu.ppn'], 'access_key': 'TTnalPNKGniQ17wPRKfQR7u29VGYKVHk2NheRgMh7K7b5JIVnJE3UQ==', 'sensitivities': [0.7], 'model_path': 'wakeword/porcupine_params_zh.pv', 'audio_device_index': 1}, 'tts_cache_policy': {'max_files': 200, 'max_bytes': 15000000000}}
+2025-06-22 22:02:57.156 | DEBUG    | __main__:prepare_welcome_audio:22 - 本地欢迎语音已存在：audio_out/welcome.mp3
+2025-06-22 22:02:57.156 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_recording.mp3
+2025-06-22 22:02:57.157 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_asr.mp3
+2025-06-22 22:02:57.157 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_network.mp3
+2025-06-22 22:02:57.157 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_tts.mp3
+2025-06-22 22:02:57.157 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_system.mp3
+2025-06-22 22:02:57.157 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_no_input.mp3
+2025-06-22 22:02:57.246 | INFO     | wakeword.porcupine_adapter:start:29 - 唤醒词检测已启动，等待唤醒...
+2025-06-22 22:03:01.663 | DEBUG    | wakeword.porcupine_adapter:start:36 - 唤醒词已检测到，触发回调。
+2025-06-22 22:03:01.663 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/welcome.mp3
+2025-06-22 22:03:03.104 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/welcome.mp3
+2025-06-22 22:03:03.104 | INFO     | __main__:on_wakeword_detected:81 - 已唤醒，等待用户说话...
+2025-06-22 22:03:03.104 | DEBUG    | asr.xunfei_asr:_assemble_url:33 - ASR鉴权用date: Sun, 22 Jun 2025 14:03:03 GMT
+2025-06-22 22:03:03.104 | DEBUG    | asr.xunfei_asr:_assemble_url:39 - ASR签名原始串: 'host: iat-api.xfyun.cn\ndate: Sun, 22 Jun 2025 14:03:03 GMT\nGET /v2/iat HTTP/1.1'
+2025-06-22 22:03:03.105 | DEBUG    | asr.xunfei_asr:_assemble_url:48 - ASR签名base64: hAwEJiME7dJM0O3BT7szTbxKBsrvKbUq6XQ+MTzQ8lc=
+2025-06-22 22:03:03.105 | DEBUG    | asr.xunfei_asr:_assemble_url:57 - ASR authorization_origin: api_key="8ac63485f16c76f845142189872f5cea", algorithm="hmac-sha256", headers="host date request-line", signature="hAwEJiME7dJM0O3BT7szTbxKBsrvKbUq6XQ+MTzQ8lc="
+2025-06-22 22:03:03.105 | DEBUG    | asr.xunfei_asr:_assemble_url:59 - ASR authorization (base64): YXBpX2tleT0iOGFjNjM0ODVmMTZjNzZmODQ1MTQyMTg5ODcyZjVjZWEiLCBhbGdvcml0aG09ImhtYWMtc2hhMjU2IiwgaGVhZGVycz0iaG9zdCBkYXRlIHJlcXVlc3QtbGluZSIsIHNpZ25hdHVyZT0iaEF3RUppTUU3ZEpNME8zQlQ3c3pUYnhLQnNydktiVXE2WFErTVR6UThsYz0i
+2025-06-22 22:03:03.105 | INFO     | asr.xunfei_asr:_assemble_url:68 - ASR WS 连接URL: wss://iat-api.xfyun.cn/v2/iat?authorization=YXBpX2tleT0iOGFjNjM0ODVmMTZjNzZmODQ1MTQyMTg5ODcyZjVjZWEiLCBhbGdvcml0aG09ImhtYWMtc2hhMjU2IiwgaGVhZGVycz0iaG9zdCBkYXRlIHJlcXVlc3QtbGluZSIsIHNpZ25hdHVyZT0iaEF3RUppTUU3ZEpNME8zQlQ3c3pUYnhLQnNydktiVXE2WFErTVR6UThsYz0i&date=Sun%2C+22+Jun+2025+14%3A03%3A03+GMT&host=iat-api.xfyun.cn
+2025-06-22 22:03:04.695 | INFO     | asr.xunfei_asr:send_audio:204 - ASR流式识别：开始分块发送
+2025-06-22 22:03:19.717 | INFO     | asr.xunfei_asr:_on_close:100 - ASR websocket连接关闭
+2025-06-22 22:03:19.718 | ERROR    | asr.xunfei_asr:recognize_stream:264 - ASR流式未识别到有效文本
+2025-06-22 22:03:19.718 | INFO     | __main__:on_wakeword_detected:85 - 用户语音识别结果: 
+2025-06-22 22:03:19.719 | DEBUG    | __main__:on_wakeword_detected:88 - 识别结果为空，提示用户重说。
+2025-06-22 22:03:19.719 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 22:03:23.265 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 22:03:34.744 | ERROR    | asr.xunfei_asr:send_audio:244 - ASR流式音频发送异常: Error starting stream: Unanticipated host error [PaErrorCode -9999]: '' [<host API not found> error 0]
+2025-06-22 22:07:17.990 | DEBUG    | wakeword.porcupine_adapter:start:36 - 唤醒词已检测到，触发回调。
+2025-06-22 22:07:17.990 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/welcome.mp3
+2025-06-22 22:07:19.442 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/welcome.mp3
+2025-06-22 22:07:19.443 | INFO     | __main__:on_wakeword_detected:81 - 已唤醒，等待用户说话...
+2025-06-22 22:07:19.443 | DEBUG    | asr.xunfei_asr:_assemble_url:33 - ASR鉴权用date: Sun, 22 Jun 2025 14:07:19 GMT
+2025-06-22 22:07:19.443 | DEBUG    | asr.xunfei_asr:_assemble_url:39 - ASR签名原始串: 'host: iat-api.xfyun.cn\ndate: Sun, 22 Jun 2025 14:07:19 GMT\nGET /v2/iat HTTP/1.1'
+2025-06-22 22:07:19.444 | DEBUG    | asr.xunfei_asr:_assemble_url:48 - ASR签名base64: MD/FZWE/9USUpkY2VhsKVW+uhF6l/8Hp9YVcaKjxfF0=
+2025-06-22 22:07:19.444 | DEBUG    | asr.xunfei_asr:_assemble_url:57 - ASR authorization_origin: api_key="8ac63485f16c76f845142189872f5cea", algorithm="hmac-sha256", headers="host date request-line", signature="MD/FZWE/9USUpkY2VhsKVW+uhF6l/8Hp9YVcaKjxfF0="
+2025-06-22 22:07:19.444 | DEBUG    | asr.xunfei_asr:_assemble_url:59 - ASR authorization (base64): YXBpX2tleT0iOGFjNjM0ODVmMTZjNzZmODQ1MTQyMTg5ODcyZjVjZWEiLCBhbGdvcml0aG09ImhtYWMtc2hhMjU2IiwgaGVhZGVycz0iaG9zdCBkYXRlIHJlcXVlc3QtbGluZSIsIHNpZ25hdHVyZT0iTUQvRlpXRS85VVNVcGtZMlZoc0tWVyt1aEY2bC84SHA5WVZjYUtqeGZGMD0i
+2025-06-22 22:07:19.444 | INFO     | asr.xunfei_asr:_assemble_url:68 - ASR WS 连接URL: wss://iat-api.xfyun.cn/v2/iat?authorization=YXBpX2tleT0iOGFjNjM0ODVmMTZjNzZmODQ1MTQyMTg5ODcyZjVjZWEiLCBhbGdvcml0aG09ImhtYWMtc2hhMjU2IiwgaGVhZGVycz0iaG9zdCBkYXRlIHJlcXVlc3QtbGluZSIsIHNpZ25hdHVyZT0iTUQvRlpXRS85VVNVcGtZMlZoc0tWVyt1aEY2bC84SHA5WVZjYUtqeGZGMD0i&date=Sun%2C+22+Jun+2025+14%3A07%3A19+GMT&host=iat-api.xfyun.cn
+2025-06-22 22:07:20.740 | INFO     | asr.xunfei_asr:send_audio:204 - ASR流式识别：开始分块发送
+2025-06-22 22:07:35.738 | INFO     | asr.xunfei_asr:_on_close:100 - ASR websocket连接关闭
+2025-06-22 22:07:35.738 | ERROR    | asr.xunfei_asr:recognize_stream:264 - ASR流式未识别到有效文本
+2025-06-22 22:07:35.739 | INFO     | __main__:on_wakeword_detected:85 - 用户语音识别结果: 
+2025-06-22 22:07:35.739 | DEBUG    | __main__:on_wakeword_detected:88 - 识别结果为空，提示用户重说。
+2025-06-22 22:07:35.739 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 22:07:39.317 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 22:07:47.865 | DEBUG    | wakeword.porcupine_adapter:start:36 - 唤醒词已检测到，触发回调。
+2025-06-22 22:07:47.865 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/welcome.mp3
+2025-06-22 22:07:49.310 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/welcome.mp3
+2025-06-22 22:07:49.310 | INFO     | __main__:on_wakeword_detected:81 - 已唤醒，等待用户说话...
+2025-06-22 22:07:49.311 | DEBUG    | asr.xunfei_asr:_assemble_url:33 - ASR鉴权用date: Sun, 22 Jun 2025 14:07:49 GMT
+2025-06-22 22:07:49.311 | DEBUG    | asr.xunfei_asr:_assemble_url:39 - ASR签名原始串: 'host: iat-api.xfyun.cn\ndate: Sun, 22 Jun 2025 14:07:49 GMT\nGET /v2/iat HTTP/1.1'
+2025-06-22 22:07:49.311 | DEBUG    | asr.xunfei_asr:_assemble_url:48 - ASR签名base64: w+2dwMfFCJKWbi7B8U17Rr6WJLaNdlWZOAF8FYGdWkg=
+2025-06-22 22:07:49.311 | DEBUG    | asr.xunfei_asr:_assemble_url:57 - ASR authorization_origin: api_key="8ac63485f16c76f845142189872f5cea", algorithm="hmac-sha256", headers="host date request-line", signature="w+2dwMfFCJKWbi7B8U17Rr6WJLaNdlWZOAF8FYGdWkg="
+2025-06-22 22:07:49.311 | DEBUG    | asr.xunfei_asr:_assemble_url:59 - ASR authorization (base64): YXBpX2tleT0iOGFjNjM0ODVmMTZjNzZmODQ1MTQyMTg5ODcyZjVjZWEiLCBhbGdvcml0aG09ImhtYWMtc2hhMjU2IiwgaGVhZGVycz0iaG9zdCBkYXRlIHJlcXVlc3QtbGluZSIsIHNpZ25hdHVyZT0idysyZHdNZkZDSktXYmk3QjhVMTdScjZXSkxhTmRsV1pPQUY4RllHZFdrZz0i
+2025-06-22 22:07:49.311 | INFO     | asr.xunfei_asr:_assemble_url:68 - ASR WS 连接URL: wss://iat-api.xfyun.cn/v2/iat?authorization=YXBpX2tleT0iOGFjNjM0ODVmMTZjNzZmODQ1MTQyMTg5ODcyZjVjZWEiLCBhbGdvcml0aG09ImhtYWMtc2hhMjU2IiwgaGVhZGVycz0iaG9zdCBkYXRlIHJlcXVlc3QtbGluZSIsIHNpZ25hdHVyZT0idysyZHdNZkZDSktXYmk3QjhVMTdScjZXSkxhTmRsV1pPQUY4RllHZFdrZz0i&date=Sun%2C+22+Jun+2025+14%3A07%3A49+GMT&host=iat-api.xfyun.cn
+2025-06-22 22:07:50.795 | INFO     | asr.xunfei_asr:send_audio:204 - ASR流式识别：开始分块发送
+2025-06-22 22:07:50.796 | ERROR    | asr.xunfei_asr:send_audio:244 - ASR流式音频发送异常: Error starting stream: Unanticipated host error [PaErrorCode -9999]: '' [<host API not found> error 0]
+2025-06-22 22:07:50.796 | ERROR    | asr.xunfei_asr:recognize_stream:264 - ASR流式未识别到有效文本
+2025-06-22 22:07:50.796 | INFO     | __main__:on_wakeword_detected:85 - 用户语音识别结果: 
+2025-06-22 22:07:50.797 | DEBUG    | __main__:on_wakeword_detected:88 - 识别结果为空，提示用户重说。
+2025-06-22 22:07:50.797 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 22:07:54.344 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 22:08:05.826 | INFO     | asr.xunfei_asr:_on_close:100 - ASR websocket连接关闭
+2025-06-22 22:08:20.859 | ERROR    | asr.xunfei_asr:send_audio:244 - ASR流式音频发送异常: Error starting stream: Unanticipated host error [PaErrorCode -9999]: '' [<host API not found> error 0]
+2025-06-22 22:13:48.038 | DEBUG    | wakeword.porcupine_adapter:start:36 - 唤醒词已检测到，触发回调。
+2025-06-22 22:13:48.038 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/welcome.mp3
+2025-06-22 22:13:49.494 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/welcome.mp3
+2025-06-22 22:13:49.494 | INFO     | __main__:on_wakeword_detected:81 - 已唤醒，等待用户说话...
+2025-06-22 22:13:49.495 | DEBUG    | asr.xunfei_asr:_assemble_url:33 - ASR鉴权用date: Sun, 22 Jun 2025 14:13:49 GMT
+2025-06-22 22:13:49.495 | DEBUG    | asr.xunfei_asr:_assemble_url:39 - ASR签名原始串: 'host: iat-api.xfyun.cn\ndate: Sun, 22 Jun 2025 14:13:49 GMT\nGET /v2/iat HTTP/1.1'
+2025-06-22 22:13:49.495 | DEBUG    | asr.xunfei_asr:_assemble_url:48 - ASR签名base64: Ls8AbeAt8OeFKPrRuUumEM2LMaYtxK+qCQ+KOWq+Apo=
+2025-06-22 22:13:49.495 | DEBUG    | asr.xunfei_asr:_assemble_url:57 - ASR authorization_origin: api_key="8ac63485f16c76f845142189872f5cea", algorithm="hmac-sha256", headers="host date request-line", signature="Ls8AbeAt8OeFKPrRuUumEM2LMaYtxK+qCQ+KOWq+Apo="
+2025-06-22 22:13:49.495 | DEBUG    | asr.xunfei_asr:_assemble_url:59 - ASR authorization (base64): YXBpX2tleT0iOGFjNjM0ODVmMTZjNzZmODQ1MTQyMTg5ODcyZjVjZWEiLCBhbGdvcml0aG09ImhtYWMtc2hhMjU2IiwgaGVhZGVycz0iaG9zdCBkYXRlIHJlcXVlc3QtbGluZSIsIHNpZ25hdHVyZT0iTHM4QWJlQXQ4T2VGS1ByUnVVdW1FTTJMTWFZdHhLK3FDUStLT1dxK0Fwbz0i
+2025-06-22 22:13:49.496 | INFO     | asr.xunfei_asr:_assemble_url:68 - ASR WS 连接URL: wss://iat-api.xfyun.cn/v2/iat?authorization=YXBpX2tleT0iOGFjNjM0ODVmMTZjNzZmODQ1MTQyMTg5ODcyZjVjZWEiLCBhbGdvcml0aG09ImhtYWMtc2hhMjU2IiwgaGVhZGVycz0iaG9zdCBkYXRlIHJlcXVlc3QtbGluZSIsIHNpZ25hdHVyZT0iTHM4QWJlQXQ4T2VGS1ByUnVVdW1FTTJMTWFZdHhLK3FDUStLT1dxK0Fwbz0i&date=Sun%2C+22+Jun+2025+14%3A13%3A49+GMT&host=iat-api.xfyun.cn
+2025-06-22 22:13:50.856 | INFO     | asr.xunfei_asr:send_audio:204 - ASR流式识别：开始分块发送
+2025-06-22 22:14:05.882 | INFO     | asr.xunfei_asr:_on_close:100 - ASR websocket连接关闭
+2025-06-22 22:14:05.882 | ERROR    | asr.xunfei_asr:recognize_stream:264 - ASR流式未识别到有效文本
+2025-06-22 22:14:05.883 | INFO     | __main__:on_wakeword_detected:85 - 用户语音识别结果: 
+2025-06-22 22:14:05.883 | DEBUG    | __main__:on_wakeword_detected:88 - 识别结果为空，提示用户重说。
+2025-06-22 22:14:05.883 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 22:14:09.431 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 22:14:20.911 | ERROR    | asr.xunfei_asr:send_audio:244 - ASR流式音频发送异常: Error starting stream: Unanticipated host error [PaErrorCode -9999]: '' [<host API not found> error 0]
+2025-06-22 22:28:13.460 | DEBUG    | wakeword.porcupine_adapter:start:36 - 唤醒词已检测到，触发回调。
+2025-06-22 22:28:13.460 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/welcome.mp3
+2025-06-22 22:28:14.914 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/welcome.mp3
+2025-06-22 22:28:14.915 | INFO     | __main__:on_wakeword_detected:81 - 已唤醒，等待用户说话...
+2025-06-22 22:28:14.915 | DEBUG    | asr.xunfei_asr:_assemble_url:33 - ASR鉴权用date: Sun, 22 Jun 2025 14:28:14 GMT
+2025-06-22 22:28:14.915 | DEBUG    | asr.xunfei_asr:_assemble_url:39 - ASR签名原始串: 'host: iat-api.xfyun.cn\ndate: Sun, 22 Jun 2025 14:28:14 GMT\nGET /v2/iat HTTP/1.1'
+2025-06-22 22:28:14.916 | DEBUG    | asr.xunfei_asr:_assemble_url:48 - ASR签名base64: Lggaw68TlongB6aM7sTxauAqJccCZP7+I/NKdsUrCic=
+2025-06-22 22:28:14.916 | DEBUG    | asr.xunfei_asr:_assemble_url:57 - ASR authorization_origin: api_key="8ac63485f16c76f845142189872f5cea", algorithm="hmac-sha256", headers="host date request-line", signature="Lggaw68TlongB6aM7sTxauAqJccCZP7+I/NKdsUrCic="
+2025-06-22 22:28:14.916 | DEBUG    | asr.xunfei_asr:_assemble_url:59 - ASR authorization (base64): YXBpX2tleT0iOGFjNjM0ODVmMTZjNzZmODQ1MTQyMTg5ODcyZjVjZWEiLCBhbGdvcml0aG09ImhtYWMtc2hhMjU2IiwgaGVhZGVycz0iaG9zdCBkYXRlIHJlcXVlc3QtbGluZSIsIHNpZ25hdHVyZT0iTGdnYXc2OFRsb25nQjZhTTdzVHhhdUFxSmNjQ1pQNytJL05LZHNVckNpYz0i
+2025-06-22 22:28:14.916 | INFO     | asr.xunfei_asr:_assemble_url:68 - ASR WS 连接URL: wss://iat-api.xfyun.cn/v2/iat?authorization=YXBpX2tleT0iOGFjNjM0ODVmMTZjNzZmODQ1MTQyMTg5ODcyZjVjZWEiLCBhbGdvcml0aG09ImhtYWMtc2hhMjU2IiwgaGVhZGVycz0iaG9zdCBkYXRlIHJlcXVlc3QtbGluZSIsIHNpZ25hdHVyZT0iTGdnYXc2OFRsb25nQjZhTTdzVHhhdUFxSmNjQ1pQNytJL05LZHNVckNpYz0i&date=Sun%2C+22+Jun+2025+14%3A28%3A14+GMT&host=iat-api.xfyun.cn
+2025-06-22 22:28:16.316 | INFO     | asr.xunfei_asr:send_audio:204 - ASR流式识别：开始分块发送
+2025-06-22 22:28:31.337 | INFO     | asr.xunfei_asr:_on_close:100 - ASR websocket连接关闭
+2025-06-22 22:28:31.337 | ERROR    | asr.xunfei_asr:recognize_stream:264 - ASR流式未识别到有效文本
+2025-06-22 22:28:31.338 | INFO     | __main__:on_wakeword_detected:85 - 用户语音识别结果: 
+2025-06-22 22:28:31.338 | DEBUG    | __main__:on_wakeword_detected:88 - 识别结果为空，提示用户重说。
+2025-06-22 22:28:31.338 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 22:28:35.023 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 22:35:02.481 | INFO     | __main__:main:25 - ==== 智能语音音箱主流程启动 ====
+2025-06-22 22:35:02.486 | DEBUG    | __main__:main:27 - 完整配置参数: {'xunfei_asr': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'hotwords': '小猪猪,芝麻开门'}, 'xunfei': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'vcn': 'x4_yezi', 'speed': 50, 'volume': 50, 'pitch': 50}, 'deepseek': {'api_key': 'sk-f2d5403d07e1499a8e344a09588f4eb7', 'base_url': 'https://api.deepseek.com', 'model': 'deepseek-chat', 'temperature': 0.7, 'max_tokens': 2048}, 'endwords': ['再见', '拜拜', '下次再说'], 'welcome_audio_path': 'audio_out/welcome.mp3', 'welcome_text': '你好。', 'audio_out_dir': 'audio_out', 'tts_cache_dir': 'audio_out/tts_cache', 'error_prompts': {'error_recording': '录音设备不可用，请检查麦克风。', 'error_asr': '语音识别服务不可用，请检查网络或稍后重试。', 'error_network': '网络连接异常，请检查网络。', 'error_tts': '语音合成服务不可用。', 'error_system': '系统发生未知错误，请稍后重试。', 'error_no_input': '未检测到有效语音，请再试一次。'}, 'wakeword': {'keyword_paths': ['wakeword/xiaozhu.ppn'], 'access_key': 'TTnalPNKGniQ17wPRKfQR7u29VGYKVHk2NheRgMh7K7b5JIVnJE3UQ==', 'sensitivities': [0.7], 'model_path': 'wakeword/porcupine_params_zh.pv', 'audio_device_index': 1}, 'tts_cache_policy': {'max_files': 200, 'max_bytes': 15000000000}}
+2025-06-22 22:35:02.487 | DEBUG    | __main__:prepare_welcome_audio:22 - 本地欢迎语音已存在：audio_out/welcome.mp3
+2025-06-22 22:35:02.487 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_recording.mp3
+2025-06-22 22:35:02.488 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_asr.mp3
+2025-06-22 22:35:02.488 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_network.mp3
+2025-06-22 22:35:02.489 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_tts.mp3
+2025-06-22 22:35:02.489 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_system.mp3
+2025-06-22 22:35:02.489 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_no_input.mp3
+2025-06-22 22:35:02.574 | INFO     | wakeword.porcupine_adapter:start:29 - 唤醒词检测已启动，等待唤醒...
+2025-06-22 22:35:13.840 | DEBUG    | wakeword.porcupine_adapter:start:36 - 唤醒词已检测到，触发回调。
+2025-06-22 22:35:13.840 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/welcome.mp3
+2025-06-22 22:35:15.293 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/welcome.mp3
+2025-06-22 22:35:15.293 | INFO     | __main__:on_wakeword_detected:81 - 已唤醒，等待用户说话...
+2025-06-22 22:35:15.294 | DEBUG    | asr.xunfei_asr:_assemble_url:32 - ASR鉴权用date: Sun, 22 Jun 2025 14:35:15 GMT
+2025-06-22 22:35:15.294 | DEBUG    | asr.xunfei_asr:_assemble_url:38 - ASR签名原始串: 'host: iat-api.xfyun.cn\ndate: Sun, 22 Jun 2025 14:35:15 GMT\nGET /v2/iat HTTP/1.1'
+2025-06-22 22:35:15.294 | DEBUG    | asr.xunfei_asr:_assemble_url:47 - ASR签名base64: /wmLdDrrG0NJQfug1xlWeWaohQCdiwtkbLkI5sUJP54=
+2025-06-22 22:35:15.294 | DEBUG    | asr.xunfei_asr:_assemble_url:56 - ASR authorization_origin: api_key="8ac63485f16c76f845142189872f5cea", algorithm="hmac-sha256", headers="host date request-line", signature="/wmLdDrrG0NJQfug1xlWeWaohQCdiwtkbLkI5sUJP54="
+2025-06-22 22:35:15.294 | DEBUG    | asr.xunfei_asr:_assemble_url:58 - ASR authorization (base64): YXBpX2tleT0iOGFjNjM0ODVmMTZjNzZmODQ1MTQyMTg5ODcyZjVjZWEiLCBhbGdvcml0aG09ImhtYWMtc2hhMjU2IiwgaGVhZGVycz0iaG9zdCBkYXRlIHJlcXVlc3QtbGluZSIsIHNpZ25hdHVyZT0iL3dtTGREcnJHME5KUWZ1ZzF4bFdlV2FvaFFDZGl3dGtiTGtJNXNVSlA1ND0i
+2025-06-22 22:35:15.294 | INFO     | asr.xunfei_asr:_assemble_url:67 - ASR WS 连接URL: wss://iat-api.xfyun.cn/v2/iat?authorization=YXBpX2tleT0iOGFjNjM0ODVmMTZjNzZmODQ1MTQyMTg5ODcyZjVjZWEiLCBhbGdvcml0aG09ImhtYWMtc2hhMjU2IiwgaGVhZGVycz0iaG9zdCBkYXRlIHJlcXVlc3QtbGluZSIsIHNpZ25hdHVyZT0iL3dtTGREcnJHME5KUWZ1ZzF4bFdlV2FvaFFDZGl3dGtiTGtJNXNVSlA1ND0i&date=Sun%2C+22+Jun+2025+14%3A35%3A15+GMT&host=iat-api.xfyun.cn
+2025-06-22 22:35:16.779 | INFO     | asr.xunfei_asr:send_audio:203 - ASR流式识别：开始分块发送
+2025-06-22 22:35:31.819 | INFO     | asr.xunfei_asr:_on_close:99 - ASR websocket连接关闭
+2025-06-22 22:35:31.820 | ERROR    | asr.xunfei_asr:recognize_stream:263 - ASR流式未识别到有效文本
+2025-06-22 22:35:31.821 | INFO     | __main__:on_wakeword_detected:85 - 用户语音识别结果: 
+2025-06-22 22:35:31.821 | DEBUG    | __main__:on_wakeword_detected:88 - 识别结果为空，提示用户重说。
+2025-06-22 22:35:31.821 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 22:35:35.413 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 22:50:48.228 | INFO     | __main__:main:25 - ==== 智能语音音箱主流程启动 ====
+2025-06-22 22:50:48.233 | DEBUG    | __main__:main:27 - 完整配置参数: {'xunfei_asr': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'hotwords': '小猪猪,芝麻开门'}, 'xunfei': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'vcn': 'x4_yezi', 'speed': 50, 'volume': 50, 'pitch': 50}, 'deepseek': {'api_key': 'sk-f2d5403d07e1499a8e344a09588f4eb7', 'base_url': 'https://api.deepseek.com', 'model': 'deepseek-chat', 'temperature': 0.7, 'max_tokens': 2048}, 'endwords': ['再见', '拜拜', '下次再说'], 'welcome_audio_path': 'audio_out/welcome.mp3', 'welcome_text': '你好。', 'audio_out_dir': 'audio_out', 'tts_cache_dir': 'audio_out/tts_cache', 'error_prompts': {'error_recording': '录音设备不可用，请检查麦克风。', 'error_asr': '语音识别服务不可用，请检查网络或稍后重试。', 'error_network': '网络连接异常，请检查网络。', 'error_tts': '语音合成服务不可用。', 'error_system': '系统发生未知错误，请稍后重试。', 'error_no_input': '未检测到有效语音，请再试一次。'}, 'wakeword': {'keyword_paths': ['wakeword/xiaozhu.ppn'], 'access_key': 'TTnalPNKGniQ17wPRKfQR7u29VGYKVHk2NheRgMh7K7b5JIVnJE3UQ==', 'sensitivities': [0.7], 'model_path': 'wakeword/porcupine_params_zh.pv', 'audio_device_index': 1}, 'tts_cache_policy': {'max_files': 200, 'max_bytes': 15000000000}}
+2025-06-22 22:50:48.233 | DEBUG    | __main__:prepare_welcome_audio:22 - 本地欢迎语音已存在：audio_out/welcome.mp3
+2025-06-22 22:50:48.233 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_recording.mp3
+2025-06-22 22:50:48.233 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_asr.mp3
+2025-06-22 22:50:48.233 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_network.mp3
+2025-06-22 22:50:48.234 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_tts.mp3
+2025-06-22 22:50:48.234 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_system.mp3
+2025-06-22 22:50:48.234 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_no_input.mp3
+2025-06-22 22:50:48.321 | INFO     | wakeword.porcupine_adapter:start:29 - 唤醒词检测已启动，等待唤醒...
+2025-06-22 22:50:51.651 | DEBUG    | wakeword.porcupine_adapter:start:36 - 唤醒词已检测到，触发回调。
+2025-06-22 22:50:51.651 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/welcome.mp3
+2025-06-22 22:50:53.105 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/welcome.mp3
+2025-06-22 22:50:53.105 | INFO     | __main__:on_wakeword_detected:81 - 已唤醒，等待用户说话...
+2025-06-22 22:50:53.106 | DEBUG    | asr.xunfei_asr:_assemble_url:32 - ASR鉴权用date: Sun, 22 Jun 2025 14:50:53 GMT
+2025-06-22 22:50:53.106 | DEBUG    | asr.xunfei_asr:_assemble_url:38 - ASR签名原始串: 'host: iat-api.xfyun.cn\ndate: Sun, 22 Jun 2025 14:50:53 GMT\nGET /v2/iat HTTP/1.1'
+2025-06-22 22:50:53.106 | DEBUG    | asr.xunfei_asr:_assemble_url:47 - ASR签名base64: UZNBTU6LPKSUyIadN7S/s9js5X1uuAY7/nrBv/hAzuQ=
+2025-06-22 22:50:53.106 | DEBUG    | asr.xunfei_asr:_assemble_url:56 - ASR authorization_origin: api_key="8ac63485f16c76f845142189872f5cea", algorithm="hmac-sha256", headers="host date request-line", signature="UZNBTU6LPKSUyIadN7S/s9js5X1uuAY7/nrBv/hAzuQ="
+2025-06-22 22:50:53.106 | DEBUG    | asr.xunfei_asr:_assemble_url:58 - ASR authorization (base64): YXBpX2tleT0iOGFjNjM0ODVmMTZjNzZmODQ1MTQyMTg5ODcyZjVjZWEiLCBhbGdvcml0aG09ImhtYWMtc2hhMjU2IiwgaGVhZGVycz0iaG9zdCBkYXRlIHJlcXVlc3QtbGluZSIsIHNpZ25hdHVyZT0iVVpOQlRVNkxQS1NVeUlhZE43Uy9zOWpzNVgxdXVBWTcvbnJCdi9oQXp1UT0i
+2025-06-22 22:50:53.106 | INFO     | asr.xunfei_asr:_assemble_url:67 - ASR WS 连接URL: wss://iat-api.xfyun.cn/v2/iat?authorization=YXBpX2tleT0iOGFjNjM0ODVmMTZjNzZmODQ1MTQyMTg5ODcyZjVjZWEiLCBhbGdvcml0aG09ImhtYWMtc2hhMjU2IiwgaGVhZGVycz0iaG9zdCBkYXRlIHJlcXVlc3QtbGluZSIsIHNpZ25hdHVyZT0iVVpOQlRVNkxQS1NVeUlhZE43Uy9zOWpzNVgxdXVBWTcvbnJCdi9oQXp1UT0i&date=Sun%2C+22+Jun+2025+14%3A50%3A53+GMT&host=iat-api.xfyun.cn
+2025-06-22 22:50:54.643 | INFO     | asr.xunfei_asr:send_audio:203 - ASR流式识别：开始分块发送
+2025-06-22 22:51:09.671 | INFO     | asr.xunfei_asr:_on_close:99 - ASR websocket连接关闭
+2025-06-22 22:51:09.672 | ERROR    | asr.xunfei_asr:recognize_stream:263 - ASR流式未识别到有效文本
+2025-06-22 22:51:09.673 | INFO     | __main__:on_wakeword_detected:85 - 用户语音识别结果: 
+2025-06-22 22:51:09.673 | DEBUG    | __main__:on_wakeword_detected:88 - 识别结果为空，提示用户重说。
+2025-06-22 22:51:09.673 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 22:51:13.218 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 22:51:19.141 | INFO     | wakeword.porcupine_adapter:start:39 - 唤醒词检测终止。
+2025-06-22 23:16:53.291 | INFO     | __main__:main:25 - ==== 智能语音音箱主流程启动 ====
+2025-06-22 23:16:53.295 | DEBUG    | __main__:main:27 - 完整配置参数: {'xunfei_asr': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'hotwords': '小猪猪,芝麻开门'}, 'xunfei': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'vcn': 'x4_yezi', 'speed': 50, 'volume': 50, 'pitch': 50}, 'deepseek': {'api_key': 'sk-f2d5403d07e1499a8e344a09588f4eb7', 'base_url': 'https://api.deepseek.com', 'model': 'deepseek-chat', 'temperature': 0.7, 'max_tokens': 2048}, 'endwords': ['再见', '拜拜', '下次再说'], 'welcome_audio_path': 'audio_out/welcome.mp3', 'welcome_text': '你好。', 'audio_out_dir': 'audio_out', 'tts_cache_dir': 'audio_out/tts_cache', 'error_prompts': {'error_recording': '录音设备不可用，请检查麦克风。', 'error_asr': '语音识别服务不可用，请检查网络或稍后重试。', 'error_network': '网络连接异常，请检查网络。', 'error_tts': '语音合成服务不可用。', 'error_system': '系统发生未知错误，请稍后重试。', 'error_no_input': '未检测到有效语音，请再试一次。'}, 'wakeword': {'keyword_paths': ['wakeword/xiaozhu.ppn'], 'access_key': 'TTnalPNKGniQ17wPRKfQR7u29VGYKVHk2NheRgMh7K7b5JIVnJE3UQ==', 'sensitivities': [0.7], 'model_path': 'wakeword/porcupine_params_zh.pv', 'audio_device_index': 1}, 'tts_cache_policy': {'max_files': 200, 'max_bytes': 15000000000}}
+2025-06-22 23:16:53.296 | DEBUG    | __main__:prepare_welcome_audio:22 - 本地欢迎语音已存在：audio_out/welcome.mp3
+2025-06-22 23:16:53.296 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_recording.mp3
+2025-06-22 23:16:53.296 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_asr.mp3
+2025-06-22 23:16:53.296 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_network.mp3
+2025-06-22 23:16:53.297 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_tts.mp3
+2025-06-22 23:16:53.297 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_system.mp3
+2025-06-22 23:16:53.297 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_no_input.mp3
+2025-06-22 23:16:53.382 | INFO     | wakeword.porcupine_adapter:start:29 - 唤醒词检测已启动，等待唤醒...
+2025-06-22 23:17:11.815 | DEBUG    | wakeword.porcupine_adapter:start:36 - 唤醒词已检测到，触发回调。
+2025-06-22 23:17:11.816 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/welcome.mp3
+2025-06-22 23:17:13.272 | INFO     | audio_out.player:play_audio:8 - 播放音频完成: audio_out/welcome.mp3
+2025-06-22 23:17:13.272 | INFO     | __main__:on_wakeword_detected:81 - 已唤醒，等待用户说话...
+2025-06-22 23:17:13.273 | DEBUG    | asr.xunfei_asr:_assemble_url:32 - ASR鉴权用date: Sun, 22 Jun 2025 15:17:13 GMT
+2025-06-22 23:17:13.273 | DEBUG    | asr.xunfei_asr:_assemble_url:38 - ASR签名原始串: 'host: iat-api.xfyun.cn\ndate: Sun, 22 Jun 2025 15:17:13 GMT\nGET /v2/iat HTTP/1.1'
+2025-06-22 23:17:13.274 | DEBUG    | asr.xunfei_asr:_assemble_url:47 - ASR签名base64: 8KaLCMvZInccuPuHftOSK7EMarf0NnplYIsNzzlgivM=
+2025-06-22 23:17:13.274 | DEBUG    | asr.xunfei_asr:_assemble_url:56 - ASR authorization_origin: api_key="8ac63485f16c76f845142189872f5cea", algorithm="hmac-sha256", headers="host date request-line", signature="8KaLCMvZInccuPuHftOSK7EMarf0NnplYIsNzzlgivM="
+2025-06-22 23:17:13.275 | DEBUG    | asr.xunfei_asr:_assemble_url:58 - ASR authorization (base64): YXBpX2tleT0iOGFjNjM0ODVmMTZjNzZmODQ1MTQyMTg5ODcyZjVjZWEiLCBhbGdvcml0aG09ImhtYWMtc2hhMjU2IiwgaGVhZGVycz0iaG9zdCBkYXRlIHJlcXVlc3QtbGluZSIsIHNpZ25hdHVyZT0iOEthTENNdlpJbmNjdVB1SGZ0T1NLN0VNYXJmME5ucGxZSXNOenpsZ2l2TT0i
+2025-06-22 23:17:13.275 | INFO     | asr.xunfei_asr:_assemble_url:67 - ASR WS 连接URL: wss://iat-api.xfyun.cn/v2/iat?authorization=YXBpX2tleT0iOGFjNjM0ODVmMTZjNzZmODQ1MTQyMTg5ODcyZjVjZWEiLCBhbGdvcml0aG09ImhtYWMtc2hhMjU2IiwgaGVhZGVycz0iaG9zdCBkYXRlIHJlcXVlc3QtbGluZSIsIHNpZ25hdHVyZT0iOEthTENNdlpJbmNjdVB1SGZ0T1NLN0VNYXJmME5ucGxZSXNOenpsZ2l2TT0i&date=Sun%2C+22+Jun+2025+15%3A17%3A13+GMT&host=iat-api.xfyun.cn
+2025-06-22 23:17:14.630 | INFO     | asr.xunfei_asr:send_audio:203 - ASR流式识别：开始分块发送
+2025-06-22 23:17:29.625 | INFO     | asr.xunfei_asr:_on_close:99 - ASR websocket连接关闭
+2025-06-22 23:17:29.626 | ERROR    | asr.xunfei_asr:recognize_stream:263 - ASR流式未识别到有效文本
+2025-06-22 23:17:29.627 | INFO     | __main__:on_wakeword_detected:85 - 用户语音识别结果: 
+2025-06-22 23:17:29.627 | DEBUG    | __main__:on_wakeword_detected:88 - 识别结果为空，提示用户重说。
+2025-06-22 23:17:29.627 | DEBUG    | audio_out.player:play_audio:6 - 准备播放音频: audio_out/tts_cache/error_no_input.mp3
+2025-06-22 23:17:31.945 | INFO     | wakeword.porcupine_adapter:start:39 - 唤醒词检测终止。
+2025-06-22 23:32:42.720 | INFO     | __main__:main:25 - ==== 智能语音音箱主流程启动 ====
+2025-06-22 23:32:42.724 | DEBUG    | __main__:main:27 - 完整配置参数: {'xunfei_asr': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'hotwords': '小猪猪,芝麻开门'}, 'xunfei': {'app_id': '016b92a6', 'api_key': '8ac63485f16c76f845142189872f5cea', 'api_secret': 'MjUzZjZmZjFkOTllMDYwYjljYzhlYWE2', 'vcn': 'x4_yezi', 'speed': 50, 'volume': 50, 'pitch': 50}, 'deepseek': {'api_key': 'sk-f2d5403d07e1499a8e344a09588f4eb7', 'base_url': 'https://api.deepseek.com', 'model': 'deepseek-chat', 'temperature': 0.7, 'max_tokens': 2048}, 'endwords': ['再见', '拜拜', '下次再说'], 'welcome_audio_path': 'audio_out/welcome.mp3', 'welcome_text': '你好。', 'audio_out_dir': 'audio_out', 'tts_cache_dir': 'audio_out/tts_cache', 'error_prompts': {'error_recording': '录音设备不可用，请检查麦克风。', 'error_asr': '语音识别服务不可用，请检查网络或稍后重试。', 'error_network': '网络连接异常，请检查网络。', 'error_tts': '语音合成服务不可用。', 'error_system': '系统发生未知错误，请稍后重试。', 'error_no_input': '未检测到有效语音，请再试一次。'}, 'wakeword': {'keyword_paths': ['wakeword/xiaozhu.ppn'], 'access_key': 'TTnalPNKGniQ17wPRKfQR7u29VGYKVHk2NheRgMh7K7b5JIVnJE3UQ==', 'sensitivities': [0.7], 'model_path': 'wakeword/porcupine_params_zh.pv', 'audio_device_index': 1}, 'tts_cache_policy': {'max_files': 200, 'max_bytes': 15000000000}}
+2025-06-22 23:32:42.725 | DEBUG    | __main__:prepare_welcome_audio:22 - 本地欢迎语音已存在：audio_out/welcome.mp3
+2025-06-22 23:32:42.725 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_recording.mp3
+2025-06-22 23:32:42.725 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_asr.mp3
+2025-06-22 23:32:42.725 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_network.mp3
+2025-06-22 23:32:42.726 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_tts.mp3
+2025-06-22 23:32:42.726 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_system.mp3
+2025-06-22 23:32:42.726 | DEBUG    | utils.tts_cache_manager:prepare_error_prompts:29 - TTS缓存已存在：audio_out/tts_cache/error_no_input.mp3
+2025-06-22 23:32:42.810 | INFO     | wakeword.porcupine_adapter:start:29 - 唤醒词检测已启动，等待唤醒...
