@@ -23,8 +23,12 @@ def play_audio_stream(audio_generator, device=2, samplerate=44100, channels=2, d
             with sd.OutputStream(samplerate=samplerate, channels=channels, dtype=dtype, device=device) as stream:
                 for audio_chunk in audio_generator:
                     block = np.frombuffer(audio_chunk, dtype=dtype)
-                    if channels > 1:
-                        block = block.reshape(-1, channels)
+                    # 自动判断并扩展单声道为双声道
+                    if channels == 2:
+                        if block.ndim == 1:  # 单声道
+                            block = np.stack([block, block], axis=-1)
+                        elif block.ndim == 2 and block.shape[1] == 1:  # 还是单声道
+                            block = np.repeat(block, 2, axis=1)
                     stream.write(block)
             logger.info("流式音频播放结束。")
         except Exception as e:
