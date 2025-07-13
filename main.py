@@ -92,7 +92,7 @@ def main():
                     conversation_history.append({"role": "assistant", "content": reply_text})
                     logger.info(f"AI回复文本: {reply_text}")
                     audio_gen = tts_stream.synthesize_stream(reply_text)
-                    play_audio_stream(audio_gen, samplerate=16000, channels=1, dtype='int16', device=None)
+                    play_audio_stream(audio_gen, samplerate=16000, channels=1, dtype='int16', device="plughw:3,0")
                     
         except Exception as e:
             logger.error(f"主流程异常：{e}")
