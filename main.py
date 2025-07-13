@@ -50,6 +50,7 @@ def main():
 
     conversation_history = []
 
+    tts_cache_dir=config["tts_cache_dir"]
     def play_standard_error(tag):
         err_file = os.path.join(tts_cache_dir, f"{tag}.mp3")
         if os.path.exists(err_file):
