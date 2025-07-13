@@ -9,7 +9,7 @@ def ensure_initialized(config):
     """
     # 1. 确保输出目录存在
     audio_out_dir = config.get("audio_out_dir", "audio_out")
-    tts_cache_dir = config.get("tts_cache_dir", os.path.join(audio_out_dir, "tts_cache"))
+    tts_cache_dir = config.get("tts_cache_dir", "audio_out/tts_cache")
     os.makedirs(audio_out_dir, exist_ok=True)
     os.makedirs(tts_cache_dir, exist_ok=True)
 
