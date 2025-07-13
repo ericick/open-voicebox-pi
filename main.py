@@ -15,8 +15,14 @@ def main():
     config = load_config()
     logger.debug(f"完整配置参数: {config}")
 
-    init_resources = ensure_initialized(config)
-    tts_cache_manager = init_resources["tts_cache_manager"]
+    welcome_audio_path = config.get("welcome_audio_path", "audio_out/welcome.mp3")
+    if not os.path.exists(welcome_audio_path):
+        need_init = True
+    if need_init:
+        logger.info("检测到部分音频文件缺失，执行初始化...")
+        ensure_initialized(config)
+    else:
+        logger.info("欢迎语音和报错音频均已存在，无需初始化。")
 
     asr = XunfeiASR(
         app_id=config["xunfei_asr"]["app_id"],
@@ -38,11 +44,11 @@ def main():
     conversation_history = []
 
     def play_standard_error(tag):
-        audio = tts_cache_manager.get_error_audio(tag)
-        if audio:
-            play_audio(audio)
+        err_file = os.path.join(tts_cache_dir, f"{tag}.mp3")
+        if os.path.exists(err_file):
+            play_audio(err_file)
         else:
-            play_audio(tts_cache_manager.get_error_audio("error_system"))
+            play_audio(os.path.join(tts_cache_dir, "error_system.mp3"))
 
     def on_wakeword_detected():
         try:
