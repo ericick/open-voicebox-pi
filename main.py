@@ -16,10 +16,8 @@ def main():
     logger.debug(f"完整配置参数: {config}")
 
     welcome_audio_path = config.get("welcome_audio_path", "audio_out/welcome.mp3")
-    if not os.path.exists(welcome_audio_path):
-        need_init = True
+    need_init = not os.path.exists(welcome_audio_path)
     if need_init:
-        logger.info("检测到部分音频文件缺失，执行初始化...")
         ensure_initialized(config)
     else:
         logger.info("欢迎语音和报错音频均已存在，无需初始化。")
