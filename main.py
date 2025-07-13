@@ -1,54 +1,21 @@
 import os
+from utils.initializer import ensure_initialized
 from asr.xunfei_asr import XunfeiASR
 from dialogue.deepseek_adapter import DeepseekAdapter
-from tts.xunfei_adapter import XunfeiTTS
 from audio_out.player import play_audio
 from endword.endword_detector import EndwordDetector
 from audio_in.recorder import Recorder
 from utils.config_loader import load_config
 from utils.logger import logger
-from utils.tts_cache_manager import TTSCacheManager
 from wakeword.porcupine_adapter import WakewordDetector
-
-def prepare_welcome_audio(tts, welcome_text, welcome_audio_path):
-    if not os.path.exists(welcome_audio_path):
-        logger.info("未发现本地欢迎语音，将使用TTS生成。")
-        # 合成welcome音频，存到tts_out_dir下
-        generated_audio_path = tts.synthesize(welcome_text, filename_prefix="welcome")
-        # 用os.replace移动到你指定的位置
-        os.replace(generated_audio_path, welcome_audio_path)
-        logger.info(f"欢迎语音生成并保存到：{welcome_audio_path}")
-    else:
-        logger.debug(f"本地欢迎语音已存在：{welcome_audio_path}")
 
 def main():
     logger.info("==== 智能语音音箱主流程启动 ====")
     config = load_config()
     logger.debug(f"完整配置参数: {config}")
 
-    tts = XunfeiTTS(
-        app_id=config["xunfei"]["app_id"],
-        api_key=config["xunfei"]["api_key"],
-        api_secret=config["xunfei"]["api_secret"],
-        vcn=config["xunfei"].get("vcn", "x4_yezi"),
-        speed=config["xunfei"].get("speed", 50),
-        volume=config["xunfei"].get("volume", 50),
-        pitch=config["xunfei"].get("pitch", 50),
-        tts_out_dir=config.get("audio_out_dir", "audio_out")
-    )
-
-    tts_cache_manager = TTSCacheManager(
-        tts=tts,
-        tts_cache_dir=config.get("tts_cache_dir", "audio_out/tts_cache"),
-        error_prompts=config.get("error_prompts", {})
-    )
-    prepare_welcome_audio(tts, config["welcome_text"], config["welcome_audio_path"])
-    tts_cache_manager.prepare_error_prompts()
-
-    cache_policy = config.get("tts_cache_policy", {})
-    max_files = cache_policy.get("max_files", 50)
-    max_bytes = cache_policy.get("max_bytes", 100*1024*1024)
-    tts_cache_manager.clean_cache(max_files=max_files, max_bytes=max_bytes)
+    init_resources = ensure_initialized(config)
+    tts_cache_manager = init_resources["tts_cache_manager"]
 
     asr = XunfeiASR(
         app_id=config["xunfei_asr"]["app_id"],
