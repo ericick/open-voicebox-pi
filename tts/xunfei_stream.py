@@ -13,7 +13,7 @@ import threading
 
 class XunfeiTTSStream:
     def __init__(self, app_id, api_key, api_secret, vcn="x4_yezi",
-                 aue="raw", auf="audio/L16;rate=16000", sfl=1, speed=50,
+                 aue="raw", auf="audio/L16;rate=44100", sfl=1, speed=50,
                  volume=50, pitch=50):
         self.app_id = app_id
         self.api_key = api_key
