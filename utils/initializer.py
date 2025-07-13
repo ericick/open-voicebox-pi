@@ -31,7 +31,7 @@ def ensure_initialized(config):
     )
 
     # 3. 检查欢迎音频
-    welcome_audio_path = config.get("welcome_audio_path", os.path.join(audio_out_dir, "welcome.mp3"))
+    welcome_audio_path = config.get("welcome_audio_path", "audio_out/welcome.mp3")
     if not os.path.exists(welcome_audio_path):
         welcome_text = config.get("welcome_text", "你好，我是智能语音助手。")
         logger.info("未发现本地欢迎语音，将用TTS生成。")
