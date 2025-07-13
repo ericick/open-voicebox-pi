@@ -13,7 +13,7 @@ def play_audio(file_path, volume=None, device="plughw:3,0"):
     except Exception as e:
         logger.error(f"播放失败: {e}")
 
-def play_audio_stream(audio_generator, samplerate=16000, channels=1, dtype='int16', device=None):
+def play_audio_stream(audio_generator, samplerate=16000, channels=1, dtype='int16', device="plughw:3,0"):
     """
     audio_generator: 生成器或可迭代，每次yield一帧PCM音频（bytes）
     """
