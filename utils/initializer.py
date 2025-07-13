@@ -46,10 +46,3 @@ def ensure_initialized(config):
 
     logger.info("音频初始化完毕。")
     # 你可以返回需要用到的路径（可选）
-    return {
-        "tts": tts,
-        "tts_cache_manager": tts_cache_manager,
-        "welcome_audio_path": welcome_audio_path,
-        "audio_out_dir": audio_out_dir,
-        "tts_cache_dir": tts_cache_dir
-    }
