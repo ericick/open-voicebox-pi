@@ -38,6 +38,15 @@ def main():
         max_tokens=config["deepseek"].get("max_tokens", 2048),
         system_prompt=config["deepseek"].get("system_prompt", "")
     )
+    tts_stream = XunfeiTTSStream(
+        app_id=config["xunfei"]["app_id"],
+        api_key=config["xunfei"]["api_key"],
+        api_secret=config["xunfei"]["api_secret"],
+        vcn=config["xunfei"].get("vcn", "x4_yezi"),
+        speed=config["xunfei"].get("speed", 50),
+        volume=config["xunfei"].get("volume", 50),
+        pitch=config["xunfei"].get("pitch", 50)
+    )
     endword_detector = EndwordDetector(keywords=config["endwords"])
     recorder = Recorder(device=1, channels=6)
 
@@ -82,11 +91,9 @@ def main():
                     reply_text = deepseek.chat(context=conversation_history)
                     conversation_history.append({"role": "assistant", "content": reply_text})
                     logger.info(f"AI回复文本: {reply_text}")
-                    tts_file = tts_cache_manager.cache_normal_tts(reply_text)
-                    if tts_file:
-                        play_audio(tts_file)
-                    else:
-                        play_standard_error("error_tts")
+                    audio_gen = tts_stream.synthesize_stream(reply_text)
+                    play_audio_stream(audio_gen, samplerate=16000, channels=1, dtype='int16', device=None)
+                    
         except Exception as e:
             logger.error(f"主流程异常：{e}")
             import traceback
