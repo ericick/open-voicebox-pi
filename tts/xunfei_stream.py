@@ -3,28 +3,28 @@ import hashlib
 import base64
 import hmac
 import json
+from urllib.parse import urlencode
 import time
 import ssl
 from wsgiref.handlers import format_date_time
 from datetime import datetime
 from time import mktime
 import threading
-import numpy as np
-import sounddevice as sd
 
 class XunfeiTTSStream:
     def __init__(self, app_id, api_key, api_secret, vcn="x4_yezi",
-                 speed=50, volume=50, pitch=50):
+                 aue="raw", auf="audio/L16;rate=16000", sfl=1, speed=50,
+                 volume=50, pitch=50):
         self.app_id = app_id
         self.api_key = api_key
         self.api_secret = api_secret
         self.vcn = vcn
+        self.aue = aue
+        self.auf = auf
+        self.sfl = sfl
         self.speed = speed
         self.volume = volume
         self.pitch = pitch
-        self.aue = "raw"    # PCM流
-        self.auf = "audio/L16;rate=16000"
-        self.sfl = 1
 
     def _create_url(self):
         url = 'wss://tts-api.xfyun.cn/v2/tts'
@@ -43,51 +43,48 @@ class XunfeiTTSStream:
             "date": date,
             "host": "tts-api.xfyun.cn"
         }
-        url = url + '?' + '&'.join([f"{k}={v[k]}" for k in v])
+        url = url + '?' + urlencode(v)
         return url
 
-    def synthesize_stream(self, text, samplerate=16000, channels=1):
+    def synthesize_stream(self, text):
         """
-        流式合成+边收边播报（仅PCM）。
+        生成器：每次 yield 一帧 PCM 音频数据（bytes），最后自动结束
         """
-        self._error = None
-        self._finished = threading.Event()
+        ws_url = self._create_url()
+        audio_queue = []
+        done = threading.Event()
+        error = []
 
         def on_message(ws, message):
             try:
                 msg = json.loads(message)
                 code = msg["code"]
+                if code != 0:
+                    error.append(msg.get("message", "未知错误"))
+                    done.set()
+                    ws.close()
+                    return
                 audio = base64.b64decode(msg["data"]["audio"])
                 status = msg["data"]["status"]
-                if code != 0:
-                    print(f"讯飞TTS错误: code={code}, msg={msg.get('message')}")
-                    self._error = msg.get('message')
-                    ws.close()
-                else:
-                    # PCM播放，每次都播一帧
-                    arr = np.frombuffer(audio, dtype=np.int16)
-                    sd.play(arr, samplerate=samplerate)
-                    sd.wait()
+                audio_queue.append(audio)
                 if status == 2:
+                    done.set()
                     ws.close()
-                    self._finished.set()
             except Exception as e:
-                print("TTS流播放错误:", e)
-                self._error = str(e)
+                error.append(f"解析TTS返回时异常: {e}")
+                done.set()
                 ws.close()
-                self._finished.set()
 
-        def on_error(ws, error):
-            print("TTS WS 错误:", error)
-            self._error = str(error)
-            self._finished.set()
+        def on_error(ws, err):
+            error.append(f"TTS websocket错误: {err}")
+            done.set()
+            ws.close()
 
         def on_close(ws, *args):
-            print("TTS WS 关闭")
-            self._finished.set()
+            done.set()
 
         def on_open(ws):
-            def run(*args):
+            def run(*_):
                 d = {
                     "common": {"app_id": self.app_id},
                     "business": {
@@ -102,13 +99,12 @@ class XunfeiTTSStream:
                     },
                     "data": {
                         "status": 2,
-                        "text": base64.b64encode(text.encode('utf-8')).decode("utf-8")
+                        "text": str(base64.b64encode(text.encode('utf-8')), "utf8")
                     }
                 }
                 ws.send(json.dumps(d))
             threading.Thread(target=run).start()
 
-        ws_url = self._create_url()
         ws = websocket.WebSocketApp(
             ws_url,
             on_message=on_message,
@@ -116,7 +112,15 @@ class XunfeiTTSStream:
             on_close=on_close
         )
         ws.on_open = on_open
-        ws.run_forever(sslopt={"cert_reqs": ssl.CERT_NONE})
-        self._finished.wait()
-        if self._error:
-            raise RuntimeError(f"TTS流式失败: {self._error}")
+
+        threading.Thread(target=ws.run_forever, kwargs={"sslopt": {"cert_reqs": ssl.CERT_NONE}}).start()
+
+        # 每收到一帧就yield，done后退出
+        while not done.is_set() or audio_queue:
+            if audio_queue:
+                yield audio_queue.pop(0)
+            else:
+                time.sleep(0.01)
+        if error:
+            raise RuntimeError("讯飞TTS流式合成异常：" + "; ".join(error))
+
