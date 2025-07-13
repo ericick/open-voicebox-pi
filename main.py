@@ -2,7 +2,8 @@ import os
 from utils.initializer import ensure_initialized
 from asr.xunfei_asr import XunfeiASR
 from dialogue.deepseek_adapter import DeepseekAdapter
-from audio_out.player import play_audio
+from tts.xunfei_stream import XunfeiTTSStream
+from audio_out.player import play_audio, play_audio_stream
 from endword.endword_detector import EndwordDetector
 from audio_in.recorder import Recorder
 from utils.config_loader import load_config
