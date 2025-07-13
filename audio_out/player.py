@@ -16,7 +16,7 @@ def play_audio(file_path, volume=None, device="plughw:3,0"):
         except Exception as e:
             logger.error(f"播放失败: {e}")
 
-def play_audio_stream(audio_generator, samplerate=16000, channels=1, dtype='int16', device=2):
+def play_audio_stream(audio_generator, device=2, samplerate=44100, channels=2, dtype='int16'):
     with _audio_play_lock:
         try:
             logger.info("流式播放音频启动...")
