@@ -10,6 +10,7 @@ from wsgiref.handlers import format_date_time
 from datetime import datetime
 from time import mktime
 import threading
+from collections import deque
 
 class XunfeiTTSStream:
     def __init__(self, app_id, api_key, api_secret, vcn="x4_yezi",
@@ -51,7 +52,7 @@ class XunfeiTTSStream:
         生成器：每次 yield 一帧 PCM 音频数据（bytes），最后自动结束
         """
         ws_url = self._create_url()
-        audio_queue = []
+        audio_queue = deque()
         done = threading.Event()
         error = []
 
@@ -103,7 +104,7 @@ class XunfeiTTSStream:
                     }
                 }
                 ws.send(json.dumps(d))
-            threading.Thread(target=run).start()
+            threading.Thread(target=run, daemon=True).start()
 
         ws = websocket.WebSocketApp(
             ws_url,
@@ -118,7 +119,7 @@ class XunfeiTTSStream:
         # 每收到一帧就yield，done后退出
         while not done.is_set() or audio_queue:
             if audio_queue:
-                yield audio_queue.pop(0)
+                yield audio_queue.popleft()
             else:
                 time.sleep(0.01)
         if error:
