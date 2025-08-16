@@ -77,11 +77,7 @@ def main():
                     logger.info("检测到结束词，清空历史对话。")
                     reply_text = "好的，下次再见。"
                     conversation_history.clear()
-                    tts_file = tts_cache_manager.cache_normal_tts(reply_text)
-                    if tts_file:
-                        play_audio(tts_file)
-                    else:
-                        play_standard_error("error_tts")
+                    play_audio(os.path.join(tts_cache_dir, "goodbye.mp3"))
                     break       # 跳出多轮对话，回到唤醒监听
     
                 else:
