@@ -64,6 +64,8 @@ def main():
             logger.info("已唤醒，进入多轮对话...")
     
             while True:   # 增加循环
+                while is_playing_event.is_set():
+                    time.sleep(0.01)
                 audio_blocks = recorder.record_stream(max_record_time=10)
                 user_text = asr.recognize_stream(audio_blocks)
                 logger.info(f"用户语音识别结果: {user_text}")
@@ -71,6 +73,7 @@ def main():
                 if not user_text.strip():
                     logger.debug("识别结果为空，提示用户重说。")
                     play_standard_error("error_no_input")
+                    time.sleep(0.3)
                     continue    # 让用户重说
     
                 elif endword_detector.is_end(user_text):
