@@ -1,7 +1,6 @@
 import os
 from tts.xunfei_adapter import XunfeiTTS
 from utils.logger import logger
-from utils.tts_cache_manager import TTSCacheManager
 
 def ensure_initialized(config):
     """
@@ -24,11 +23,6 @@ def ensure_initialized(config):
         pitch=config["xunfei"].get("pitch", 50),
         tts_out_dir=audio_out_dir
     )
-    tts_cache_manager = TTSCacheManager(
-        tts=tts,
-        tts_cache_dir=tts_cache_dir,
-        error_prompts=config.get("error_prompts", {})
-    )
 
     # 3. 检查欢迎音频
     welcome_audio_path = config.get("welcome_audio_path", "audio_out/welcome.mp3")
@@ -40,9 +34,20 @@ def ensure_initialized(config):
         logger.info(f"欢迎语音生成并保存到：{welcome_audio_path}")
     else:
         logger.debug(f"本地欢迎语音已存在：{welcome_audio_path}")
+    
+    # 3. 检查欢迎音频
+    error_prompts = config.get("error_prompts", {})
+    for tag, text in error_prompts.items():
+        out_path = os.path.join(tts_cache_dir, f"{tag}.mp3")
+        if os.path.exists(out_path):
+            logger.debug(f"[跳过] 错误提示音已存在：{out_path}")
+            continue
+        try:
+            logger.info(f"生成错误提示音：{tag}")
+            tmp_file = tts.synthesize(text, filename_prefix=f"err_{tag}")
+            os.replace(tmp_file, out_path)
+            logger.info(f"错误提示音已生成：{out_path}")
+        except Exception as e:
+            logger.error(f"生成错误提示音失败（{tag}）：{e}")
 
-    # 4. 检查所有 error_prompts 音频
-    tts_cache_manager.prepare_error_prompts()
-
-    logger.info("音频初始化完毕。")
-    # 你可以返回需要用到的路径（可选）
+    logger.info("初始化完成：欢迎音与错误提示音就绪。")
