@@ -4,13 +4,12 @@ from utils.initializer import ensure_initialized
 from asr.xunfei_asr import XunfeiASR
 from dialogue.deepseek_adapter import DeepseekAdapter
 from tts.xunfei_stream import XunfeiTTSStream
-from audio_out.player import play_audio, play_audio_stream
+from audio_out.player import play_audio, play_audio_stream, wait_until_idle
 from endword.endword_detector import EndwordDetector
 from audio_in.recorder import Recorder
 from utils.config_loader import load_config
 from utils.logger import logger
 from wakeword.porcupine_adapter import WakewordDetector
-import audio_out.player as player
 
 def main():
     logger.info("==== 智能语音音箱主流程启动 ====")
@@ -66,7 +65,7 @@ def main():
             logger.info("已唤醒，进入多轮对话...")
     
             while True:   # 增加循环
-                player.wait_until_idle(timeout_s=10)
+                wait_until_idle(timeout_s=10)
                 audio_blocks = recorder.record_stream(max_record_time=10)
                 user_text = asr.recognize_stream(audio_blocks)
                 logger.info(f"用户语音识别结果: {user_text}")
