@@ -10,7 +10,7 @@ from audio_in.recorder import Recorder
 from utils.config_loader import load_config
 from utils.logger import logger
 from wakeword.porcupine_adapter import WakewordDetector
-from audio_out.player import is_playing_event
+import audio_out.player as player
 
 def main():
     logger.info("==== 智能语音音箱主流程启动 ====")
