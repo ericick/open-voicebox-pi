@@ -1,6 +1,8 @@
 import sounddevice as sd
 import numpy as np
+import time
 from utils.logger import logger
+from audio_out.player import is_playing_event
 
 
 class Recorder:
@@ -27,6 +29,9 @@ class Recorder:
         logger.info("开始流式录音，请说话...")
         with stream:
             for i in range(total_samples // self.block_size):
+                while is_playing_event.is_set():
+                    logger.debug("当前在播放，暂缓采集…")
+                    time.sleep(0.02)
                 block, _ = stream.read(self.block_size)
                 logger.debug(f"第{i}帧录音, block形状: {block.shape}")
                 mono_block = block[:, 0] if self.channels > 1 else block
