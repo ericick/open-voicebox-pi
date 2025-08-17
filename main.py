@@ -75,9 +75,17 @@ def main():
     
                 elif endword_detector.is_end(user_text):
                     logger.info("检测到结束词，清空历史对话。")
-                    reply_text = "好的，下次再见。"
+                    tmp_context = conversation_history + [{"role": "user", "content": user_text}]
+                    tmp_context.append({
+                        "role": "user",
+                        "content": "请根据以上整段对话，用一句自然、简短的中文结束语向我告别。不要提出新问题，不要额外延伸。"
+                    })
+                    farewell_text = deepseek.chat(context=tmp_context).strip()
+                    if not farewell_text:
+                        farewell_text = "好的，下次再见。"
+                    audio_gen = tts_stream.synthesize_stream(farewell_text)
+                    play_audio_stream(audio_gen, device=2, samplerate=44100, channels=2, dtype='int16')
                     conversation_history.clear()
-                    play_audio(os.path.join(tts_cache_dir, "goodbye.mp3"))
                     break       # 跳出多轮对话，回到唤醒监听
     
                 else:
