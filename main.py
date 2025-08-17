@@ -1,4 +1,5 @@
 import os
+import time
 from utils.initializer import ensure_initialized
 from asr.xunfei_asr import XunfeiASR
 from dialogue.deepseek_adapter import DeepseekAdapter
@@ -9,6 +10,7 @@ from audio_in.recorder import Recorder
 from utils.config_loader import load_config
 from utils.logger import logger
 from wakeword.porcupine_adapter import WakewordDetector
+from audio_out.player import is_playing_event
 
 def main():
     logger.info("==== 智能语音音箱主流程启动 ====")
