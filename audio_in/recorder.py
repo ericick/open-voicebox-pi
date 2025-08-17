@@ -1,7 +1,8 @@
 import sounddevice as sd
 import numpy as np
+import time
 from utils.logger import logger
-
+import audio_out.player as player
 
 class Recorder:
     def __init__(self, samplerate=16000, channels=6, dtype='int16', block_size=1280, max_record_time=15, device=1):
@@ -13,6 +14,7 @@ class Recorder:
         self.device = device
 
     def record_stream(self, max_record_time=15, silence_threshold=500, silence_duration=2.0):
+        player.wait_until_idle(timeout_s=10)
         total_samples = int(self.samplerate * max_record_time)
         silence_chunk = int(self.samplerate * silence_duration)
         silence_count = 0
