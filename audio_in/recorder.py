@@ -15,6 +15,9 @@ class Recorder:
         self.device = device
 
     def record_stream(self, max_record_time=15, silence_threshold=500, silence_duration=2.0):
+        while is_playing_event.is_set():
+            logger.debug("当前在播放，暂缓采集…")
+            time.sleep(0.02)
         total_samples = int(self.samplerate * max_record_time)
         silence_chunk = int(self.samplerate * silence_duration)
         silence_count = 0
@@ -29,9 +32,6 @@ class Recorder:
         logger.info("开始流式录音，请说话...")
         with stream:
             for i in range(total_samples // self.block_size):
-                while is_playing_event.is_set():
-                    logger.debug("当前在播放，暂缓采集…")
-                    time.sleep(0.02)
                 block, _ = stream.read(self.block_size)
                 logger.debug(f"第{i}帧录音, block形状: {block.shape}")
                 mono_block = block[:, 0] if self.channels > 1 else block
