@@ -75,7 +75,7 @@ def main():
                     logger.debug("识别结果为空，提示用户重说。")
                     play_standard_error("error_no_input")
                     time.sleep(0.3)
-                    if blank_count = 1:
+                    if blank_count == 1:
                         continue    # 让用户重说
                         blank_count += 1
                     else:
