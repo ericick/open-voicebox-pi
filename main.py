@@ -63,6 +63,7 @@ def main():
         try:
             play_audio(config["welcome_audio_path"])
             logger.info("已唤醒，进入多轮对话...")
+            blank_count = 1
     
             while True:   # 增加循环
                 wait_until_idle(timeout_s=10)
@@ -74,7 +75,12 @@ def main():
                     logger.debug("识别结果为空，提示用户重说。")
                     play_standard_error("error_no_input")
                     time.sleep(0.3)
-                    continue    # 让用户重说
+                    if blank_count = 1:
+                        continue    # 让用户重说
+                        blank_count += 1
+                    else:
+                        blank_count = 1
+                        break    # 多次为空直接退出
     
                 elif endword_detector.is_end(user_text):
                     logger.info("检测到结束词，清空历史对话。")
