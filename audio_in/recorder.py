@@ -13,7 +13,7 @@ class Recorder:
         self.max_record_time =  max_record_time
         self.device = device
 
-    def record_stream(self, max_record_time=15, silence_threshold=1500, silence_duration=2.0):
+    def record_stream(self, max_record_time=15, silence_threshold=2000, silence_duration=2.0):
         player.wait_until_idle(timeout_s=10)
         total_samples = int(self.samplerate * max_record_time)
         silence_chunk = int(self.samplerate * silence_duration)
