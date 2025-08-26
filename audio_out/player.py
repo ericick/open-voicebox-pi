@@ -22,7 +22,7 @@ def wait_until_idle(timeout_s: float = None) -> bool:
         logger.warning("等待播放超时，可能存在卡死的播放进程。")
     return ok
     
-def play_audio(file_path, volume=None, device="plughw:3,0"):
+def play_audio(file_path, device="plughw:3,0"):
     with _audio_play_lock:
         _is_playing_event.set()
         try:
@@ -33,7 +33,7 @@ def play_audio(file_path, volume=None, device="plughw:3,0"):
         except Exception as e:
             logger.error(f"播放失败: {e}")
         finally:
-            _is_playing_event.set()
+            _is_playing_event.clear()
 
 def play_audio_stream(audio_generator, device=2, samplerate=44100, channels=2, dtype='int16'):
     with _audio_play_lock:
@@ -56,4 +56,4 @@ def play_audio_stream(audio_generator, device=2, samplerate=44100, channels=2, d
         except Exception as e:
             logger.error(f"流式播放失败: {e}")
         finally:
-            _is_playing_event.set()
+            _is_playing_event.clear()
