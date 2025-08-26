@@ -5,7 +5,7 @@ from utils.logger import logger
 import audio_out.player as player
 
 class Recorder:
-    def __init__(self, samplerate=16000, channels=6, dtype='int16', block_size=1280, max_record_time=15, silence_threshold=2000, silence_duration=2.0, device=1):
+    def __init__(self, samplerate=16000, channels=6, dtype='int16', block_size=1280, max_record_time=15, silence_threshold=2000, silence_duration=2.0, device=0):
         self.samplerate = samplerate
         self.channels = channels
         self.dtype = dtype
