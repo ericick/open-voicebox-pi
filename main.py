@@ -47,7 +47,16 @@ def main():
         pitch=config["xunfei"].get("pitch", 50)
     )
     endword_detector = EndwordDetector(keywords=config["endwords"])
-    recorder = Recorder(device=1, channels=6)
+    recorder = Recorder(
+        samplerate=config["audio_in"]["samplerate"],
+        channels=config["audio_in"]["channels"],
+        dtype=config["audio_in"]["dtype"],
+        block_size=config["audio_in"]["block_size"],
+        max_record_time=config["audio_in"]["max_record_time"],
+        silence_threshold=config["audio_in"]["max_record_time"],
+        silence_duration=config["audio_in"]["silence_duration"],
+        device=config["audio_in"]["device"],
+    )
 
     conversation_history = []
 
