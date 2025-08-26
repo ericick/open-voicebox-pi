@@ -67,7 +67,7 @@ def main():
     
             while True:   # 增加循环
                 wait_until_idle(timeout_s=10)
-                audio_blocks = recorder.record_stream(max_record_time=10)
+                audio_blocks = recorder.record_stream()
                 user_text = asr.recognize_stream(audio_blocks)
                 logger.info(f"用户语音识别结果: {user_text}")
     
