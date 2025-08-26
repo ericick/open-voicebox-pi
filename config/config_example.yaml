@@ -1,3 +1,13 @@
+audio_in:
+  samplerate: 16000
+  channels: 6
+  dtype: "int16"
+  block_size: 1200
+  max_record_time: 15
+  silence_threshold: 2000
+  silence_duration: 2.0
+  device: 0
+  
 xunfei_asr:
   app_id: "你的ASR APPID"
   api_key: "你的ASR APIKey"
