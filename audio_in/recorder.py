@@ -11,12 +11,14 @@ class Recorder:
         self.dtype = dtype
         self.block_size = block_size  # 1280 samples @16kHz = 40ms
         self.max_record_time =  max_record_time
+        self.silence_threshold = silence_threshold
+        self.silence_duration = silence_duration
         self.device = device
 
     def record_stream(self):
         player.wait_until_idle(timeout_s=10)
-        total_samples = int(self.samplerate * max_record_time)
-        silence_chunk = int(self.samplerate * silence_duration)
+        total_samples = int(self.samplerate * self.max_record_time)
+        silence_chunk = int(self.samplerate * self.silence_duration)
         silence_count = 0
     
         stream = sd.InputStream(
@@ -34,7 +36,7 @@ class Recorder:
                 mono_block = block[:, 0] if self.channels > 1 else block
                 yield mono_block.tobytes()
                 # === 新增静音检测 ===
-                if np.abs(mono_block).mean() < silence_threshold:
+                if np.abs(mono_block).mean() <self.silence_duration:
                     silence_count += len(mono_block)
                     if silence_count >= silence_chunk:
                         logger.info("检测到静音，自动停止流式录音。")
