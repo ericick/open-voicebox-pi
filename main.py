@@ -85,8 +85,8 @@ def main():
                     play_standard_error("error_no_input")
                     time.sleep(0.3)
                     if blank_count == 1:
-                        continue    # 让用户重说
                         blank_count += 1
+                        continue    # 让用户重说
                     else:
                         blank_count = 1
                         break    # 多次为空直接退出
