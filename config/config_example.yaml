@@ -33,6 +33,7 @@ deepseek:
   api_key: "你的DeepSeek APIKey"
   api_url: "https://api.deepseek.com"
   model: "deepseek-chat"
+  web_search: true
   temperature: 0.7
   max_tokens: 2048
   system_prompt: "这是背景设定，你不需要在后面的对话中提及，但是要一直记住："
@@ -41,6 +42,8 @@ endwords:
   - "再见"
   - "拜拜"
   - "下次再说"
+  - "关闭"
+  - "停止"
 
 welcome_audio_path: "audio_out/welcome.mp3"
 welcome_text: "你好。"

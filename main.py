@@ -32,7 +32,8 @@ def main():
         model=config["deepseek"].get("model", "deepseek-chat"),
         temperature=config["deepseek"].get("temperature", 0.7),
         max_tokens=config["deepseek"].get("max_tokens", 2048),
-        system_prompt=config["deepseek"].get("system_prompt", "")
+        system_prompt=config["deepseek"].get("system_prompt", ""),
+        web_search=config["deepseek"].get("web_search", False)
     )
     tts_stream = XunfeiTTSStream(
         app_id=config["xunfei"]["app_id"],
