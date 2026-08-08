@@ -80,42 +80,33 @@ class XunfeiASR:
             result = data["data"]["result"]
             ws_list = result["ws"]
             pgs = result.get("pgs")
-            rg = result.get("rg")
-            # 初始化words_list，保证每次新的识别流程都是干净的
-            if not hasattr(self, "words_list") or data["data"]["status"] == 0:
+            status = data["data"]["status"]
+
+            # 新一轮识别开始时清空历史结果
+            if status == 0:
                 self.words_list = []
-    
-            # 处理增量或替换逻辑
-            if pgs == "apd":  # 追加
-                #logger.info(f"apd")
-                self.words_list.extend(ws_list)
-            elif pgs == "rpl" and rg is not None:  # 替换
-                #logger.info(f"rpl")
-                start, end = rg
-                self.words_list = self.words_list[:start] + ws_list + self.words_list[end+1:]
+
+            if pgs == "rpl":
+                # 替换：wpgs 模式下 rpl 消息携带完整的修正后结果，直接整段替换
+                self.words_list = list(ws_list)
             else:
-                # 兼容无pgs（极少见），直接累积
-                #logger.info(f"none")
+                # apd（或无 pgs）：追加到已有结果
                 self.words_list.extend(ws_list)
-    
+
+            # 组装当前文本
+            text = ""
+            for ws_block in self.words_list:
+                for w in ws_block["cw"]:
+                    text += w["w"]
+
             # status==2 表示识别结束，组装最终结果
-            if data["data"]["status"] == 2:
-                # 拼接所有分词
-                final_result = ""
-                for ws_block in self.words_list:
-                    for w in ws_block["cw"]:
-                        final_result += w["w"]
+            if status == 2:
                 with self.result_lock:
-                    self.result = final_result
+                    self.result = text
                 logger.info(f"ASR识别完成，最终结果: {self.result.strip()}")
                 self.finished.set()
             else:
-                # 打印累计中间文本（可选）
-                middle = ""
-                for ws_block in self.words_list:
-                    for w in ws_block["cw"]:
-                        middle += w["w"]
-                logger.info(f"ASR中间累计: {middle}")
+                logger.info(f"ASR中间累计: {text}")
         except Exception as e:
             logger.error(f"ASR返回解析异常: {e}")
             self.finished.set()
@@ -214,6 +205,10 @@ class XunfeiASR:
         wst.daemon = True
         wst.start()
         self.finished.wait(timeout=30)
+        try:
+            ws.close()
+        except Exception:
+            pass
         if self.result.strip():
             logger.info(f"ASR最终识别文本: {self.result.strip()}")
         else:
@@ -288,6 +283,10 @@ class XunfeiASR:
         wst.daemon = True
         wst.start()
         self.finished.wait(timeout=30)
+        try:
+            ws.close()
+        except Exception:
+            pass
         if self.result.strip():
             logger.info(f"ASR流式最终识别文本: {self.result.strip()}")
         else:

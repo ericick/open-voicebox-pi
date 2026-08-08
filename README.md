@@ -1,120 +1,126 @@
 # DeepSeek-Powered Smart Voice Speaker
 
-基于树莓派/Jetson 和 DeepSeek/讯飞 API 的智能语音音箱
+基于 DeepSeek / 讯飞 API 的智能语音音箱，支持 **macOS（Apple Silicon）、树莓派 5 / Jetson**。
+
+> v3.0.0：新增 macOS 支持；唤醒词改为 sherpa-onnx 离线方案（无需账号/联网）；录音改为"等用户开口再开始"。
 
 ---
 
-## 项目简介 | Project Introduction
+## 项目简介 | Introduction
 
-本项目是一个使用 Python、树莓派 5 / Jetson Orin Nano 以及 DeepSeek / 讯飞云 API 的智能语音对话音箱系统，强调稳定、低延迟和友好的交互体验。
-它支持多轮对话、热词唤醒、自定义结束词、异常分级播报，且已优化为无需单独的 TTS 缓存管理机制，直接依赖事件同步确保流畅的输入输出流程。
-
-This project is a smart voice speaker powered by Python, Raspberry Pi 5 / Jetson Orin Nano, DeepSeek LLM, and iFlytek (Xunfei) ASR/TTS APIs. It provides robust multi-turn dialogue, hotword/stopword detection, graded error reporting, and streamlined audio event handling. The system has been optimized to remove legacy cache managers and now ensures smooth streaming playback using event synchronization.
-
----
+本项目是一个使用 Python、DeepSeek 大模型与讯飞云 API 的智能语音对话音箱系统。
+技术路线：**sherpa-onnx 离线唤醒词 → 讯飞流式 ASR → DeepSeek 多轮对话 → 讯飞流式 TTS**。
+唤醒词全程本地运行，无需任何账号或网络；对话依赖 DeepSeek / 讯飞云 API。
 
 ## 主要功能 | Features
 
-* **多轮对话**：支持 DeepSeek 大模型，上下文保持自然
-* **唤醒/结束词**：Porcupine 自定义唤醒词 + DeepSeek 动态生成结束词
-* **讯飞 ASR+TTS**：中英混合识别，流式语音合成
+* **多轮对话**：DeepSeek 大模型，上下文保持自然
+* **离线唤醒词**：sherpa-onnx（默认"小猪小猪"），无需账号、无需联网
+* **讯飞 ASR + TTS**：中英混合识别，流式语音合成
+* **智能录音**：等用户开口才开始录音，说完静音自动停止，不催促、不误判
+* **结束词**：说"再见 / 拜拜 / 下次再说"结束对话
 * **异常分级播报**：网络、录音、ASR、TTS 故障均有语音提示
-* **参数全配置化**：热词、音色、欢迎语、超时阈值等统一在配置文件里管理
-* **冷启动秒级响应**：欢迎语和常见错误音频预缓存
-* **事件包裹的音频播放**：避免播放与录音冲突，防止 ASR 误识别系统播报
-* **兼容性强**：树莓派、Jetson、小型 Linux 主机均可运行
-
----
+* **播放与录音隔离**：音箱说话时不会录到自己
 
 ## 快速开始 | Quick Start
 
-### 1. 克隆仓库 | Clone the Repo
+### macOS（Apple Silicon）
+
+1. 前置条件：Python 3.12、USB 麦克风（如 ReSpeaker 4 Mic Array）、音箱（3.5mm 或 USB）
+2. 克隆仓库并创建虚拟环境：
 
 ```bash
-git clone https://github.com/ericick/deepseek-smart-speaker.git
-cd deepseek-smart-speaker
-```
-
-### 2. 安装依赖 | Install Requirements
-
-建议 Python 3.9+，推荐虚拟环境：
-
-```bash
+git clone https://github.com/ericick/open-voicebox-pi.git
+cd open-voicebox-pi
+python3 -m venv venv-mac
+source venv-mac/bin/activate
 pip install -r requirements.txt
 ```
 
-### 3. 配置参数 | Configure Your Keys
+> 注意：`requirements.txt` 将 sherpa-onnx 固定在 **1.12.40**。1.13.x 的 macOS 版本存在唤醒词检测失效问题，请勿升级。
 
-编辑 `config/config.yaml`，填入 DeepSeek / iFlytek / Porcupine API Key 及自定义参数。
-
-### 4. 运行主程序 | Run the Main App
+3. 下载唤醒词模型（官方 k2-fsa 发布页）：
 
 ```bash
+cd wakeword
+curl -SL -O https://github.com/k2-fsa/sherpa-onnx/releases/download/kws-models/sherpa-onnx-kws-zipformer-zh-en-3M-2025-12-20.tar.bz2
+tar xvf sherpa-onnx-kws-zipformer-zh-en-3M-2025-12-20.tar.bz2
+rm sherpa-onnx-kws-zipformer-zh-en-3M-2025-12-20.tar.bz2
+cd ..
+```
+
+> 国内网络可改用 ModelScope 镜像下载同名模型。
+
+4. 配置 `config/config.yaml`：
+   * `deepseek.api_key`：DeepSeek API Key；`api_url` 填 `https://api.deepseek.com`（不要带 `/chat/completions`）
+   * `xunfei` / `xunfei_asr`：讯飞开放平台的 AppID、APIKey、APISecret
+   * `audio_in.device` / `wakeword.audio_device_index`：你的麦克风设备名（可用 `python -c "import sounddevice; print(sounddevice.query_devices())"` 查看）
+5. 启动：
+
+```bash
+./run.sh
+```
+
+> `run.sh` 只在音箱程序内部临时关闭系统代理（直连 DeepSeek / 讯飞），不影响系统和其他程序。若你的网络必须走代理，删掉 `run.sh` 里的 `unset` 行，改为 `pip install socksio` 即可。
+
+### 树莓派 5 / Jetson / Linux
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+# 下载唤醒词模型（同上，路径放到 wakeword/）
 python main.py
 ```
 
-> 首次启动将生成欢迎语和异常提示缓存音频。此后启动延迟极短。
+播放器会自动按系统选择：macOS 用 `afplay`，Linux 用 `mpg123`。
 
----
+## 唤醒词自定义 | Custom Wake Word
+
+1. 在 `wakeword/keywords_raw.txt` 里写一行中文（如 `小猪小猪 @小猪小猪`）
+2. 用 sherpa-onnx 自带工具转成拼音 token：
+
+```bash
+pip install click sentencepiece   # text2token 所需组件
+venv-mac/bin/sherpa-onnx-cli text2token \
+  --tokens wakeword/<模型目录>/tokens.txt \
+  --tokens-type ppinyin \
+  wakeword/keywords_raw.txt wakeword/keywords_custom.txt
+```
+
+3. 灵敏度调整：`config/config.yaml` 的 `wakeword.keywords_score`（越大越灵敏）、`wakeword.keywords_threshold`（越大越难触发）。
 
 ## 目录结构 | Directory Structure
 
 ```
 ├── main.py                      # 主业务入口
+├── run.sh                       # macOS 启动脚本（临时关闭代理直连）
 ├── config/
-│   └── config.yaml              # 全局配置文件
-├── utils/
-│   ├── logger.py                # 日志管理
-│   ├── timing.py                # 性能监控装饰器
-│   ├── retry_utils.py           # 自动重试工具
-│   └── config_loader.py         # 配置加载与校验
-├── asr/xunfei_asr.py            # 讯飞 ASR 模块
-├── tts/xunfei_adapter.py        # 讯飞 TTS 模块
-├── dialogue/deepseek_adapter.py # DeepSeek LLM 模块
-├── wakeword/porcupine_adapter.py# 本地唤醒词检测
-├── endword/endword_detector.py  # 结束词检测（DeepSeek 生成）
-├── audio_in/recorder.py         # 录音
-├── audio_out/player.py          # 音频播放（事件包裹，避免冲突）
-├── audio_out/
-│   ├── welcome.mp3              # 欢迎语缓存
-│   ├── error_beep.mp3           # 异常提示音
-│   └── tts_cache/               # 流式生成的 TTS 音频缓存
-├── logs/                        # 日志目录
-└── requirements.txt             # 依赖列表
+│   ├── config.yaml              # 全局配置（含密钥，不入库）
+│   └── config_example.yaml      # 配置示例
+├── utils/                       # 配置加载、日志、初始化
+├── asr/xunfei_asr.py            # 讯飞流式 ASR
+├── tts/                         # 讯飞流式 TTS
+├── dialogue/deepseek_adapter.py # DeepSeek 对话
+├── wakeword/
+│   ├── wakeword_detector.py     # sherpa-onnx 唤醒词检测
+│   ├── keywords_custom.txt      # 唤醒词（拼音 token）
+│   └── sherpa-onnx-kws-*/       # 唤醒词模型（自行下载，不入库）
+├── endword/endword_detector.py  # 结束词检测
+├── audio_in/recorder.py         # 录音（等用户开口）
+└── audio_out/player.py          # 音频播放（macOS/Linux 自动适配）
 ```
-
----
-
-## 性能与异常监控 | Performance & Error Handling
-
-* **API 调用耗时自动记录**：ASR / TTS / LLM 皆有耗时日志
-* **端到端统计**：可扩展计时器监控整体用户体验延迟
-* **异常分级提示**：录音、ASR、TTS、网络、系统异常，均有本地缓存的语音播报
-* **事件同步**：播放期间阻塞 ASR，防止系统提示音误识别
-* **缓存机制简化**：不再依赖独立的 TTSCacheManager，缓存清理逻辑内嵌在播放和生成模块中
-
----
 
 ## FAQ
 
-**Q: 支持中英混合识别吗？**
-A: 是的，配置 `engine_type=sms16k` 后，讯飞 ASR 可中英文混合识别。
+**Q: 为什么用 run.sh？**
+A: 你的系统设置了 SOCKS5 全局代理，而程序用的联网库需要额外组件才能走 SOCKS5。`run.sh` 让音箱程序直连（DeepSeek/讯飞均为国内服务），只影响本程序。
 
-**Q: 唤醒/结束词能自定义吗？**
-A: 唤醒词通过 Porcupine 定制 `.ppn` 文件；结束词由 DeepSeek 在对话逻辑中生成。
+**Q: 唤醒词没反应？**
+A: 确认模型已下载到 `wakeword/sherpa-onnx-kws-zipformer-zh-en-3M-2025-12-20`；确认 `config.yaml` 的 `wakeword.model_dir` 路径正确；调高 `keywords_score`。
 
-**Q: 系统提示音会被 ASR 识别吗？**
-A: 不会。音频播放被事件包裹，播放时 ASR 暂停，避免误识别。
-
----
-
-## 联系与贡献 | Contact & Contribution
-
-欢迎通过 Issue 或 PR 提交问题与建议！
-
-If you’d like to contribute, please fork and submit pull requests.
-
----
+**Q: 升级 sherpa-onnx 后唤醒词失灵？**
+A: 1.13.x 的 macOS 版唤醒词功能有缺陷，请保持 `requirements.txt` 中的 `sherpa-onnx==1.12.40`。
 
 ## License
 

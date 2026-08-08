@@ -1,12 +1,18 @@
 audio_in:
   samplerate: 16000
-  channels: 6
+  # ReSpeaker 4 Mic Array 是 4 声道；普通 USB 麦克风填 1 或 2
+  channels: 4
   dtype: "int16"
   block_size: 1200
   max_record_time: 15
   silence_threshold: 2000
   silence_duration: 2.0
-  device: 0
+  # 录音设备：写设备名（推荐，跨系统稳定）或索引号；留空则用系统默认
+  device: "ReSpeaker 4 Mic Array"
+
+audio_out:
+  # 播放设备：留空则用系统当前默认输出（Mac 上插 3.5mm 音箱后会自动切换）
+  device:
   
 xunfei_asr:
   app_id: "你的ASR APPID"
@@ -25,7 +31,7 @@ xunfei:
 
 deepseek:
   api_key: "你的DeepSeek APIKey"
-  api_url: "https://api.deepseek.com/v1/chat/completions"
+  api_url: "https://api.deepseek.com"
   model: "deepseek-chat"
   temperature: 0.7
   max_tokens: 2048
@@ -51,11 +57,13 @@ error_prompts:
   error_no_input: "未检测到有效语音，请再试一次。"
 
 wakeword:
-  keyword_paths: ["wakeword/xiaozhu_xiaozhu.ppn"]
-  access_key: "你的picovoice_access_key"
-  sensitivities: [0.7]
-  model_path: "wakeword/porcupine_params_zh.pv"
-  audio_device_index: 1
+  # sherpa-onnx 离线中文唤醒词（模型从官方 GitHub 发布页下载后解压到 wakeword/ 下）
+  model_dir: "wakeword/sherpa-onnx-kws-zipformer-zh-en-3M-2025-12-20"
+  keywords_file: "wakeword/keywords_custom.txt"
+  audio_device_index: "ReSpeaker 4 Mic Array"
+  keywords_score: 1.0
+  keywords_threshold: 0.25
+  num_threads: 2
 
 tts_cache_policy:
   max_files: 200        # 最大保留音频文件数

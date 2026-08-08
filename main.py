@@ -9,7 +9,7 @@ from endword.endword_detector import EndwordDetector
 from audio_in.recorder import Recorder
 from utils.config_loader import load_config
 from utils.logger import logger
-from wakeword.porcupine_adapter import WakewordDetector
+from wakeword.wakeword_detector import WakewordDetector
 
 def main():
     logger.info("==== 智能语音音箱主流程启动 ====")
@@ -17,11 +17,8 @@ def main():
     logger.debug(f"完整配置参数: {config}")
 
     welcome_audio_path = config.get("welcome_audio_path", "audio_out/welcome.mp3")
-    need_init = not os.path.exists(welcome_audio_path)
-    if need_init:
-        ensure_initialized(config)
-    else:
-        logger.info("欢迎语音和报错音频均已存在，无需初始化。")
+    # 幂等初始化：缺少的欢迎音/错误提示音会自动生成，已存在的跳过
+    ensure_initialized(config)
 
     asr = XunfeiASR(
         app_id=config["xunfei_asr"]["app_id"],
@@ -53,29 +50,32 @@ def main():
         dtype=config["audio_in"]["dtype"],
         block_size=config["audio_in"]["block_size"],
         max_record_time=config["audio_in"]["max_record_time"],
-        silence_threshold=config["audio_in"]["max_record_time"],
-        silence_duration=config["audio_in"]["silence_duration"],
+        silence_threshold=config["audio_in"].get("silence_threshold", 2000),
+        silence_duration=config["audio_in"].get("silence_duration", 2.0),
         device=config["audio_in"]["device"],
     )
 
     conversation_history = []
 
+    output_device = config.get("audio_out", {}).get("device")
+
     tts_cache_dir=config["tts_cache_dir"]
     def play_standard_error(tag):
         err_file = os.path.join(tts_cache_dir, f"{tag}.mp3")
         if os.path.exists(err_file):
-            play_audio(err_file)
+            play_audio(err_file, device=output_device)
         else:
-            play_audio(os.path.join(tts_cache_dir, "error_system.mp3"))
+            play_audio(os.path.join(tts_cache_dir, "error_system.mp3"), device=output_device)
 
     def on_wakeword_detected():
         try:
-            play_audio(config["welcome_audio_path"])
+            play_audio(config["welcome_audio_path"], device=output_device)
             logger.info("已唤醒，进入多轮对话...")
             blank_count = 1
     
             while True:   # 增加循环
-                wait_until_idle(timeout_s=10)
+                # 等音箱把话说完再开始下一轮录音，避免录到自己
+                wait_until_idle(timeout_s=60)
                 audio_blocks = recorder.record_stream()
                 user_text = asr.recognize_stream(audio_blocks)
                 logger.info(f"用户语音识别结果: {user_text}")
@@ -102,7 +102,7 @@ def main():
                     if not farewell_text:
                         farewell_text = "好的，下次再见。"
                     audio_gen = tts_stream.synthesize_stream(farewell_text)
-                    play_audio_stream(audio_gen, device=2, samplerate=44100, channels=2, dtype='int16')
+                    play_audio_stream(audio_gen, device=output_device, samplerate=44100, channels=2, dtype='int16')
                     conversation_history.clear()
                     break       # 跳出多轮对话，回到唤醒监听
     
@@ -113,7 +113,7 @@ def main():
                     conversation_history.append({"role": "assistant", "content": reply_text})
                     logger.info(f"AI回复文本: {reply_text}")
                     audio_gen = tts_stream.synthesize_stream(reply_text)
-                    play_audio_stream(audio_gen, device=2, samplerate=44100, channels=2, dtype='int16')
+                    play_audio_stream(audio_gen, device=output_device, samplerate=44100, channels=2, dtype='int16')
                     
         except Exception as e:
             logger.error(f"主流程异常：{e}")
@@ -134,11 +134,16 @@ def main():
     # ==== 配置并启动唤醒词检测 ====
     wake_cfg = config["wakeword"]
     args = {
-        "keyword_paths": wake_cfg["keyword_paths"],
-        "access_key": wake_cfg["access_key"],
-        "sensitivities": wake_cfg.get("sensitivities"),
-        "model_path": wake_cfg.get("model_path"),
-        "audio_device_index": wake_cfg.get("audio_device_index")
+        "model_dir": wake_cfg["model_dir"],
+        "keywords_file": wake_cfg.get(
+            "keywords_file",
+            os.path.join(wake_cfg["model_dir"], "keywords_custom.txt"),
+        ),
+        "audio_device_index": wake_cfg.get("audio_device_index"),
+        "channels": config["audio_in"]["channels"],
+        "keywords_score": wake_cfg.get("keywords_score", 1.0),
+        "keywords_threshold": wake_cfg.get("keywords_threshold", 0.25),
+        "num_threads": wake_cfg.get("num_threads", 2),
     }
     wakeword_detector = WakewordDetector(**args)
 

@@ -7,14 +7,12 @@ openai
 
 # 录音与音频处理
 sounddevice
-soundfile
-playsound
 websocket-client
-pydub
 
 # 唤醒词检测
-pvporcupine
-pyaudio
+# 注意：勿升级到 1.13.x —— 1.13.4 的 macOS arm64 版本存在 KWS 检测失效问题，
+# 官方测试音频也检测不到任何关键词；1.12.40 经验证正常。
+sherpa-onnx==1.12.40
 
 # （可选）扩展功能
 # cryptography      # 若需加密缓存或配置

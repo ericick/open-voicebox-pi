@@ -1,1 +1,11 @@
 config/config.yaml
+venv/
+venv-mac/
+work/
+wakeword/sherpa-onnx-kws-*/
+logs/
+tts_log/
+audio_out/tts_cache/
+.DS_Store
+__pycache__/
+*.pyc

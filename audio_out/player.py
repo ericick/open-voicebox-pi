@@ -1,4 +1,5 @@
 import subprocess
+import platform
 import sounddevice as sd
 import numpy as np
 import threading
@@ -22,12 +23,12 @@ def wait_until_idle(timeout_s: float = None) -> bool:
         logger.warning("等待播放超时，可能存在卡死的播放进程。")
     return ok
     
-def play_audio(file_path, device="plughw:3,0"):
+def play_audio(file_path, device=None):
     with _audio_play_lock:
         _is_playing_event.set()
         try:
-            logger.debug(f"准备播放音频: {file_path}")
-            cmd = ['mpg123', '-q', '-a', device, file_path]
+            cmd = _build_play_cmd(file_path, device)
+            logger.debug(f"准备播放音频: {' '.join(cmd)}")
             subprocess.run(cmd)
             logger.info(f"播放音频完成: {file_path}")
         except Exception as e:
@@ -35,7 +36,14 @@ def play_audio(file_path, device="plughw:3,0"):
         finally:
             _is_playing_event.clear()
 
-def play_audio_stream(audio_generator, device=2, samplerate=44100, channels=2, dtype='int16'):
+def _build_play_cmd(file_path, device):
+    """跨平台播放命令：macOS 用系统自带 afplay，Linux 用 mpg123（兼容原 ALSA 配置）。"""
+    if platform.system() == "Darwin":
+        return ["afplay", file_path]
+    alsa_device = device if device else "default"
+    return ["mpg123", "-q", "-a", alsa_device, file_path]
+
+def play_audio_stream(audio_generator, device=None, samplerate=44100, channels=2, dtype='int16'):
     with _audio_play_lock:
         _is_playing_event.set()
         try:
@@ -45,7 +53,7 @@ def play_audio_stream(audio_generator, device=2, samplerate=44100, channels=2, d
                     # 假设音频帧为16kHz单声道PCM
                     block = np.frombuffer(audio_chunk, dtype=dtype)
                     # 升采样到44.1k
-                    target_len = int(len(block) * 44100 / 16000)
+                    target_len = int(len(block) * samplerate / 16000)
                     xp = np.linspace(0, len(block)-1, target_len)
                     x = np.arange(len(block))
                     upsampled = np.interp(xp, x, block).astype(np.int16)
