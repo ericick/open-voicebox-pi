@@ -95,7 +95,3 @@ wakeword:
   keywords_score: 1.0
   keywords_threshold: 0.25
   num_threads: 2
-
-tts_cache_policy:
-  max_files: 200        # 最大保留音频文件数
-  max_bytes: 15000000000 # 最大总容量，单位为字节（如15GB）

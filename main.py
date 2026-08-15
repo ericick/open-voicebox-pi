@@ -27,7 +27,6 @@ def clean_for_speech(text):
 def main():
     logger.info("==== 智能语音音箱主流程启动 ====")
     config = load_config()
-    logger.debug(f"完整配置参数: {config}")
 
     welcome_audio_path = config.get("welcome_audio_path", "audio_out/welcome.mp3")
     # 幂等初始化：缺少的欢迎音/错误提示音会自动生成，已存在的跳过

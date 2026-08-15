@@ -8,9 +8,6 @@ from utils.logger import logger
 _audio_play_lock = threading.Lock()  # 新增：全局锁
 _is_playing_event = threading.Event() # 新增：播放事件控制
 
-def is_playing() -> bool:
-    return _is_playing_event.is_set()
-
 def wait_until_idle(timeout_s: float = None) -> bool:
     """
     等到播放结束；返回 True 表示已空闲，False 表示超时仍在“播放中”（可能卡死）

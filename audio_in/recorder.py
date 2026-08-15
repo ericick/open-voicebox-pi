@@ -105,7 +105,11 @@ class Recorder:
                     except Exception:
                         logger.debug("录音流已关闭，结束本轮。")
                         return
-                    mono = block[:, 0] if self.channels > 1 else block
+                    if self.channels > 1:
+                        # 4 路平均拾音：比单取第 0 路更稳定（决策3，实测后可回退）
+                        mono = block.astype(np.float32).mean(axis=1).astype(np.int16)
+                    else:
+                        mono = block
                     level = np.abs(mono).mean()
 
                     if not state["speech_started"]:
@@ -147,31 +151,3 @@ class Recorder:
                     pass
 
         return RecordingStream(gen(), stream_ref)
-
-    def record(self, max_record_time=15, silence_threshold=500, silence_duration=1.0):
-        """
-        常规录音，录完返回整个音频（numpy数组），支持自动静音停止。
-        """
-        total_samples = int(self.samplerate * max_record_time)
-        buffer = []
-        stream = sd.InputStream(samplerate=self.samplerate, channels=self.channels, dtype=self.dtype)
-        silence_chunk = int(self.samplerate * silence_duration)
-        last_audio = np.zeros(silence_chunk, dtype=self.dtype)
-        silence_count = 0
-        print("开始录音，请说话...")
-
-        with stream:
-            for _ in range(total_samples // self.block_size):
-                block, _ = stream.read(self.block_size)
-                block = block.flatten()
-                buffer.append(block)
-                # 判断静音
-                if np.abs(block).mean() < silence_threshold:
-                    silence_count += len(block)
-                    if silence_count >= silence_chunk:
-                        print("检测到静音，自动停止录音。")
-                        break
-                else:
-                    silence_count = 0
-        audio = np.concatenate(buffer)
-        return audio

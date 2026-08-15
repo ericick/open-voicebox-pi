@@ -194,6 +194,7 @@ class XunfeiASR:
             raise ValueError("audio只能为numpy数组或bytes")
         self.audio_data = audio
         self.result = ""
+        self.words_list = []
         self.finished.clear()
         self._last_error = None
         url = self._assemble_url()
@@ -223,6 +224,8 @@ class XunfeiASR:
         边录音边识别（流式）：audio_generator为yield音频块(bytes)的生成器
         """
         self.result = ""
+        self.words_list = []
+        self._last_error = None
         self.finished.clear()
         url = self._assemble_url()
 
