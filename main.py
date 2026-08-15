@@ -3,7 +3,9 @@ import re
 import time
 from utils.initializer import ensure_initialized
 from asr.xunfei_asr import XunfeiASR
+from dialogue.codex_adapter import CodexAdapter
 from dialogue.deepseek_adapter import DeepseekAdapter
+from dialogue.router import DialogueRouter
 from tts.xunfei_stream import XunfeiTTSStream
 from audio_out.player import play_audio, play_audio_stream, wait_until_idle
 from endword.endword_detector import EndwordDetector
@@ -45,6 +47,20 @@ def main():
         max_tokens=config["deepseek"].get("max_tokens", 2048),
         system_prompt=config["deepseek"].get("system_prompt", ""),
         web_search=config["deepseek"].get("web_search", False)
+    )
+    codex_cfg = config.get("codex", {})
+    codex = CodexAdapter(
+        model=codex_cfg.get("model", "deepseek-v4-flash"),
+        provider=codex_cfg.get("provider", "deepseek"),
+        system_prompt=config["deepseek"].get("system_prompt", ""),
+        timeout_s=codex_cfg.get("timeout_s", 120),
+    )
+    dialogue = DialogueRouter(
+        default_adapter=deepseek,
+        codex_adapter=codex,
+        enabled=codex_cfg.get("enabled", False),
+        triggers=codex_cfg.get("triggers", []),
+        min_length=codex_cfg.get("min_length", 40),
     )
     tts_stream = XunfeiTTSStream(
         app_id=config["xunfei"]["app_id"],
@@ -122,7 +138,7 @@ def main():
                 else:
                     logger.debug("进入多轮对话处理。")
                     conversation_history.append({"role": "user", "content": user_text})
-                    reply_text = deepseek.chat(context=conversation_history)
+                    reply_text = dialogue.chat(context=conversation_history)
                     conversation_history.append({"role": "assistant", "content": reply_text})
                     logger.info(f"AI回复文本: {reply_text}")
                     reply_text = clean_for_speech(reply_text)

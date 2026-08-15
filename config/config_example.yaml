@@ -38,6 +38,31 @@ deepseek:
   max_tokens: 2048
   system_prompt: "这是背景设定，你不需要在后面的对话中提及，但是要一直记住："
 
+codex:
+  # 复杂任务路由：Codex 壳 + DeepSeek 脑子（本机已配置，无需额外账号）
+  # 命中触发词或长句才走 Codex；Codex 失败会自动降级回 DeepSeek
+  enabled: true
+  model: "deepseek-v4-flash"
+  provider: "deepseek"
+  timeout_s: 120
+  min_length: 40
+  triggers:
+    - "帮我查"
+    - "查一下"
+    - "查一查"
+    - "搜索"
+    - "搜一下"
+    - "对比"
+    - "比较一下"
+    - "计算"
+    - "算一下"
+    - "分析"
+    - "总结"
+    - "安排"
+    - "规划"
+    - "写一个"
+    - "找一下"
+
 endwords:
   - "再见"
   - "拜拜"
