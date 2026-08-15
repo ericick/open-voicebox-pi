@@ -3,6 +3,34 @@ import numpy as np
 import time
 from utils.logger import logger
 import audio_out.player as player
+from utils.audio_device import DeviceUnavailable, find_input_device
+
+
+class RecordingStream:
+    """包装录音生成器与底层音频流：可迭代，支持从外部安全关闭（避免遗留幽灵音频流）。"""
+
+    def __init__(self, generator, stream_ref):
+        self._generator = generator
+        self._stream_ref = stream_ref
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        return next(self._generator)
+
+    def close(self):
+        """从外部中止录音流并结束生成器；可在其他线程调用。"""
+        if self._stream_ref:
+            try:
+                self._stream_ref[0].abort()
+            except Exception:
+                pass
+        try:
+            self._generator.close()
+        except Exception:
+            pass
+
 
 class Recorder:
     def __init__(self, samplerate=16000, channels=4, dtype='int16', block_size=1280, max_record_time=15, silence_threshold=2000, silence_duration=2.0, device=None):
@@ -37,17 +65,46 @@ class Recorder:
             "total": 0,
         }
 
+        stream_ref = []
+
         def gen():
-            with sd.InputStream(
-                samplerate=self.samplerate,
-                channels=self.channels,
-                dtype=self.dtype,
-                blocksize=self.block_size,
-                device=self.device,
-            ) as stream:
+            device_id = find_input_device(self.device) if self.device else None
+            if device_id is None and self.device:
+                logger.warning("录音时麦克风不可用，未找到设备。")
+                raise DeviceUnavailable("麦克风未接入")
+            last_check = time.monotonic()
+            input_stream = None
+            try:
+                input_stream = sd.InputStream(
+                    samplerate=self.samplerate,
+                    channels=self.channels,
+                    dtype=self.dtype,
+                    blocksize=self.block_size,
+                    device=device_id,
+                )
+                input_stream.start()
+            except Exception as e:
+                logger.warning(f"录音时麦克风打开失败：{e}")
+                if input_stream is not None:
+                    try:
+                        input_stream.close()
+                    except Exception:
+                        pass
+                raise DeviceUnavailable("麦克风已断开或不可用") from e
+            stream_ref.append(input_stream)
+            try:
                 logger.info("开始流式录音，请说话...")
                 while True:
-                    block, _ = stream.read(self.block_size)
+                    if self.device and time.monotonic() - last_check >= 1.0:
+                        last_check = time.monotonic()
+                        if find_input_device(self.device) is None:
+                            logger.warning("录音中检测到麦克风断开，结束本轮。")
+                            raise DeviceUnavailable("麦克风已断开")
+                    try:
+                        block, _ = input_stream.read(self.block_size)
+                    except Exception:
+                        logger.debug("录音流已关闭，结束本轮。")
+                        return
                     mono = block[:, 0] if self.channels > 1 else block
                     level = np.abs(mono).mean()
 
@@ -83,7 +140,13 @@ class Recorder:
                     else:
                         state["silence_count"] = 0
 
-        return gen()
+            finally:
+                try:
+                    input_stream.close()
+                except Exception:
+                    pass
+
+        return RecordingStream(gen(), stream_ref)
 
     def record(self, max_record_time=15, silence_threshold=500, silence_duration=1.0):
         """

@@ -8,6 +8,7 @@ import websocket
 import ssl
 import numpy as np
 from utils.logger import logger
+from utils.audio_device import DeviceUnavailable
 from urllib.parse import quote_plus
 
 class XunfeiASR:
@@ -20,6 +21,7 @@ class XunfeiASR:
         self.result = ""
         self.result_lock = threading.Lock()
         self.finished = threading.Event()
+        self._last_error = None
 
     def _assemble_url(self):
         host = "iat-api.xfyun.cn"
@@ -193,6 +195,7 @@ class XunfeiASR:
         self.audio_data = audio
         self.result = ""
         self.finished.clear()
+        self._last_error = None
         url = self._assemble_url()
         ws = websocket.WebSocketApp(
             url,
@@ -228,6 +231,8 @@ class XunfeiASR:
             try:
                 logger.info("ASR流式识别：开始分块发送")
                 for idx, audio_chunk in enumerate(audio_generator):
+                    if self.finished.is_set():
+                        break
                     if idx == 0:
                         status = 0
                     else:
@@ -254,17 +259,22 @@ class XunfeiASR:
                     ws.send(json.dumps(d))
                     time.sleep(0.04)
                 # 发送尾帧
-                logger.debug("流式ASR，发送尾帧（status=2）")
-                d = {
-                    "data": {
-                        "status": 2,
-                        "format": "audio/L16;rate=16000",
-                        "encoding": "raw",
-                        "audio": ""
+                if not self.finished.is_set():
+                    logger.debug("流式ASR，发送尾帧（status=2）")
+                    d = {
+                        "data": {
+                            "status": 2,
+                            "format": "audio/L16;rate=16000",
+                            "encoding": "raw",
+                            "audio": ""
+                        }
                     }
-                }
-                ws.send(json.dumps(d))
-                logger.info("流式ASR所有音频已发送")
+                    ws.send(json.dumps(d))
+                    logger.info("流式ASR所有音频已发送")
+            except DeviceUnavailable as e:
+                logger.warning(f"录音流不可用：{e}")
+                self._last_error = e
+                self.finished.set()
             except Exception as e:
                 logger.error(f"ASR流式音频发送异常: {e}")
                 self.finished.set()
@@ -287,6 +297,14 @@ class XunfeiASR:
             ws.close()
         except Exception:
             pass
+        # 关闭录音生成器（中止底层音频流），避免遗留幽灵流导致后续崩溃
+        if audio_generator is not None:
+            try:
+                audio_generator.close()
+            except Exception:
+                pass
+        if self._last_error is not None:
+            raise self._last_error
         if self.result.strip():
             logger.info(f"ASR流式最终识别文本: {self.result.strip()}")
         else:

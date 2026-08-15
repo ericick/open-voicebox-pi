@@ -9,6 +9,7 @@ from endword.endword_detector import EndwordDetector
 from audio_in.recorder import Recorder
 from utils.config_loader import load_config
 from utils.logger import logger
+from utils.audio_device import DeviceUnavailable
 from wakeword.wakeword_detector import WakewordDetector
 
 def main():
@@ -116,6 +117,9 @@ def main():
                     audio_gen = tts_stream.synthesize_stream(reply_text)
                     play_audio_stream(audio_gen, device=output_device, samplerate=44100, channels=2, dtype='int16')
                     
+        except DeviceUnavailable as e:
+            logger.warning(f"录音设备不可用：{e}")
+            play_standard_error("error_recording")
         except Exception as e:
             logger.error(f"主流程异常：{e}")
             import traceback
