@@ -1,6 +1,8 @@
 from openai import OpenAI
 from utils.logger import logger
 
+REPLY_FORMAT_HINT = "回答要简短，最多3句话；不要使用任何星号、破折号、列表符号或换行；不要反问用户。"
+
 class DeepseekAdapter:
     def __init__(self, api_key, base_url="https://api.deepseek.com", model="deepseek-chat", temperature=0.7, max_tokens=2048, system_prompt="", web_search=False):
         self.client = OpenAI(api_key=api_key, base_url=base_url)
@@ -8,6 +10,8 @@ class DeepseekAdapter:
         self.temperature = temperature
         self.max_tokens = max_tokens
         self.system_prompt = system_prompt
+        if system_prompt and REPLY_FORMAT_HINT not in system_prompt:
+            self.system_prompt = system_prompt + " " + REPLY_FORMAT_HINT
         self.web_search = web_search
 
     def _build_messages(self, context):

@@ -3,7 +3,8 @@ class EndwordDetector:
         self.keywords = keywords
 
     def is_end(self, text):
+        lowered = text.lower()
         for word in self.keywords:
-            if word in text:
+            if word.lower() in lowered:
                 return True
         return False

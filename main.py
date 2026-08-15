@@ -1,4 +1,5 @@
 import os
+import re
 import time
 from utils.initializer import ensure_initialized
 from asr.xunfei_asr import XunfeiASR
@@ -11,6 +12,15 @@ from utils.config_loader import load_config
 from utils.logger import logger
 from utils.audio_device import DeviceUnavailable
 from wakeword.wakeword_detector import WakewordDetector
+
+
+def clean_for_speech(text):
+    """去掉不适合朗读的符号（markdown/星号/列表符等），压缩空白。"""
+    text = re.sub(r"[*#`>_~\[\](){}]", "", text)
+    text = re.sub(r"^\s*[-•·]\s*", "", text, flags=re.M)
+    text = re.sub(r"\s+", " ", text)
+    return text.strip()
+
 
 def main():
     logger.info("==== 智能语音音箱主流程启动 ====")
@@ -103,6 +113,7 @@ def main():
                     farewell_text = deepseek.chat(context=tmp_context).strip()
                     if not farewell_text:
                         farewell_text = "好的，下次再见。"
+                    farewell_text = clean_for_speech(farewell_text)
                     audio_gen = tts_stream.synthesize_stream(farewell_text)
                     play_audio_stream(audio_gen, device=output_device, samplerate=44100, channels=2, dtype='int16')
                     conversation_history.clear()
@@ -114,6 +125,7 @@ def main():
                     reply_text = deepseek.chat(context=conversation_history)
                     conversation_history.append({"role": "assistant", "content": reply_text})
                     logger.info(f"AI回复文本: {reply_text}")
+                    reply_text = clean_for_speech(reply_text)
                     audio_gen = tts_stream.synthesize_stream(reply_text)
                     play_audio_stream(audio_gen, device=output_device, samplerate=44100, channels=2, dtype='int16')
                     

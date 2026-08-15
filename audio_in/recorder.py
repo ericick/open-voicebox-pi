@@ -52,7 +52,7 @@ class Recorder:
         - 等 max_wait_s 秒无人说话则放弃本轮
         """
         player.wait_until_idle(timeout_s=10)
-        time.sleep(0.3)  # 播放结束后留一点回响消散时间
+        time.sleep(1.5)  # 播放结束后留足回响消散时间，避免录到音箱自己的回声
         silence_chunk = int(self.samplerate * self.silence_duration)
         max_total = int(self.samplerate * self.max_record_time)
         max_wait = int(self.samplerate * max_wait_s)
