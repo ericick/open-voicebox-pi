@@ -55,7 +55,6 @@ class XunfeiASR:
             f'headers="host date request-line", '
             f'signature="{signature}"'
         )
-        logger.debug(f"ASR authorization_origin: {authorization_origin}")
         authorization = base64.b64encode(authorization_origin.encode('utf-8')).decode('utf-8')
         logger.debug(f"ASR authorization (base64): {authorization}")
 
@@ -66,7 +65,7 @@ class XunfeiASR:
             "host": host,
         }
         url = url + '?' + '&'.join([f"{k}={quote_plus(v)}" for k, v in params.items()])
-        logger.info(f"ASR WS 连接URL: {url}")
+        logger.info(f"ASR WS 连接: {host}")
         return url
 
     def _on_message(self, ws, message):
