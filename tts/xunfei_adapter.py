@@ -65,16 +65,16 @@ class XunfeiTTS:
                 msg = json.loads(message)
                 code = msg["code"]
                 sid = msg.get("sid", "unknown")
-                audio = base64.b64decode(msg["data"]["audio"])
-                status = msg["data"]["status"]
+                audio_data = msg["data"].get("audio")
+                status = msg["data"].get("status", 0)
                 logger.debug(f"XunfeiTTS on_message: sid={sid}, code={code}, status={status}")
                 if code != 0:
                     errMsg = msg.get("message", "未知错误")
                     logger.error(f"讯飞TTS错误 [sid:{sid} code:{code}] {errMsg}")
                     self._error = f"讯飞TTS错误 [sid:{sid} code:{code}] {errMsg}"
                     ws.close()
-                else:
-                    self._result_audio.append(audio)
+                elif audio_data:
+                    self._result_audio.append(base64.b64decode(audio_data))
                 if status == 2:
                     logger.info("讯飞TTS流式音频全部接收完毕")
                     ws.close()
@@ -142,4 +142,3 @@ class XunfeiTTS:
         else:
             logger.error("未收到任何音频数据")
             raise RuntimeError("讯飞TTS合成失败，未收到音频")
-

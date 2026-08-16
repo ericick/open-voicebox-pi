@@ -94,6 +94,17 @@ def main():
         else:
             play_audio(os.path.join(tts_cache_dir, "error_system.mp3"), device=output_device)
 
+    def speak_text(text, retries=1):
+        """合成并播放一句话；失败自动重试，仍失败返回 False。"""
+        for attempt in range(retries + 1):
+            try:
+                audio_gen = tts_stream.synthesize_stream(text)
+                if play_audio_stream(audio_gen, device=output_device, samplerate=44100, channels=2, dtype='int16'):
+                    return True
+            except Exception as e:
+                logger.warning(f"语音合成/播放失败（第{attempt+1}次）: {e}")
+        return False
+
     def on_wakeword_detected():
         try:
             play_audio(config["welcome_audio_path"], device=output_device)
@@ -129,8 +140,7 @@ def main():
                     if not farewell_text:
                         farewell_text = "好的，下次再见。"
                     farewell_text = clean_for_speech(farewell_text)
-                    audio_gen = tts_stream.synthesize_stream(farewell_text)
-                    play_audio_stream(audio_gen, device=output_device, samplerate=44100, channels=2, dtype='int16')
+                    speak_text(farewell_text)
                     conversation_history.clear()
                     break       # 跳出多轮对话，回到唤醒监听
     
@@ -141,8 +151,8 @@ def main():
                     conversation_history.append({"role": "assistant", "content": reply_text})
                     logger.info(f"AI回复文本: {reply_text}")
                     reply_text = clean_for_speech(reply_text)
-                    audio_gen = tts_stream.synthesize_stream(reply_text)
-                    play_audio_stream(audio_gen, device=output_device, samplerate=44100, channels=2, dtype='int16')
+                    if not speak_text(reply_text):
+                        play_standard_error("error_tts")
                     
         except DeviceUnavailable as e:
             logger.warning(f"录音设备不可用：{e}")

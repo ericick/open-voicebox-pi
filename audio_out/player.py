@@ -44,11 +44,17 @@ def play_audio_stream(audio_generator, device=None, samplerate=44100, channels=2
     with _audio_play_lock:
         _is_playing_event.set()
         try:
+            out_dev = sd.query_devices(device=device, kind="output")
+            logger.info(f"流式播放音频启动... 输出设备=[{out_dev.get('index')}] {out_dev.get('name')}")
             logger.info("流式播放音频启动...")
+            rms_sum = 0.0
+            rms_count = 0
             with sd.OutputStream(samplerate=samplerate, channels=channels, dtype=dtype, device=device) as stream:
                 for audio_chunk in audio_generator:
                     # 假设音频帧为16kHz单声道PCM
                     block = np.frombuffer(audio_chunk, dtype=dtype)
+                    rms_sum += float(np.square(block.astype(np.float64)).sum())
+                    rms_count += block.size
                     # 升采样到44.1k
                     target_len = int(len(block) * samplerate / 16000)
                     xp = np.linspace(0, len(block)-1, target_len)
@@ -57,8 +63,11 @@ def play_audio_stream(audio_generator, device=None, samplerate=44100, channels=2
                     # 扩展为双声道
                     stereo = np.stack([upsampled, upsampled], axis=-1)
                     stream.write(stereo)
-            logger.info("流式音频播放结束。")
+            rms = (rms_sum / rms_count) ** 0.5 if rms_count else 0.0
+            logger.info(f"流式音频播放结束。样本={rms_count} RMS={rms:.1f}")
+            return True
         except Exception as e:
             logger.error(f"流式播放失败: {e}")
+            return False
         finally:
             _is_playing_event.clear()

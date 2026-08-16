@@ -65,9 +65,11 @@ class XunfeiTTSStream:
                     done.set()
                     ws.close()
                     return
-                audio = base64.b64decode(msg["data"]["audio"])
-                status = msg["data"]["status"]
-                audio_queue.append(audio)
+                audio_data = msg["data"].get("audio")
+                status = msg["data"].get("status", 0)
+                if audio_data:
+                    audio = base64.b64decode(audio_data)
+                    audio_queue.append(audio)
                 if status == 2:
                     done.set()
                     ws.close()
@@ -124,4 +126,3 @@ class XunfeiTTSStream:
                 time.sleep(0.01)
         if error:
             raise RuntimeError("讯飞TTS流式合成异常：" + "; ".join(error))
-
